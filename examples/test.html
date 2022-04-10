@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="/Users/wxkmac/Documents/Github/core/packages/vue/dist/vue.global.js"></script> -->
+    <script src="../debug3/vue3.js"></script>
+    <script src="../debug3/vue-router4.js"></script>
+    <script src="../dist/index.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Hello App!</h1>
+        <router-view v-slot="{ Component }">
+            <div class="test">
+                <stack-keep-alive>
+                    <component :is="Component" />
+                  </stack-keep-alive>
+            </div>
+        </router-view>
+    </div>
+    <script>
+
+        const Foo = { 
+            name: 'foo',
+            template: '<div><p>this is foo page {{a}}</p><router-link to="/bar">Go to Bar</router-link></div>',
+            data() {
+                return {
+                    b: 20
+                }
+            },
+            beforeCreate() {
+                // console.log(this.$.ctx === this)
+                console.log("foo beforeCreate")
+            },
+            setup(props) {
+                const a = 10
+                return {
+                    a
+                }  
+            },
+            unmounted() {
+                console.log("foo unmounted")
+            },
+        }
+        const Bar = { 
+            name: 'bar',
+            props: ['test_prop'],
+            data() {
+                return { 'test_data': 'help'}
+            },
+            template: '<div><p>this is bar page</p><router-link to="/baz">Go to Baz</router-link></div>' ,
+            beforeCreate() {
+                console.log(this)
+                console.log("bar beforeCreate")
+            },
+            destroyed() {
+                console.log("bar destroyed")
+            },
+        }
+        const Baz = { 
+            name: 'baz',
+            template: '<div><p>this is baz page</p><div @click="goback">goBack</div><router-link to="/foo">Go to Foo</router-link></div>',
+            methods:{
+                goback(){
+                    this.$router.back();
+                }
+            },
+            destroyed() {
+                console.log("baz destroyed")
+            },
+        }
+
+        const routes = [
+            { path: '/foo', component: Foo },
+            { path: '/bar', component: Bar },
+            { path: '/baz', component: Baz }
+        ]
+
+        // const router = new VueRouter({
+        //     routes,
+        //     mode:'hash',
+        // })
+
+        const router = VueRouter.createRouter({
+            // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
+            history: VueRouter.createWebHashHistory(),
+            routes, // `routes: routes` 的缩写
+        })
+
+        
+       
+        // const app = new Vue({
+        //     router
+        // }).$mount('#app')
+
+        const app = Vue.createApp({})
+        //确保 _use_ 路由实例使
+        //整个应用支持路由。
+        app.use(StackKeepAlive)
+        // createHelper({Vue: app, router})
+        app.use(router)
+
+        app.mount('#app')
+
+    </script>
+</body>
+</html>

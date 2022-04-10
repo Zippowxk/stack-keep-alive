@@ -1,0 +1,1 @@
+export const isAsyncWrapper = (i) => !!i.__asyncLoader
