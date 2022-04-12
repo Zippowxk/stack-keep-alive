@@ -13,6 +13,9 @@
     <div id="app">
         <h1>Hello App!</h1>
         <router-view v-slot="{ Component }">
+            <!-- <keep-alive :max="1">
+                <component :is="Component"/>
+            </keep-alive> -->
             <stack-keep-alive v-slot='{ key }'> 
                 <component :is="Component" :key='key'/>
             </stack-keep-alive>
