@@ -4,14 +4,14 @@ import {
     isVNode,
     warn
 } from 'Vue'
-
+import { isDef } from '../core/utils'
 import {
     getComponentName, // fix done
-  } from './depens/component'
+  } from '../depens/component'
 
   import {
     invokeVNodeHook // fix
-  } from './depens/vnode'
+  } from '../depens/vnode'
 
   import {
     onBeforeUnmount, // fix
@@ -24,20 +24,28 @@ import {
     isString, // fix
     isArray, // fix
     remove, // fix
-    invokeArrayFns, // fix
   } from '@vue/shared'
   import {
-    ShapeFlags
-  } from './depens/share'
+    ShapeFlags,
+    invokeArrayFns
+  } from '../depens/share'
+
   import { watch } from 'Vue' // fix done
   import {
     queuePostRenderEffect, // fix done
     MoveType,
-  } from './depens/renderer'
+  } from '../depens/renderer'
   import { setTransitionHooks } from 'Vue' // fix done
 //   import { devtoolsComponentAdded } from '../devtools' // TODO: fixed
-  import { isAsyncWrapper } from './depens/apiAsyncComponent' // fix done
+  import { isAsyncWrapper } from '../depens/apiAsyncComponent' // fix done
   
+  // import { hackRouter, hackHistory } from '../hacks/index'
+
+  import Core from '../core/index'
+  import VueRouter from 'vue-router';
+  // vnode 生成key
+  // 提供根据key清除cache的方法
+
   const StackKeepAliveImpl = {
     name: `StackKeepAlive`,
   
@@ -49,7 +57,9 @@ import {
     props: {
       include: [String, RegExp, Array],
       exclude: [String, RegExp, Array],
-      max: [String, Number]
+      max: [String, Number],
+      replaceStay: [String],
+      mode: String,
     },
   
     setup(props, { slots } ) {
@@ -69,10 +79,11 @@ import {
   
       const cache = new Map()
       const keys = new Set()
+  
       let current = null
   
       if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
-        instance.__v_cache = cache
+        window.__v_cache = instance.__v_cache = cache
       }
   
       const parentSuspense = instance.suspense
@@ -167,6 +178,12 @@ import {
         keys.delete(key)
       }
   
+      // core
+      const router = VueRouter.useRouter()
+      const _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay })
+      if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
+        window.__core = _core
+      }
       // prune cache on include/exclude prop change
       watch(
         () => [props.include, props.exclude],
@@ -211,27 +228,32 @@ import {
         if (!slots.default) {
           return null
         }
-  
-        const children = slots.default()
+        // generate a specific key for every vnode
+        const _key = _core.genKeyForVnode()
+        
+        const children = slots.default({'key': _key})
         const rawVNode = children[0]
         if (children.length > 1) {
           if (__DEV__) {
             warn(`KeepAlive should contain exactly one component child.`)
           }
           current = null
+          _core.genInitialKeyNextTime()
           return children
         } else if (
           !isVNode(rawVNode) ||
           (!(rawVNode.shapeFlag === ShapeFlags.STATEFUL_COMPONENT) &&
             !(rawVNode.shapeFlag === ShapeFlags.SUSPENSE))
         ) {
+          _core.genInitialKeyNextTime()
           current = null
           return rawVNode
         }
   
         let vnode = getInnerChild(rawVNode)
+
         const comp = vnode.type
-  
+
         // for async components, name check should be based in its loaded
         // inner component if available
         const name = getComponentName(
@@ -252,7 +274,6 @@ import {
   
         const key = vnode.key == null ? comp : vnode.key
         const cachedVNode = cache.get(key)
-  
         // clone vnode if it's reused because we are going to mutate it
         if (vnode.el) {
           vnode = cloneVNode(vnode)
@@ -266,11 +287,11 @@ import {
         // key and cache `instance.subTree` (the normalized vnode) in
         // beforeMount/beforeUpdate hooks.
         pendingCacheKey = key
-  
         if (cachedVNode) {
           // copy over mounted state
           vnode.el = cachedVNode.el
           vnode.component = cachedVNode.component
+          
           if (vnode.transition) {
             // recursively update transition hooks on subTree
             setTransitionHooks(vnode, vnode.transition)
@@ -395,3 +416,8 @@ import {
     return vnode.shapeFlag & ShapeFlags.SUSPENSE ? vnode.ssContent : vnode
   }
   
+  function normalizeSlot(slot, data) {
+    if (!slot) return null
+    const slotContent = slot(data)
+    return slotContent.length === 1 ? slotContent[0] : slotContent
+  }

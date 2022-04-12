@@ -16,7 +16,8 @@
   "author": "",
   "license": "ISC",
   "peerDependencies": {
-    "vue": "^3.2.21"
+    "vue": "^3.2.21",
+    "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@vue/compiler-sfc": "^3.2.31",

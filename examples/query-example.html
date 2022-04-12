@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router@3.4.9/dist/vue-router.js"></script>
+    <script src="../dist/index.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Hello App!</h1>
+        <keep-alive>
+            <router-view></router-view>
+        </keep-alive>
+    </div>
+    <script>
+
+        const Foo = { 
+            name: 'foo',
+            template: '<div><p>this is foo page</p><router-link to="/bar?key1=value1&key2=value2">Go to Bar</router-link></div>',
+            beforeCreate() {
+                console.log("foo beforeCreate")
+            },
+            destroyed() {
+                console.log("foo destroyed")
+            },
+        }
+        const Bar = { 
+            name: 'bar',
+            template: '<div><p>this is bar page,check query in the console panel</p><router-link to="/baz">Go to Baz</router-link></div>' ,
+            beforeCreate(){
+                console.log(this.$route.query)
+            },
+            destroyed() {
+                console.log("bar destroyed")
+            },
+        }
+        const Baz = { 
+            name: 'baz',
+            template: '<div><p>this is baz page</p><div @click="goback">goBack</div><router-link to="/">Go to Foo</router-link></div>',
+            methods:{
+                goback(){
+                    this.$router.back();
+                }
+            },
+            destroyed() {
+                console.log("baz destroyed")
+            },
+        }
+
+        const routes = [
+            { path: '/', component: Foo },
+            { path: '/bar', component: Bar },
+            { path: '/baz', component: Baz }
+        ]
+
+        const router = new VueRouter({
+            routes,
+            mode:'hash',
+        })
+        createHelper({Vue,router})
+       
+        const app = new Vue({
+            router
+        }).$mount('#app')
+
+
+
+    </script>
+</body>
+</html>

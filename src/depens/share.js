@@ -13,3 +13,10 @@ export const ShapeFlags = {
   }
   
   export const isFunction = val => typeof val === 'function'
+
+  export const invokeArrayFns = (fns, arg = null) => {
+    for (let i = 0; i < fns.length; i++) {
+      fns[i](arg)
+    }
+  }
+  
