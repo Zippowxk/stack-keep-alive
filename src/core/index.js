@@ -5,7 +5,6 @@ import {
   resolvePushedVm,
   genKey,
   isPlaceHolderVm,
-  setCurrentVnodeKey,
   replaceState,
 } from './utils';
 
@@ -13,7 +12,7 @@ import HistoryStack from './Stack';
 
 import { nextTick } from 'Vue'
 
-import { hackHistory } from '../hacks/index';
+import { hackHistory, RouterHacker } from '../hacks/index';
 
 export default class VueRouterKeepAliveHelper {
   constructor({ router, pruneCacheEntry , replaceStay }) {
@@ -51,10 +50,13 @@ export default class VueRouterKeepAliveHelper {
       this.setState(0);
     }
   }
-
+  /**
+   * to fix the first time inital Render with path like "/",
+   */
   genInitialKeyNextTime() {
     this._initial = true
   }
+  
   genKeyForVnode() {
     if (this.isReplace || this._initial) {
       this._initial = false
@@ -101,44 +103,23 @@ export default class VueRouterKeepAliveHelper {
    * @description hack router go , replace and push functions to tell replace from back and push
    */
   hackRouter() {
-    const router = this.router;
-    const rtmp = router.replace;
-    const rtmpf = (location, onComplete, onAbort) => {
-      this.isReplace = true;
-      // this.SetIdle(false)
-      this.replacePrePath = router.history.current.path;
-      rtmp.call(router, location, onComplete, (e) => {
-        this.isReplace = false;
-        this.replacePrePath = undefined;
-        isDef(onAbort) && onAbort(e);
-      });
-    };
-    router.replace = function (location, onComplete, onAbort) {
-      rtmpf(location, onComplete, onAbort);
-    };
+    this._hackRouter = new RouterHacker(this.router)
 
-    const gstmp = router.go;
-    const gstmpf = (number) => {
+    this._hackRouter.beforeReplace(()=>{
+      this.isReplace = true;
+      this.replacePrePath = router.history.current.path;
+    },(e)=>{
       this.isReplace = false;
-      // this.SetIdle(false)
-      return gstmp.call(router, number);
-    };
-    router.go = function (num) {
-      return gstmpf(num);
-    };
-    const pstmp = router.push;
-    const pstmpf = (location, onComplete, onAbort) => {
+      this.replacePrePath = undefined;
+    })
+
+    this._hackRouter.beforeGo(()=>{
       this.isReplace = false;
-      // this.SetIdle(false)
-      if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
-        return pstmp.call(router, location, onComplete, onAbort);
-      } else {
-        pstmp.call(router, location, onComplete, onAbort);
-      }
-    };
-    router.push = function (location, onComplete, onAbort) {
-      return pstmpf(location, onComplete, onAbort);
-    };
+    })
+
+    this._hackRouter.beforePush(()=>{
+      this.isReplace = false;
+    })
   }
 
   onInitial(vm) {

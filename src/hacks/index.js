@@ -1,2 +1,2 @@
-// export { hackRouter } from './hackRouter'
+export { RouterHacker } from './hackRouter'
 export { hackHistory } from './hackHistory'

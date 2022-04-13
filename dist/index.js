@@ -156,6 +156,53 @@
     }
   }
 
+  class RouterHacker {
+    constructor(router) {
+      this.router = router;
+    }
+
+    beforeReplace(cb,onerror) {
+      const router = this.router;
+      const rtmp = router.replace;
+      const rtmpf = (location, onComplete, onAbort) => {
+        cb();
+        rtmp.call(router, location, onComplete, (e) => {
+          onerror();
+          isDef(onAbort) && onAbort(e);
+        });
+      };
+      router.replace = function (location, onComplete, onAbort) {
+        rtmpf(location, onComplete, onAbort);
+      };
+    }
+
+    beforeGo(cb) {
+      const gstmp = router.go;
+      const gstmpf = (number) => {
+        cb();
+        return gstmp.call(router, number);
+      };
+      router.go = function (num) {
+        return gstmpf(num);
+      };
+    }
+
+    beforePush(cb) {
+      const pstmp = router.push;
+      const pstmpf = (location, onComplete, onAbort) => {
+        cb();
+        if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
+          return pstmp.call(router, location, onComplete, onAbort);
+        } else {
+          pstmp.call(router, location, onComplete, onAbort);
+        }
+      };
+      router.push = function (location, onComplete, onAbort) {
+        return pstmpf(location, onComplete, onAbort);
+      };
+    }
+  }
+
   function hackHistory(history) {
     const rstmp = history.replaceState;
     history.replaceState = function (state, op, path) {
@@ -207,10 +254,13 @@
         this.setState(0);
       }
     }
-
+    /**
+     * to fix the first time inital Render with path like "/",
+     */
     genInitialKeyNextTime() {
       this._initial = true;
     }
+    
     genKeyForVnode() {
       if (this.isReplace || this._initial) {
         this._initial = false;
@@ -257,44 +307,23 @@
      * @description hack router go , replace and push functions to tell replace from back and push
      */
     hackRouter() {
-      const router = this.router;
-      const rtmp = router.replace;
-      const rtmpf = (location, onComplete, onAbort) => {
-        this.isReplace = true;
-        // this.SetIdle(false)
-        this.replacePrePath = router.history.current.path;
-        rtmp.call(router, location, onComplete, (e) => {
-          this.isReplace = false;
-          this.replacePrePath = undefined;
-          isDef(onAbort) && onAbort(e);
-        });
-      };
-      router.replace = function (location, onComplete, onAbort) {
-        rtmpf(location, onComplete, onAbort);
-      };
+      this._hackRouter = new RouterHacker(this.router);
 
-      const gstmp = router.go;
-      const gstmpf = (number) => {
+      this._hackRouter.beforeReplace(()=>{
+        this.isReplace = true;
+        this.replacePrePath = router.history.current.path;
+      },(e)=>{
         this.isReplace = false;
-        // this.SetIdle(false)
-        return gstmp.call(router, number);
-      };
-      router.go = function (num) {
-        return gstmpf(num);
-      };
-      const pstmp = router.push;
-      const pstmpf = (location, onComplete, onAbort) => {
+        this.replacePrePath = undefined;
+      });
+
+      this._hackRouter.beforeGo(()=>{
         this.isReplace = false;
-        // this.SetIdle(false)
-        if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
-          return pstmp.call(router, location, onComplete, onAbort);
-        } else {
-          pstmp.call(router, location, onComplete, onAbort);
-        }
-      };
-      router.push = function (location, onComplete, onAbort) {
-        return pstmpf(location, onComplete, onAbort);
-      };
+      });
+
+      this._hackRouter.beforePush(()=>{
+        this.isReplace = false;
+      });
     }
 
     onInitial(vm) {
