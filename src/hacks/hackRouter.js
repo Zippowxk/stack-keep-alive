@@ -17,6 +17,7 @@ export class RouterHacker {
     router.replace = function (location, onComplete, onAbort) {
       rtmpf(location, onComplete, onAbort);
     };
+    return this
   }
 
   beforeGo(cb) {
@@ -28,6 +29,7 @@ export class RouterHacker {
     router.go = function (num) {
       return gstmpf(num);
     };
+    return this
   }
 
   beforePush(cb) {
@@ -43,5 +45,6 @@ export class RouterHacker {
     router.push = function (location, onComplete, onAbort) {
       return pstmpf(location, onComplete, onAbort);
     };
+    return this
   }
 }

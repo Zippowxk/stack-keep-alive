@@ -4,6 +4,9 @@ export const isDef = function (v) {
 const PLACEHOLDER_VM = {
   __placeholder: true,
 };
+export const currentPathOf = function (router) {
+  return router.currentRoute._value.path
+}
 export const resolvePushedVm = function (current) {
   return isDef(current) ? current : PLACEHOLDER_VM;
 };
@@ -31,7 +34,7 @@ const getCurrentState = function () {
 };
 
 export const genKey = function (num, router) {
-  return `keep-alive-vnode-key${Number(num)}${router.currentRoute._value.path}`;
+  return `keep-alive-vnode-key${Number(num)}${currentPathOf(router)}`;
 };
 export const getCurrentVM = function (router) {
   return router.currentRoute._value.matched.length > 0
@@ -44,33 +47,6 @@ export const setCurrentVnodeKey = function (router, key) {
     current.vnode.key = key;
   }
 };
-// export const replaceFirstKeyAndCache = function (vm, key) {
-//   if (!isDef(vm) || !isDef(vm.cache) || !isDef(vm.keys)) {
-//     return;
-//   }
-//   const keys = vm.keys;
-//   const cache = vm.cache;
-//   if (keys.length === 1) {
-//     const vnode = cache[keys[0]];
-//     delete cache[keys[0]];
-//     keys.splice(0, 1);
-//     keys.push(key);
-//     cache[key] = vnode;
-//   }
-// };
-// export const getFirstComponentChild = function (children) {
-//   if (Array.isArray(children)) {
-//     for (let i = 0; i < children.length; i++) {
-//       const c = children[i];
-//       if (isDef(c) && (isDef(c.componentOptions) || isAsyncPlaceholder(c))) {
-//         return c;
-//       }
-//     }
-//   }
-// };
-// const isAsyncPlaceholder = function (node) {
-//   return node.isComment && node.asyncFactory;
-// };
 
 export const replaceState = function (mode, router, id) {
   const { pathname, search, hash } = window.location;

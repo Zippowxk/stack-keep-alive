@@ -14,6 +14,9 @@ const isDef = function (v) {
 const PLACEHOLDER_VM = {
   __placeholder: true,
 };
+const currentPathOf = function (router) {
+  return router.currentRoute._value.path
+};
 const resolvePushedVm = function (current) {
   return isDef(current) ? current : PLACEHOLDER_VM;
 };
@@ -28,40 +31,13 @@ const getCurrentState = function () {
 };
 
 const genKey = function (num, router) {
-  return `keep-alive-vnode-key${Number(num)}${router.currentRoute._value.path}`;
+  return `keep-alive-vnode-key${Number(num)}${currentPathOf(router)}`;
 };
 const getCurrentVM = function (router) {
   return router.currentRoute._value.matched.length > 0
     ? router.currentRoute._value.matched[0].instances.default.$
     : undefined;
 };
-// export const replaceFirstKeyAndCache = function (vm, key) {
-//   if (!isDef(vm) || !isDef(vm.cache) || !isDef(vm.keys)) {
-//     return;
-//   }
-//   const keys = vm.keys;
-//   const cache = vm.cache;
-//   if (keys.length === 1) {
-//     const vnode = cache[keys[0]];
-//     delete cache[keys[0]];
-//     keys.splice(0, 1);
-//     keys.push(key);
-//     cache[key] = vnode;
-//   }
-// };
-// export const getFirstComponentChild = function (children) {
-//   if (Array.isArray(children)) {
-//     for (let i = 0; i < children.length; i++) {
-//       const c = children[i];
-//       if (isDef(c) && (isDef(c.componentOptions) || isAsyncPlaceholder(c))) {
-//         return c;
-//       }
-//     }
-//   }
-// };
-// const isAsyncPlaceholder = function (node) {
-//   return node.isComment && node.asyncFactory;
-// };
 
 const replaceState = function (mode, router, id) {
   const { pathname, search, hash } = window.location;
@@ -174,6 +150,7 @@ class RouterHacker {
     router.replace = function (location, onComplete, onAbort) {
       rtmpf(location, onComplete, onAbort);
     };
+    return this
   }
 
   beforeGo(cb) {
@@ -185,6 +162,7 @@ class RouterHacker {
     router.go = function (num) {
       return gstmpf(num);
     };
+    return this
   }
 
   beforePush(cb) {
@@ -200,6 +178,7 @@ class RouterHacker {
     router.push = function (location, onComplete, onAbort) {
       return pstmpf(location, onComplete, onAbort);
     };
+    return this
   }
 }
 
@@ -260,7 +239,10 @@ class VueRouterKeepAliveHelper {
   genInitialKeyNextTime() {
     this._initial = true;
   }
-  
+  /**
+   * 
+   * @returns generator for the vnode key of keep-alive slots
+   */
   genKeyForVnode() {
     if (this.isReplace || this._initial) {
       this._initial = false;
@@ -308,20 +290,18 @@ class VueRouterKeepAliveHelper {
    */
   hackRouter() {
     this._hackRouter = new RouterHacker(this.router);
-
-    this._hackRouter.beforeReplace(()=>{
+    this._hackRouter
+    .beforeReplace(()=>{
       this.isReplace = true;
-      this.replacePrePath = router.history.current.path;
+      this.replacePrePath = currentPathOf(this.router);
     },(e)=>{
       this.isReplace = false;
       this.replacePrePath = undefined;
-    });
-
-    this._hackRouter.beforeGo(()=>{
+    })
+    .beforeGo(()=>{
       this.isReplace = false;
-    });
-
-    this._hackRouter.beforePush(()=>{
+    })
+    .beforePush(()=>{
       this.isReplace = false;
     });
   }
@@ -336,22 +316,20 @@ class VueRouterKeepAliveHelper {
     this.pre = null;
   }
   onBack(vm) {
-    this.historyStack.pop(vm);
+    this.historyStack.pop();
     this.decreaseStackPointer();
     this.historyStack.push(vm, this.stackPointer);
   }
   onReplace(vm) {
     // avoidReplaceQuery is fix the issue : router.replace only a query by same path, may cause error
-    const avoidReplaceQuery = this.replacePrePath === this.router.history.current.path;
-    const shouldDestroy = !(
-      isDef(this.replacePrePath) &&
-      this.replaceStay.includes(this.replacePrePath)) && 
+    const avoidReplaceQuery = this.replacePrePath === currentPathOf(this.router);
+    const shouldDestroy = 
+      !(isDef(this.replacePrePath) && this.replaceStay.includes(this.replacePrePath)) 
+      && 
       !avoidReplaceQuery;
 
     if (shouldDestroy) {
-      this.pre?.$keepAliveDestroy?.(vm);
-    } else if (!avoidReplaceQuery) {
-      this.pre?.$clearParent?.(vm);
+      this.destroyCaches(this.pre.vnode.key);
     }
     
     this.pre = null;

@@ -6,6 +6,7 @@ import {
   genKey,
   isPlaceHolderVm,
   replaceState,
+  currentPathOf,
 } from './utils';
 
 import HistoryStack from './Stack';
@@ -56,7 +57,10 @@ export default class VueRouterKeepAliveHelper {
   genInitialKeyNextTime() {
     this._initial = true
   }
-  
+  /**
+   * 
+   * @returns generator for the vnode key of keep-alive slots
+   */
   genKeyForVnode() {
     if (this.isReplace || this._initial) {
       this._initial = false
@@ -104,20 +108,18 @@ export default class VueRouterKeepAliveHelper {
    */
   hackRouter() {
     this._hackRouter = new RouterHacker(this.router)
-
-    this._hackRouter.beforeReplace(()=>{
+    this._hackRouter
+    .beforeReplace(()=>{
       this.isReplace = true;
-      this.replacePrePath = router.history.current.path;
+      this.replacePrePath = currentPathOf(this.router);
     },(e)=>{
       this.isReplace = false;
       this.replacePrePath = undefined;
     })
-
-    this._hackRouter.beforeGo(()=>{
+    .beforeGo(()=>{
       this.isReplace = false;
     })
-
-    this._hackRouter.beforePush(()=>{
+    .beforePush(()=>{
       this.isReplace = false;
     })
   }
@@ -132,22 +134,22 @@ export default class VueRouterKeepAliveHelper {
     this.pre = null;
   }
   onBack(vm) {
-    this.historyStack.pop(vm);
+    this.historyStack.pop();
     this.decreaseStackPointer();
     this.historyStack.push(vm, this.stackPointer);
   }
   onReplace(vm) {
     // avoidReplaceQuery is fix the issue : router.replace only a query by same path, may cause error
-    const avoidReplaceQuery = this.replacePrePath === this.router.history.current.path
-    const shouldDestroy = !(
-      isDef(this.replacePrePath) &&
-      this.replaceStay.includes(this.replacePrePath)) && 
+    const avoidReplaceQuery = this.replacePrePath === currentPathOf(this.router)
+    const shouldDestroy = 
+      !(isDef(this.replacePrePath) && this.replaceStay.includes(this.replacePrePath)) 
+      && 
       !avoidReplaceQuery
 
     if (shouldDestroy) {
-      this.pre?.$keepAliveDestroy?.(vm);
+      this.destroyCaches(this.pre.vnode.key)
     } else if (!avoidReplaceQuery) {
-      this.pre?.$clearParent?.(vm);
+      // this.pre?.$clearParent?.(vm); 
     }
     
     this.pre = null;

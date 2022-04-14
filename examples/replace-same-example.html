@@ -13,40 +13,27 @@
     <div id="app">
         <h1>Hello App!</h1>
         <router-view v-slot="{ Component }">
-            <keep-alive :max="1">
+            <!-- <keep-alive :max="1">
                 <component :is="Component"/>
-            </keep-alive>
-            <!-- <stack-keep-alive v-slot='{ key }'> 
+            </keep-alive> -->
+            <stack-keep-alive v-slot='{ key }'> 
                 <component :is="Component" :key='key'/>
-            </stack-keep-alive> -->
+            </stack-keep-alive>
         </router-view>
     </div>
     <script>
 
-        const Keep = {
-            name: 'keep',
-            template: `
-            <router-view v-slot="{ Component }">
-                <stack-keep-alive v-slot='{ key }'> 
-                    <component :is="Component" :key='key'/>
-                </stack-keep-alive>
-            </router-view>`
-            ,
-            setup(){
-                const route = VueRouter.useRoute();
-                const defaultActive = Vue.computed(() => route.fullPath);
-                return {
-                    defaultActive
-                }
-            }
-        }
-
         const Foo = { 
             name: 'foo',
-            template: '<div><p>this is foo page {{a}}</p><router-link to="/bar">Go to Bar</router-link></div>',
+            template: '<div><p>this is foo page {{a}}</p><div @click="gotoFoo">Go to Foo with Query</div></div>',
             data() {
                 return {
                     b: 20
+                }
+            },
+            methods: {
+                gotoFoo() {
+                    this.$router.replace(`/foo?index=${(this.$route.query.index || 0) + 1}`)
                 }
             },
             beforeCreate() {
@@ -71,47 +58,7 @@
             },
 
         }
-        const Bar = { 
-            name: 'bar',
-            props: ['test_prop'],
-            data() {
-                return { 'test_data': 'help', date: new Date()}
-            },
-            setup(props) {
-                const a = []
-                for (let index = 0; index < 1000; index++) {
-                    a.push(new Date())
-                }
-                return {
-                    a
-                }  
-            },
-            template: '<div><p>this is bar page</p><router-link to="/baz">Go to Baz</router-link></div>' ,
-            beforeCreate() {
-                console.log("bar beforeCreate")
-            },
-            unmounted() {
-                console.log("bar unmounted")
-            },
-            deactivated() {
-                console.log("bar deactivate")
-            },
-            activated() {
-                console.log("bar activate") 
-            },
-        }
-        const Baz = { 
-            name: 'baz',
-            template: '<div><p>this is baz page</p><div @click="goback">goBack</div><router-link to="/foo">Go to Foo</router-link></div>',
-            methods:{
-                goback(){
-                    this.$router.back();
-                }
-            },
-            unmounted() {
-                console.log("baz unmounted")
-            },
-        }
+       
         const Home = { 
             name: 'home',
             template: '<div><p>this is home page</p><div @click="goback">goBack</div><router-link to="/foo">Go to Foo</router-link></div>',
@@ -134,8 +81,6 @@
         const routes = [
             { path: '/', component: Home },
             { path: '/foo', component: Foo },
-            { path: '/bar', component: Bar },
-            { path: '/baz', component: Baz }
         ]
 
         // const router = new VueRouter({
