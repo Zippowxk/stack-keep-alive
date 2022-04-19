@@ -5,7 +5,7 @@
 
 
 ### 为什么需要本插件：
-在使用```Vue.js```搭配```vue-router```开发单页面应用时，经常使用[keep-alive](https://vuejs.org/v2/api/#keep-alive)组件缓存浏览过的页面来提升用户体验，目前提供了如下配置方式来动态管理缓存
+在使用```Vue.js```搭配```vue-router```开发单页面应用时，经常使用[keep-alive](https://v3.cn.vuejs.org/api/built-in-components.html#keep-alive)组件缓存浏览过的页面来提升用户体验，目前提供了如下配置方式来动态管理缓存
 ```
 include - 只有名称匹配的组件会被缓存。
 exclude - 任何名称匹配的组件都不会被缓存。
@@ -27,29 +27,21 @@ max - 最多可以缓存多少组件实例。
 ### 使用方式
 
 1. ```npm i -s stack-keep-alive```
-2. 将所有页面设置为keep-alive
-```html
-...
-<keep-alive>
-  <router-view/>
-</keep-alive>
-...
+2. 使用``stack-keep-alive``替换``keep-alive``组件 (无需引入，已注册全局组件)
+```vue
+<!-- 注意绑定key -->  
+<router-view v-slot="{ Component }">
+  <stack-keep-alive v-slot='{ key }'> 
+      <component :is="Component" :key='key'/>
+  </stack-keep-alive>
+</router-view>
 ```
-3. 在vue-router初始化时 添加helper
+3. 在app初始化时，使用StackKeepAlive插件
 ```javascript
 import StackKeepAlive from 'stack-keep-alive'
 const app = Vue.createApp({})
 app.use(StackKeepAlive)
 ...
-```
-
-```vue
-// 使用stack-keep-alive 替换 keep-alive 组件，注意绑定key （无需引入，已注册全局组件）
- <router-view v-slot="{ Component }">
-    <stack-keep-alive v-slot='{ key }'> 
-        <component :is="Component" :key='key'/>
-    </stack-keep-alive>
-</router-view>
 ```
 
 ### 配置
@@ -58,9 +50,9 @@ app.use(StackKeepAlive)
   
   在tab栏切换时，需要留存某些tab页面，可以在replaceStay中配置这些路径
 ```vue
-    <stack-keep-alive v-slot='{ key }' :replaceStay='["/foo"]'> 
-        <component :is="Component" :key='key'/>
-    </stack-keep-alive>
+<stack-keep-alive v-slot='{ key }' :replaceStay='["/foo"]'> 
+    <component :is="Component" :key='key'/>
+</stack-keep-alive>
 ```
 
 ### 更新日志
