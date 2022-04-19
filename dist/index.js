@@ -115,13 +115,20 @@
         this.historyStackMap[index] = vms;
       }
     }
-    pop() {
+    pop(onlyLastOne = false) {
       const last = this.historyStackMap.pop();
-      Array.isArray(last) &&
-        last.forEach(
-          (vm) => vm && this.destroyCache(vm)
-        );
+      if (Array.isArray(last)) {
+        if (onlyLastOne) {
+          const vm = last.pop();
+          vm && this.destroyCache(vm);
+        } else {
+          last.forEach(
+            (vm) => vm && this.destroyCache(vm)
+          );
+        }
+      }
     }
+    
     removeGreater(index) {
       while (this.historyStackMap.length >= index) {
         this.pop();
@@ -264,8 +271,6 @@
       router.beforeEach((to, from) => {
       });
       router.afterEach((to, from) => {
-        console.log('====================================');
-        console.log(`from: ${from.path} ,to: ${to.path}`);
         this.historyShouldChange = true;
         // get the vm instance after render
         Vue.nextTick(() => {
@@ -334,7 +339,8 @@
         !avoidReplaceQuery;
 
       if (shouldDestroy) {
-        this.destroyCaches(this.pre.vnode.key);
+        // this.destroyCaches(this.pre.vnode.key)
+        this.historyStack.pop(true);
       }
       
       this.pre = null;
@@ -357,12 +363,12 @@
     get stackPointer() {
       return this.router._stack;
     }
+    setStackPointer(val) {
+      this.router._stack = val;
+    }
     setState(id) {
       this.setStackPointer(id);
       replaceState(this.mode, this.router, id);
-    }
-    setStackPointer(val) {
-      this.router._stack = val;
     }
     increaseStackPointer() {
       return (this.router._stack += 1);
@@ -387,7 +393,7 @@
         include: [String, RegExp, Array],
         exclude: [String, RegExp, Array],
         max: [String, Number],
-        replaceStay: [String],
+        replaceStay: [Array],
         mode: String,
       },
     
@@ -502,13 +508,13 @@
         {
           router = VueRouter__default["default"].useRouter();
         }
+        if (!router) {
+          throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()")
+        }
         const _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay });
         {
           window.__core = _core;
         }
-        // if (false) {
-        //   global._core = _core
-        // }
         // prune cache on include/exclude prop change
         Vue.watch(
           () => [props.include, props.exclude],

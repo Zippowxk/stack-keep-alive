@@ -1,6 +1,6 @@
 {
   "name": "stack-keep-alive",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.0",
   "description": "",
   "main": "dist/library.js",
   "module": "dist/library.mjs",
