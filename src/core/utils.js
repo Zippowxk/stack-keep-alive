@@ -34,7 +34,7 @@ const getCurrentState = function () {
 };
 
 export const genKey = function (num, router) {
-  return `keep-alive-vnode-key${Number(num)}${currentPathOf(router)}`;
+  return `keep-alive-vnode-key-${Number(num)}-${currentPathOf(router)}`;
 };
 export const getCurrentVM = function (router) {
   return router.currentRoute._value.matched.length > 0

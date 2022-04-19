@@ -14,13 +14,20 @@ export default class HistoryStack {
       this.historyStackMap[index] = vms;
     }
   }
-  pop() {
+  pop(onlyLastOne = false) {
     const last = this.historyStackMap.pop();
-    Array.isArray(last) &&
-      last.forEach(
-        (vm) => vm && this.destroyCache(vm)
-      );
+    if (Array.isArray(last)) {
+      if (onlyLastOne) {
+        const vm = last.pop()
+        vm && this.destroyCache(vm)
+      } else {
+        last.forEach(
+          (vm) => vm && this.destroyCache(vm)
+        );
+      }
+    }
   }
+  
   removeGreater(index) {
     while (this.historyStackMap.length >= index) {
       this.pop();

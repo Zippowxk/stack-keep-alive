@@ -32,6 +32,7 @@ function createReplace() {
         __DEV__ : true,
         __FEATURE_SUSPENSE__ : false,
         __COMPAT__ : false,
+        __TEST__: false,
     }
     return replace({
         // @ts-ignore

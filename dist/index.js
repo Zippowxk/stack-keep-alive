@@ -31,7 +31,7 @@
   };
 
   const genKey = function (num, router) {
-    return `keep-alive-vnode-key${Number(num)}${currentPathOf(router)}`;
+    return `keep-alive-vnode-key-${Number(num)}-${currentPathOf(router)}`;
   };
   const getCurrentVM = function (router) {
     return router.currentRoute._value.matched.length > 0
@@ -154,6 +154,7 @@
     }
 
     beforeGo(cb) {
+      const { router } = this;
       const gstmp = router.go;
       const gstmpf = (number) => {
         cb();
@@ -166,6 +167,7 @@
     }
 
     beforePush(cb) {
+      const { router } = this;
       const pstmp = router.push;
       const pstmpf = (location, onComplete, onAbort) => {
         cb();
@@ -197,7 +199,7 @@
     };
   }
 
-  class VueRouterKeepAliveHelper {
+  class Core {
     constructor({ router, pruneCacheEntry , replaceStay }) {
       hackHistory(history);
       this.destroyCaches = pruneCacheEntry;
@@ -244,6 +246,7 @@
      * @returns generator for the vnode key of keep-alive slots
      */
     genKeyForVnode() {
+      const { router } = this;
       if (this.isReplace || this._initial) {
         this._initial = false;
         return genKey(this.stackPointer, router);
@@ -257,10 +260,12 @@
      * use afterEach hook to set state.key and add the reference of vm to the historyStack
      */
     routerHooks() {
-      const router = this.router;
+      const { router } = this;
       router.beforeEach((to, from) => {
       });
       router.afterEach((to, from) => {
+        console.log('====================================');
+        console.log(`from: ${from.path} ,to: ${to.path}`);
         this.historyShouldChange = true;
         // get the vm instance after render
         Vue.nextTick(() => {
@@ -493,11 +498,17 @@
         }
     
         // core
-        const router = VueRouter__default["default"].useRouter();
-        const _core = new VueRouterKeepAliveHelper({ router, pruneCacheEntry, replaceStay: props.replaceStay });
+        let router;
+        {
+          router = VueRouter__default["default"].useRouter();
+        }
+        const _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay });
         {
           window.__core = _core;
         }
+        // if (false) {
+        //   global._core = _core
+        // }
         // prune cache on include/exclude prop change
         Vue.watch(
           () => [props.include, props.exclude],

@@ -15,7 +15,7 @@ import { nextTick } from 'Vue'
 
 import { hackHistory, RouterHacker } from '../hacks/index';
 
-export default class VueRouterKeepAliveHelper {
+export default class Core {
   constructor({ router, pruneCacheEntry , replaceStay }) {
     hackHistory(history)
     this.destroyCaches = pruneCacheEntry;
@@ -62,6 +62,7 @@ export default class VueRouterKeepAliveHelper {
    * @returns generator for the vnode key of keep-alive slots
    */
   genKeyForVnode() {
+    const { router } = this
     if (this.isReplace || this._initial) {
       this._initial = false
       return genKey(this.stackPointer, router);
@@ -75,7 +76,7 @@ export default class VueRouterKeepAliveHelper {
    * use afterEach hook to set state.key and add the reference of vm to the historyStack
    */
   routerHooks() {
-    const router = this.router;
+    const { router } = this
     router.beforeEach((to, from) => {
     })
     router.afterEach((to, from) => {
@@ -147,7 +148,8 @@ export default class VueRouterKeepAliveHelper {
       !avoidReplaceQuery
 
     if (shouldDestroy) {
-      this.destroyCaches(this.pre.vnode.key)
+      // this.destroyCaches(this.pre.vnode.key)
+      this.historyStack.pop(true);
     } else if (!avoidReplaceQuery) {
       // this.pre?.$clearParent?.(vm); 
     }
@@ -172,12 +174,12 @@ export default class VueRouterKeepAliveHelper {
   get stackPointer() {
     return this.router._stack;
   }
+  setStackPointer(val) {
+    this.router._stack = val;
+  }
   setState(id) {
     this.setStackPointer(id);
     replaceState(this.mode, this.router, id);
-  }
-  setStackPointer(val) {
-    this.router._stack = val;
   }
   increaseStackPointer() {
     return (this.router._stack += 1);

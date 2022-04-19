@@ -58,7 +58,7 @@ import {
       include: [String, RegExp, Array],
       exclude: [String, RegExp, Array],
       max: [String, Number],
-      replaceStay: [String],
+      replaceStay: [Array],
       mode: String,
     },
   
@@ -179,10 +179,21 @@ import {
       }
   
       // core
-      const router = VueRouter.useRouter()
+      let router
+      if (__TEST__) {
+        router = global.router
+      } else {
+        router = VueRouter.useRouter()
+      }
+      if (!router) {
+        throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()")
+      }
       const _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay })
       if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
         window.__core = _core
+      }
+      if (__TEST__) {
+        global.__core = _core
       }
       // prune cache on include/exclude prop change
       watch(

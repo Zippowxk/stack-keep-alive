@@ -21,6 +21,7 @@ export class RouterHacker {
   }
 
   beforeGo(cb) {
+    const { router } = this
     const gstmp = router.go;
     const gstmpf = (number) => {
       cb()
@@ -33,6 +34,7 @@ export class RouterHacker {
   }
 
   beforePush(cb) {
+    const { router } = this
     const pstmp = router.push;
     const pstmpf = (location, onComplete, onAbort) => {
       cb()
