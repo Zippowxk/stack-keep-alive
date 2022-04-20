@@ -3,6 +3,7 @@
 
 [Vue2.x 版本](https://github.com/Zippowxk/vue-router-keep-alive-helper)
 
+![img](./assets/stack.gif)
 
 ### 为什么需要本插件：
 在使用```Vue.js```搭配```vue-router```开发单页面应用时，经常使用[keep-alive](https://v3.cn.vuejs.org/api/built-in-components.html#keep-alive)组件缓存浏览过的页面来提升用户体验，目前提供了如下配置方式来动态管理缓存
