@@ -1,6 +1,7 @@
 import vue from 'rollup-plugin-vue'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import replace from '@rollup/plugin-replace'
+import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
 export default [
   {
@@ -8,11 +9,11 @@ export default [
     output: [
       {
         format: 'esm',
-        file: 'dist/library.mjs'
+        file: 'dist/library.esm.js'
       },
       {
         format: 'cjs',
-        file: 'dist/library.js'
+        file: 'dist/library.cjs.js'
       },
       {
           name: 'StackKeepAlive',
@@ -21,8 +22,13 @@ export default [
       }
     ],
     plugins: [
-      vue(), peerDepsExternal(),
-      createReplace()
+      vue(), 
+      peerDepsExternal(),
+      createReplace(),
+      getBabelOutputPlugin({
+        presets: ['@babel/preset-env'],
+        allowAllFormats: true
+      })
     ]
   }
 ]
