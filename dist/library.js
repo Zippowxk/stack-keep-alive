@@ -8,49 +8,134 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var VueRouter__default = /*#__PURE__*/_interopDefaultLegacy(VueRouter);
 
-const isDef = function (v) {
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", {
+    writable: false
+  });
+  return Constructor;
+}
+
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
+}
+
+function _iterableToArrayLimit(arr, i) {
+  var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
+
+  if (_i == null) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+
+  var _s, _e;
+
+  try {
+    for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+var isDef = function isDef(v) {
   return v !== undefined && v !== null;
 };
-const PLACEHOLDER_VM = {
+var PLACEHOLDER_VM = {
   __placeholder: true
 };
-const currentPathOf = function (router) {
+var currentPathOf = function currentPathOf(router) {
   return router.currentRoute._value.path;
 };
-const resolvePushedVm = function (current) {
+var resolvePushedVm = function resolvePushedVm(current) {
   return isDef(current) ? current : PLACEHOLDER_VM;
 };
-const isPlaceHolderVm = vm => vm && !!vm.__placeholder;
-const getStateId = function () {
-  const state = getCurrentState();
+var isPlaceHolderVm = function isPlaceHolderVm(vm) {
+  return vm && !!vm.__placeholder;
+};
+var getStateId = function getStateId() {
+  var state = getCurrentState();
   return isDef(state) ? state.id : undefined;
 };
 
-const getCurrentState = function () {
+var getCurrentState = function getCurrentState() {
   return history.state;
 };
 
-const genKey = function (num, router) {
-  return `keep-alive-vnode-key-${Number(num)}-${currentPathOf(router)}`;
+var genKey = function genKey(num, router) {
+  return "keep-alive-vnode-key-".concat(Number(num), "-").concat(currentPathOf(router));
 };
-const getCurrentVM = function (router) {
-  return router.currentRoute._value.matched.length > 0 ? router.currentRoute._value.matched[0].instances.default.$ : undefined;
+var getCurrentVM = function getCurrentVM(router) {
+  return router.currentRoute._value.matched.length > 0 ? router.currentRoute._value.matched[0].instances["default"].$ : undefined;
 };
-const replaceState = function (mode, router, id) {
-  const {
-    pathname,
-    search,
-    hash
-  } = window.location;
-  let path = `${pathname}${search}${hash}`;
-  let state = isDef(history.state) ? history.state : {};
+var replaceState = function replaceState(mode, router, id) {
+  var _window$location = window.location,
+      pathname = _window$location.pathname,
+      search = _window$location.search,
+      hash = _window$location.hash;
+  var path = "".concat(pathname).concat(search).concat(hash);
+  var state = isDef(history.state) ? history.state : {};
   state['id'] = id; // optimize file:// URL
 
-  const isFilSys = window.location.href.startsWith('file://');
+  var isFilSys = window.location.href.startsWith('file://');
   history.replaceState(state, '', isFilSys ? null : path);
 };
 
-const ShapeFlags = {
+var ShapeFlags = {
   ELEMENT: 1,
   FUNCTIONAL_COMPONENT: 1 << 1,
   STATEFUL_COMPONENT: 1 << 2,
@@ -63,9 +148,13 @@ const ShapeFlags = {
   COMPONENT_KEPT_ALIVE: 1 << 9,
   COMPONENT: 1 << 1 | 1 << 2
 };
-const isFunction = val => typeof val === 'function';
-const invokeArrayFns = (fns, arg = null) => {
-  for (let i = 0; i < fns.length; i++) {
+var isFunction = function isFunction(val) {
+  return typeof val === 'function';
+};
+var invokeArrayFns = function invokeArrayFns(fns) {
+  var arg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+  for (var i = 0; i < fns.length; i++) {
     fns[i](arg);
   }
 };
@@ -74,156 +163,183 @@ function getComponentName(Component) {
   return isFunction(Component) ? Component.displayName || Component.name : Component.name;
 }
 
-const VNODE_HOOK = 7;
-function invokeVNodeHook(hook, instance, vnode, prevVNode = null) {
+var VNODE_HOOK = 7;
+function invokeVNodeHook(hook, instance, vnode) {
+  var prevVNode = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
   Vue.callWithAsyncErrorHandling(hook, instance, VNODE_HOOK, [vnode, prevVNode]);
 }
 
-const MoveType = {
+var MoveType = {
   ENTER: 0,
   LEAVE: 1,
   REORDER: 2
 };
 
-const queuePostRenderEffect = Vue.queuePostFlushCb;
+var queuePostRenderEffect = Vue.queuePostFlushCb;
 
-const isAsyncWrapper = i => !!i.__asyncLoader;
+var isAsyncWrapper = function isAsyncWrapper(i) {
+  return !!i.__asyncLoader;
+};
 
-class HistoryStack {
-  constructor(destroyCache) {
+var HistoryStack = /*#__PURE__*/function () {
+  function HistoryStack(destroyCache) {
+    _classCallCheck(this, HistoryStack);
+
     this.historyStackMap = [];
     this.destroyCache = destroyCache;
   }
 
-  push(vm, index) {
-    const stack = this.historyStackMap[index];
+  _createClass(HistoryStack, [{
+    key: "push",
+    value: function push(vm, index) {
+      var stack = this.historyStackMap[index];
 
-    if (Array.isArray(stack)) {
-      !stack.includes(vm) && stack.push(vm);
-      this.historyStackMap[index] = stack.filter(item => !item._isDestroyed);
-    } else {
-      const vms = [];
-      vms.push(vm);
-      this.historyStackMap[index] = vms;
-    }
-  }
-
-  pop(onlyLastOne = false) {
-    const last = this.historyStackMap.pop();
-
-    if (Array.isArray(last)) {
-      if (onlyLastOne) {
-        const vm = last.pop();
-        vm && this.destroyCache(vm);
+      if (Array.isArray(stack)) {
+        !stack.includes(vm) && stack.push(vm);
+        this.historyStackMap[index] = stack.filter(function (item) {
+          return !item._isDestroyed;
+        });
       } else {
-        last.forEach(vm => vm && this.destroyCache(vm));
+        var vms = [];
+        vms.push(vm);
+        this.historyStackMap[index] = vms;
       }
     }
-  }
+  }, {
+    key: "pop",
+    value: function pop() {
+      var _this = this;
 
-  removeGreater(index) {
-    while (this.historyStackMap.length >= index) {
-      this.pop();
+      var onlyLastOne = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var last = this.historyStackMap.pop();
+
+      if (Array.isArray(last)) {
+        if (onlyLastOne) {
+          var vm = last.pop();
+          vm && this.destroyCache(vm);
+        } else {
+          last.forEach(function (vm) {
+            return vm && _this.destroyCache(vm);
+          });
+        }
+      }
     }
-  }
+  }, {
+    key: "removeGreater",
+    value: function removeGreater(index) {
+      while (this.historyStackMap.length >= index) {
+        this.pop();
+      }
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.historyStackMap = [];
+    }
+  }]);
 
-  clear() {
-    this.historyStackMap = [];
-  }
+  return HistoryStack;
+}();
 
-}
+var RouterHacker = /*#__PURE__*/function () {
+  function RouterHacker(router) {
+    _classCallCheck(this, RouterHacker);
 
-class RouterHacker {
-  constructor(router) {
     this.router = router;
   }
 
-  beforeReplace(cb, onerror) {
-    const router = this.router;
-    const rtmp = router.replace;
+  _createClass(RouterHacker, [{
+    key: "beforeReplace",
+    value: function beforeReplace(cb, onerror) {
+      var router = this.router;
+      var rtmp = router.replace;
 
-    const rtmpf = (location, onComplete, onAbort) => {
-      cb();
-      rtmp.call(router, location, onComplete, e => {
-        onerror();
-        isDef(onAbort) && onAbort(e);
-      });
-    };
+      var rtmpf = function rtmpf(location, onComplete, onAbort) {
+        cb();
+        rtmp.call(router, location, onComplete, function (e) {
+          onerror();
+          isDef(onAbort) && onAbort(e);
+        });
+      };
 
-    router.replace = function (location, onComplete, onAbort) {
-      rtmpf(location, onComplete, onAbort);
-    };
+      router.replace = function (location, onComplete, onAbort) {
+        rtmpf(location, onComplete, onAbort);
+      };
 
-    return this;
-  }
+      return this;
+    }
+  }, {
+    key: "beforeGo",
+    value: function beforeGo(cb) {
+      var router = this.router;
+      var gstmp = router.go;
 
-  beforeGo(cb) {
-    const {
-      router
-    } = this;
-    const gstmp = router.go;
+      var gstmpf = function gstmpf(number) {
+        cb();
+        return gstmp.call(router, number);
+      };
 
-    const gstmpf = number => {
-      cb();
-      return gstmp.call(router, number);
-    };
+      router.go = function (num) {
+        return gstmpf(num);
+      };
 
-    router.go = function (num) {
-      return gstmpf(num);
-    };
+      return this;
+    }
+  }, {
+    key: "beforePush",
+    value: function beforePush(cb) {
+      var router = this.router;
+      var pstmp = router.push;
 
-    return this;
-  }
+      var pstmpf = function pstmpf(location, onComplete, onAbort) {
+        cb();
 
-  beforePush(cb) {
-    const {
-      router
-    } = this;
-    const pstmp = router.push;
+        if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
+          return pstmp.call(router, location, onComplete, onAbort);
+        } else {
+          pstmp.call(router, location, onComplete, onAbort);
+        }
+      };
 
-    const pstmpf = (location, onComplete, onAbort) => {
-      cb();
+      router.push = function (location, onComplete, onAbort) {
+        return pstmpf(location, onComplete, onAbort);
+      };
 
-      if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
-        return pstmp.call(router, location, onComplete, onAbort);
-      } else {
-        pstmp.call(router, location, onComplete, onAbort);
-      }
-    };
+      return this;
+    }
+  }]);
 
-    router.push = function (location, onComplete, onAbort) {
-      return pstmpf(location, onComplete, onAbort);
-    };
-
-    return this;
-  }
-
-}
+  return RouterHacker;
+}();
 
 function hackHistory(history) {
-  const rstmp = history.replaceState;
+  var rstmp = history.replaceState;
 
   history.replaceState = function (state, op, path) {
-    const old = Object.assign({}, history.state);
-    const s = Object.assign(old, state);
+    var old = Object.assign({}, history.state);
+    var s = Object.assign(old, state);
     rstmp.call(history, s, op, path);
   };
 
-  const historyPushState = history.pushState;
+  var historyPushState = history.pushState;
 
   history.pushState = function (state, op, path) {
-    const old = Object.assign({}, history.state);
-    const s = Object.assign(old, state);
+    var old = Object.assign({}, history.state);
+    var s = Object.assign(old, state);
     historyPushState.call(history, s, op, path);
   };
 }
 
-class Core {
-  constructor({
-    router,
-    pruneCacheEntry,
-    replaceStay
-  }) {
+var Core = /*#__PURE__*/function () {
+  function Core(_ref) {
+    var _this = this;
+
+    var router = _ref.router,
+        pruneCacheEntry = _ref.pruneCacheEntry,
+        replaceStay = _ref.replaceStay;
+
+    _classCallCheck(this, Core);
+
     hackHistory(history);
     this.destroyCaches = pruneCacheEntry;
     this.router = router;
@@ -238,191 +354,213 @@ class Core {
     this.replaceStay = replaceStay || [];
     this._initial = false; //闲置状态
 
-    this.historyStack = new HistoryStack(_vm => {
+    this.historyStack = new HistoryStack(function (_vm) {
       if (_vm) {
-        this.destroyCaches(_vm.vnode.key);
+        _this.destroyCaches(_vm.vnode.key);
       }
     });
     this.init();
   }
 
-  init() {
-    this.initStackPointer();
-    this.routerHooks();
-    this.hackRouter();
-  }
-
-  initStackPointer() {
-    const currentStateId = getStateId();
-
-    if (isDef(currentStateId)) {
-      this.setStackPointer(currentStateId);
-    } else {
-      this.setState(0);
+  _createClass(Core, [{
+    key: "init",
+    value: function init() {
+      this.initStackPointer();
+      this.routerHooks();
+      this.hackRouter();
     }
-  }
-  /**
-   * to fix the first time inital Render with path like "/",
-   */
+  }, {
+    key: "initStackPointer",
+    value: function initStackPointer() {
+      var currentStateId = getStateId();
 
-
-  genInitialKeyNextTime() {
-    this._initial = true;
-  }
-  /**
-   * 
-   * @returns generator for the vnode key of keep-alive slots
-   */
-
-
-  genKeyForVnode() {
-    const {
-      router
-    } = this;
-
-    if (this.isReplace || this._initial) {
-      this._initial = false;
-      return genKey(this.stackPointer, router);
-    } else if (this.isPush) {
-      return genKey(this.stackPointer + 1, router);
-    } else {
-      return genKey(this.stackPointer - 1, router);
+      if (isDef(currentStateId)) {
+        this.setStackPointer(currentStateId);
+      } else {
+        this.setState(0);
+      }
     }
-  }
-  /**
-   * use afterEach hook to set state.key and add the reference of vm to the historyStack
-   */
+    /**
+     * to fix the first time inital Render with path like "/",
+     */
+
+  }, {
+    key: "genInitialKeyNextTime",
+    value: function genInitialKeyNextTime() {
+      this._initial = true;
+    }
+    /**
+     * 
+     * @returns generator for the vnode key of keep-alive slots
+     */
+
+  }, {
+    key: "genKeyForVnode",
+    value: function genKeyForVnode() {
+      var router = this.router;
+
+      if (this.isReplace || this._initial) {
+        this._initial = false;
+        return genKey(this.stackPointer, router);
+      } else if (this.isPush) {
+        return genKey(this.stackPointer + 1, router);
+      } else {
+        return genKey(this.stackPointer - 1, router);
+      }
+    }
+    /**
+     * use afterEach hook to set state.key and add the reference of vm to the historyStack
+     */
+
+  }, {
+    key: "routerHooks",
+    value: function routerHooks() {
+      var _this2 = this;
+
+      var router = this.router;
+      router.beforeEach(function (to, from) {});
+      router.afterEach(function (to, from) {
+        _this2.historyShouldChange = true; // get the vm instance after render
+
+        Vue.nextTick(function () {
+          var current = _this2.currentVm;
+          var pendingToPushVm = resolvePushedVm(current);
+
+          if (_this2.pre === null) {
+            _this2.onInitial(pendingToPushVm);
+          } else if (_this2.isReplace) {
+            _this2.onReplace(pendingToPushVm);
+          } else if (_this2.isPush) {
+            _this2.onPush(pendingToPushVm);
+          } else {
+            _this2.onBack(pendingToPushVm);
+          } // console.log(current)
 
 
-  routerHooks() {
-    const {
-      router
-    } = this;
-    router.beforeEach((to, from) => {});
-    router.afterEach((to, from) => {
-      this.historyShouldChange = true; // get the vm instance after render
+          _this2.pre = current; // this.SetIdle(true)
 
-      Vue.nextTick(() => {
-        const current = this.currentVm;
-        const pendingToPushVm = resolvePushedVm(current);
+          _this2.preStateId = _this2.stackPointer;
 
-        if (this.pre === null) {
-          this.onInitial(pendingToPushVm);
-        } else if (this.isReplace) {
-          this.onReplace(pendingToPushVm);
-        } else if (this.isPush) {
-          this.onPush(pendingToPushVm);
-        } else {
-          this.onBack(pendingToPushVm);
-        } // console.log(current)
-
-
-        this.pre = current; // this.SetIdle(true)
-
-        this.preStateId = this.stackPointer;
-
-        if (!isPlaceHolderVm(pendingToPushVm)) {
-          this.historyShouldChange = false;
-        }
+          if (!isPlaceHolderVm(pendingToPushVm)) {
+            _this2.historyShouldChange = false;
+          }
+        });
       });
-    });
-  }
-  /**
-   * @description hack router go , replace and push functions to tell replace from back and push
-   */
+    }
+    /**
+     * @description hack router go , replace and push functions to tell replace from back and push
+     */
 
+  }, {
+    key: "hackRouter",
+    value: function hackRouter() {
+      var _this3 = this;
 
-  hackRouter() {
-    this._hackRouter = new RouterHacker(this.router);
+      this._hackRouter = new RouterHacker(this.router);
 
-    this._hackRouter.beforeReplace(() => {
-      this.isReplace = true;
-      this.replacePrePath = currentPathOf(this.router);
-    }, e => {
+      this._hackRouter.beforeReplace(function () {
+        _this3.isReplace = true;
+        _this3.replacePrePath = currentPathOf(_this3.router);
+      }, function (e) {
+        _this3.isReplace = false;
+        _this3.replacePrePath = undefined;
+      }).beforeGo(function () {
+        _this3.isReplace = false;
+      }).beforePush(function () {
+        _this3.isReplace = false;
+      });
+    }
+  }, {
+    key: "onInitial",
+    value: function onInitial(vm) {
+      this.historyStack.push(vm, this.stackPointer);
+    }
+  }, {
+    key: "onPush",
+    value: function onPush(vm) {
+      var _this$pre, _this$pre$$clearParen;
+
+      this.setState(this.increaseStackPointer());
+      this.historyStack.push(vm, this.stackPointer);
+      (_this$pre = this.pre) === null || _this$pre === void 0 ? void 0 : (_this$pre$$clearParen = _this$pre.$clearParent) === null || _this$pre$$clearParen === void 0 ? void 0 : _this$pre$$clearParen.call(_this$pre, vm);
+      this.pre = null;
+    }
+  }, {
+    key: "onBack",
+    value: function onBack(vm) {
+      this.historyStack.pop();
+      this.decreaseStackPointer();
+      this.historyStack.push(vm, this.stackPointer);
+    }
+  }, {
+    key: "onReplace",
+    value: function onReplace(vm) {
+      // avoidReplaceQuery is fix the issue : router.replace only a query by same path, may cause error
+      var avoidReplaceQuery = this.replacePrePath === currentPathOf(this.router);
+      var shouldDestroy = !(isDef(this.replacePrePath) && this.replaceStay.includes(this.replacePrePath)) && !avoidReplaceQuery;
+
+      if (shouldDestroy) {
+        // this.destroyCaches(this.pre.vnode.key)
+        this.historyStack.pop(true);
+      }
+
+      this.pre = null;
+      this.setState(this.stackPointer);
+      this.historyStack.push(vm, this.stackPointer);
       this.isReplace = false;
       this.replacePrePath = undefined;
-    }).beforeGo(() => {
-      this.isReplace = false;
-    }).beforePush(() => {
-      this.isReplace = false;
-    });
-  }
-
-  onInitial(vm) {
-    this.historyStack.push(vm, this.stackPointer);
-  }
-
-  onPush(vm) {
-    this.setState(this.increaseStackPointer());
-    this.historyStack.push(vm, this.stackPointer);
-    this.pre?.$clearParent?.(vm);
-    this.pre = null;
-  }
-
-  onBack(vm) {
-    this.historyStack.pop();
-    this.decreaseStackPointer();
-    this.historyStack.push(vm, this.stackPointer);
-  }
-
-  onReplace(vm) {
-    // avoidReplaceQuery is fix the issue : router.replace only a query by same path, may cause error
-    const avoidReplaceQuery = this.replacePrePath === currentPathOf(this.router);
-    const shouldDestroy = !(isDef(this.replacePrePath) && this.replaceStay.includes(this.replacePrePath)) && !avoidReplaceQuery;
-
-    if (shouldDestroy) {
-      // this.destroyCaches(this.pre.vnode.key)
-      this.historyStack.pop(true);
     }
-
-    this.pre = null;
-    this.setState(this.stackPointer);
-    this.historyStack.push(vm, this.stackPointer);
-    this.isReplace = false;
-    this.replacePrePath = undefined;
-  }
-
-  get currentVm() {
-    return getCurrentVM(this.router);
-  }
-
-  get isPush() {
-    if (!this.isReplace) {
-      const stateId = getStateId();
-      const v = !isDef(stateId) || this.preStateId <= stateId;
-      return v;
+  }, {
+    key: "currentVm",
+    get: function get() {
+      return getCurrentVM(this.router);
     }
+  }, {
+    key: "isPush",
+    get: function get() {
+      if (!this.isReplace) {
+        var stateId = getStateId();
+        var v = !isDef(stateId) || this.preStateId <= stateId;
+        return v;
+      }
 
-    return false;
-  }
+      return false;
+    }
+  }, {
+    key: "stackPointer",
+    get: function get() {
+      return this.router._stack;
+    }
+  }, {
+    key: "setStackPointer",
+    value: function setStackPointer(val) {
+      this.router._stack = val;
+    }
+  }, {
+    key: "setState",
+    value: function setState(id) {
+      this.setStackPointer(id);
+      replaceState(this.mode, this.router, id);
+    }
+  }, {
+    key: "increaseStackPointer",
+    value: function increaseStackPointer() {
+      return this.router._stack += 1;
+    }
+  }, {
+    key: "decreaseStackPointer",
+    value: function decreaseStackPointer() {
+      return this.router._stack -= 1;
+    }
+  }]);
 
-  get stackPointer() {
-    return this.router._stack;
-  }
-
-  setStackPointer(val) {
-    this.router._stack = val;
-  }
-
-  setState(id) {
-    this.setStackPointer(id);
-    replaceState(this.mode, this.router, id);
-  }
-
-  increaseStackPointer() {
-    return this.router._stack += 1;
-  }
-
-  decreaseStackPointer() {
-    return this.router._stack -= 1;
-  }
-
-}
+  return Core;
+}();
 
 // 提供根据key清除cache的方法
 
-const StackKeepAliveImpl = {
-  name: `StackKeepAlive`,
+var StackKeepAliveImpl = {
+  name: "StackKeepAlive",
   // Marker for special handling inside the renderer. We are not using a ===
   // check directly on KeepAlive in the renderer, because importing it directly
   // would prevent it from being tree-shaken.
@@ -434,57 +572,50 @@ const StackKeepAliveImpl = {
     replaceStay: [Array],
     mode: String
   },
-
-  setup(props, {
-    slots
-  }) {
-    const instance = Vue.getCurrentInstance(); // KeepAlive communicates with the instantiated renderer via the
+  setup: function setup(props, _ref) {
+    var slots = _ref.slots;
+    var instance = Vue.getCurrentInstance(); // KeepAlive communicates with the instantiated renderer via the
     // ctx where the renderer passes in its internals,
     // and the KeepAlive instance exposes activate/deactivate implementations.
     // The whole point of this is to avoid importing KeepAlive directly in the
     // renderer to facilitate tree-shaking.
 
-    const sharedContext = instance.ctx; // if the internal renderer is not registered, it indicates that this is server-side rendering,
+    var sharedContext = instance.ctx; // if the internal renderer is not registered, it indicates that this is server-side rendering,
     // for KeepAlive, we just need to render its children
 
     if (!sharedContext.renderer) {
-      return slots.default;
+      return slots["default"];
     }
 
-    const cache = new Map();
-    const keys = new Set();
-    let current = null;
+    var cache = new Map();
+    var keys = new Set();
+    var current = null;
 
     {
       window.__v_cache = instance.__v_cache = cache;
     }
 
-    const parentSuspense = instance.suspense;
-    const {
-      renderer: {
-        p: patch,
-        m: move,
-        um: _unmount,
-        o: {
-          createElement
-        }
-      }
-    } = sharedContext;
-    const storageContainer = createElement('div');
+    var parentSuspense = instance.suspense;
+    var _sharedContext$render = sharedContext.renderer,
+        patch = _sharedContext$render.p,
+        move = _sharedContext$render.m,
+        _unmount = _sharedContext$render.um,
+        createElement = _sharedContext$render.o.createElement;
+    var storageContainer = createElement('div');
 
-    sharedContext.activate = (vnode, container, anchor, isSVG, optimized) => {
-      const instance = vnode.component;
+    sharedContext.activate = function (vnode, container, anchor, isSVG, optimized) {
+      var instance = vnode.component;
       move(vnode, container, anchor, MoveType.ENTER, parentSuspense); // in case props have changed
 
       patch(instance.vnode, vnode, container, anchor, instance, parentSuspense, isSVG, vnode.slotScopeIds, optimized);
-      queuePostRenderEffect(() => {
+      queuePostRenderEffect(function () {
         instance.isDeactivated = false;
 
         if (instance.a) {
           invokeArrayFns(instance.a);
         }
 
-        const vnodeHook = vnode.props && vnode.props.onVnodeMounted;
+        var vnodeHook = vnode.props && vnode.props.onVnodeMounted;
 
         if (vnodeHook) {
           invokeVNodeHook(vnodeHook, instance.parent, vnode);
@@ -492,15 +623,15 @@ const StackKeepAliveImpl = {
       }, parentSuspense);
     };
 
-    sharedContext.deactivate = vnode => {
-      const instance = vnode.component;
+    sharedContext.deactivate = function (vnode) {
+      var instance = vnode.component;
       move(vnode, storageContainer, null, MoveType.LEAVE, parentSuspense);
-      queuePostRenderEffect(() => {
+      queuePostRenderEffect(function () {
         if (instance.da) {
           invokeArrayFns(instance.da);
         }
 
-        const vnodeHook = vnode.props && vnode.props.onVnodeUnmounted;
+        var vnodeHook = vnode.props && vnode.props.onVnodeUnmounted;
 
         if (vnodeHook) {
           invokeVNodeHook(vnodeHook, instance.parent, vnode);
@@ -518,8 +649,8 @@ const StackKeepAliveImpl = {
     }
 
     function pruneCache(filter) {
-      cache.forEach((vnode, key) => {
-        const name = getComponentName(vnode.type);
+      cache.forEach(function (vnode, key) {
+        var name = getComponentName(vnode.type);
 
         if (name && (!filter || !filter(name))) {
           pruneCacheEntry(key);
@@ -528,7 +659,7 @@ const StackKeepAliveImpl = {
     }
 
     function pruneCacheEntry(key) {
-      const cached = cache.get(key);
+      var cached = cache.get(key);
 
       if (!current || cached.type !== current.type) {
         unmount(cached);
@@ -538,12 +669,12 @@ const StackKeepAliveImpl = {
         resetShapeFlag(current);
       }
 
-      cache.delete(key);
-      keys.delete(key);
+      cache["delete"](key);
+      keys["delete"](key);
     } // core
 
 
-    let router;
+    var router;
 
     {
       router = VueRouter__default["default"].useRouter();
@@ -553,9 +684,9 @@ const StackKeepAliveImpl = {
       throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()");
     }
 
-    const _core = new Core({
-      router,
-      pruneCacheEntry,
+    var _core = new Core({
+      router: router,
+      pruneCacheEntry: pruneCacheEntry,
       replaceStay: props.replaceStay
     });
 
@@ -564,18 +695,28 @@ const StackKeepAliveImpl = {
     }
 
 
-    Vue.watch(() => [props.include, props.exclude], ([include, exclude]) => {
-      include && pruneCache(name => matches(include, name));
-      exclude && pruneCache(name => !matches(exclude, name));
+    Vue.watch(function () {
+      return [props.include, props.exclude];
+    }, function (_ref2) {
+      var _ref3 = _slicedToArray(_ref2, 2),
+          include = _ref3[0],
+          exclude = _ref3[1];
+
+      include && pruneCache(function (name) {
+        return matches(include, name);
+      });
+      exclude && pruneCache(function (name) {
+        return !matches(exclude, name);
+      });
     }, // prune post-render after `current` has been updated
     {
       flush: 'post',
       deep: true
     }); // cache sub tree after render
 
-    let pendingCacheKey = null;
+    var pendingCacheKey = null;
 
-    const cacheSubtree = () => {
+    var cacheSubtree = function cacheSubtree() {
       // fix #1621, the pendingCacheKey could be 0
       if (pendingCacheKey != null) {
         cache.set(pendingCacheKey, getInnerChild(instance.subTree));
@@ -584,19 +725,17 @@ const StackKeepAliveImpl = {
 
     Vue.onMounted(cacheSubtree);
     Vue.onUpdated(cacheSubtree);
-    Vue.onBeforeUnmount(() => {
-      cache.forEach(cached => {
-        const {
-          subTree,
-          suspense
-        } = instance;
-        const vnode = getInnerChild(subTree);
+    Vue.onBeforeUnmount(function () {
+      cache.forEach(function (cached) {
+        var subTree = instance.subTree,
+            suspense = instance.suspense;
+        var vnode = getInnerChild(subTree);
 
         if (cached.type === vnode.type) {
           // current instance will be unmounted as part of keep-alive's unmount
           resetShapeFlag(vnode); // but invoke its deactivated hook here
 
-          const da = vnode.component.da;
+          var da = vnode.component.da;
           da && queuePostRenderEffect(da, suspense);
           return;
         }
@@ -604,24 +743,24 @@ const StackKeepAliveImpl = {
         unmount(cached);
       });
     });
-    return () => {
+    return function () {
       pendingCacheKey = null;
 
-      if (!slots.default) {
+      if (!slots["default"]) {
         return null;
       } // generate a specific key for every vnode
 
 
-      const _key = _core.genKeyForVnode();
+      var _key = _core.genKeyForVnode();
 
-      const children = slots.default({
+      var children = slots["default"]({
         'key': _key
       });
-      const rawVNode = children[0];
+      var rawVNode = children[0];
 
       if (children.length > 1) {
         {
-          Vue.warn(`KeepAlive should contain exactly one component child.`);
+          Vue.warn("KeepAlive should contain exactly one component child.");
         }
 
         current = null;
@@ -636,24 +775,22 @@ const StackKeepAliveImpl = {
         return rawVNode;
       }
 
-      let vnode = getInnerChild(rawVNode);
-      const comp = vnode.type; // for async components, name check should be based in its loaded
+      var vnode = getInnerChild(rawVNode);
+      var comp = vnode.type; // for async components, name check should be based in its loaded
       // inner component if available
 
-      const name = getComponentName(isAsyncWrapper(vnode) ? vnode.type.__asyncResolved || {} : comp);
-      const {
-        include,
-        exclude,
-        max
-      } = props;
+      var name = getComponentName(isAsyncWrapper(vnode) ? vnode.type.__asyncResolved || {} : comp);
+      var include = props.include,
+          exclude = props.exclude,
+          max = props.max;
 
       if (include && (!name || !matches(include, name)) || exclude && name && matches(exclude, name)) {
         current = vnode;
         return rawVNode;
       }
 
-      const key = vnode.key == null ? comp : vnode.key;
-      const cachedVNode = cache.get(key); // clone vnode if it's reused because we are going to mutate it
+      var key = vnode.key == null ? comp : vnode.key;
+      var cachedVNode = cache.get(key); // clone vnode if it's reused because we are going to mutate it
 
       if (vnode.el) {
         vnode = Vue.cloneVNode(vnode);
@@ -683,7 +820,7 @@ const StackKeepAliveImpl = {
 
         vnode.shapeFlag |= ShapeFlags.COMPONENT_KEPT_ALIVE; // make this key the freshest
 
-        keys.delete(key);
+        keys["delete"](key);
         keys.add(key);
       } else {
         keys.add(key); // prune oldest entry
@@ -699,14 +836,15 @@ const StackKeepAliveImpl = {
       return rawVNode;
     };
   }
-
 };
 
-const StackKeepAlive = StackKeepAliveImpl;
+var StackKeepAlive = StackKeepAliveImpl;
 
 function matches(pattern, name) {
   if (shared.isArray(pattern)) {
-    return pattern.some(p => matches(p, name));
+    return pattern.some(function (p) {
+      return matches(p, name);
+    });
   } else if (shared.isString(pattern)) {
     return pattern.split(',').includes(name);
   } else if (pattern.test) {
@@ -719,7 +857,7 @@ function matches(pattern, name) {
 }
 
 function resetShapeFlag(vnode) {
-  let shapeFlag = vnode.shapeFlag;
+  var shapeFlag = vnode.shapeFlag;
 
   if (shapeFlag & ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE) {
     shapeFlag -= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
@@ -737,19 +875,18 @@ function getInnerChild(vnode) {
 }
 
 var components = {
-  StackKeepAlive
+  StackKeepAlive: StackKeepAlive
 };
 
-const plugin = {
-  install(Vue) {
-    for (const prop in components) {
+var plugin = {
+  install: function install(Vue) {
+    for (var prop in components) {
       if (components.hasOwnProperty(prop)) {
-        const component = components[prop];
+        var component = components[prop];
         Vue.component(component.name, component);
       }
     }
   }
-
 };
 
 module.exports = plugin;

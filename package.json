@@ -2,8 +2,9 @@
   "name": "stack-keep-alive",
   "version": "1.0.0-beta.1",
   "description": "",
-  "main": "dist/library.cjs.js",
-  "module": "dist/library.esm.js",
+  "main": "dist/library.js",
+  "module": "dist/library.mjs",
+  "browser": "dist/index.js",
   "files": [
     "dist/*"
   ],
@@ -37,6 +38,5 @@
     "rollup-plugin-vue": "^6.0.0",
     "vue": "^3.2.21",
     "vue-router": "^4.0.14"
-  },
-  "dependencies": {}
+  }
 }
