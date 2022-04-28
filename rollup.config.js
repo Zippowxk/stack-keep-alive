@@ -1,7 +1,7 @@
 import vue from 'rollup-plugin-vue'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import replace from '@rollup/plugin-replace'
-import { babel } from '@rollup/plugin-babel';
+import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
 export default [
   {
@@ -31,11 +31,11 @@ export default [
       vue(), 
       peerDepsExternal(),
       createReplace(),
-      babel({exclude: 'node_modules/**'}) 
-      // getBabelOutputPlugin({
-      //   presets: ['@babel/preset-env'],
-      //   allowAllFormats: true
-      // })
+      getBabelOutputPlugin({
+        presets: ['@babel/preset-env'],
+        allowAllFormats: true,
+        exclude: 'node_modules/**',
+      })
     ]
   }
 ]

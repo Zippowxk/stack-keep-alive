@@ -1,112 +1,56 @@
-(function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('Vue'), require('@vue/shared'), require('vue-router')) :
-  typeof define === 'function' && define.amd ? define(['Vue', '@vue/shared', 'vue-router'], factory) :
-  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.StackKeepAlive = factory(global.Vue, global["vue/shared"], global.VueRouter));
-})(this, (function (Vue, shared, VueRouter) { 'use strict';
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
-  function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+(function (global, factory) {
+  (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('Vue'), require('@vue/shared'), require('vue-router')) : typeof define === 'function' && define.amd ? define(['Vue', '@vue/shared', 'vue-router'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.StackKeepAlive = factory(global.Vue, global["vue/shared"], global.VueRouter));
+})(this, function (Vue, shared, VueRouter) {
+  'use strict';
+
+  function _interopDefaultLegacy(e) {
+    return e && _typeof(e) === 'object' && 'default' in e ? e : {
+      'default': e
+    };
+  }
 
   var VueRouter__default = /*#__PURE__*/_interopDefaultLegacy(VueRouter);
-
-  function _classCallCheck(instance, Constructor) {
-    if (!(instance instanceof Constructor)) {
-      throw new TypeError("Cannot call a class as a function");
-    }
-  }
-
-  function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      Object.defineProperty(target, descriptor.key, descriptor);
-    }
-  }
-
-  function _createClass(Constructor, protoProps, staticProps) {
-    if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) _defineProperties(Constructor, staticProps);
-    Object.defineProperty(Constructor, "prototype", {
-      writable: false
-    });
-    return Constructor;
-  }
-
-  function _slicedToArray(arr, i) {
-    return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
-  }
-
-  function _arrayWithHoles(arr) {
-    if (Array.isArray(arr)) return arr;
-  }
-
-  function _iterableToArrayLimit(arr, i) {
-    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-
-    if (_i == null) return;
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-
-    var _s, _e;
-
-    try {
-      for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"] != null) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  function _unsupportedIterableToArray(o, minLen) {
-    if (!o) return;
-    if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-    var n = Object.prototype.toString.call(o).slice(8, -1);
-    if (n === "Object" && o.constructor) n = o.constructor.name;
-    if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-  }
-
-  function _arrayLikeToArray(arr, len) {
-    if (len == null || len > arr.length) len = arr.length;
-
-    for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-    return arr2;
-  }
-
-  function _nonIterableRest() {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
 
   var isDef = function isDef(v) {
     return v !== undefined && v !== null;
   };
+
   var PLACEHOLDER_VM = {
     __placeholder: true
   };
+
   var currentPathOf = function currentPathOf(router) {
     return router.currentRoute._value.path;
   };
+
   var resolvePushedVm = function resolvePushedVm(current) {
     return isDef(current) ? current : PLACEHOLDER_VM;
   };
+
   var isPlaceHolderVm = function isPlaceHolderVm(vm) {
     return vm && !!vm.__placeholder;
   };
+
   var getStateId = function getStateId() {
     var state = getCurrentState();
     return isDef(state) ? state.id : undefined;
@@ -119,9 +63,11 @@
   var genKey = function genKey(num, router) {
     return "keep-alive-vnode-key-".concat(Number(num), "-").concat(currentPathOf(router));
   };
+
   var getCurrentVM = function getCurrentVM(router) {
     return router.currentRoute._value.matched.length > 0 ? router.currentRoute._value.matched[0].instances["default"].$ : undefined;
   };
+
   var replaceState = function replaceState(mode, router, id) {
     var _window$location = window.location,
         pathname = _window$location.pathname,
@@ -148,9 +94,11 @@
     COMPONENT_KEPT_ALIVE: 1 << 9,
     COMPONENT: 1 << 1 | 1 << 2
   };
+
   var isFunction = function isFunction(val) {
     return typeof val === 'function';
   };
+
   var invokeArrayFns = function invokeArrayFns(fns) {
     var arg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
 
@@ -164,6 +112,7 @@
   }
 
   var VNODE_HOOK = 7;
+
   function invokeVNodeHook(hook, instance, vnode) {
     var prevVNode = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
     Vue.callWithAsyncErrorHandling(hook, instance, VNODE_HOOK, [vnode, prevVNode]);
@@ -174,7 +123,6 @@
     LEAVE: 1,
     REORDER: 2
   };
-
   var queuePostRenderEffect = Vue.queuePostFlushCb;
 
   var isAsyncWrapper = function isAsyncWrapper(i) {
@@ -332,7 +280,7 @@
 
   var Core = /*#__PURE__*/function () {
     function Core(_ref) {
-      var _this = this;
+      var _this2 = this;
 
       var router = _ref.router,
           pruneCacheEntry = _ref.pruneCacheEntry,
@@ -356,7 +304,7 @@
 
       this.historyStack = new HistoryStack(function (_vm) {
         if (_vm) {
-          _this.destroyCaches(_vm.vnode.key);
+          _this2.destroyCaches(_vm.vnode.key);
         }
       });
       this.init();
@@ -415,34 +363,34 @@
     }, {
       key: "routerHooks",
       value: function routerHooks() {
-        var _this2 = this;
+        var _this3 = this;
 
         var router = this.router;
         router.beforeEach(function (to, from) {});
         router.afterEach(function (to, from) {
-          _this2.historyShouldChange = true; // get the vm instance after render
+          _this3.historyShouldChange = true; // get the vm instance after render
 
           Vue.nextTick(function () {
-            var current = _this2.currentVm;
+            var current = _this3.currentVm;
             var pendingToPushVm = resolvePushedVm(current);
 
-            if (_this2.pre === null) {
-              _this2.onInitial(pendingToPushVm);
-            } else if (_this2.isReplace) {
-              _this2.onReplace(pendingToPushVm);
-            } else if (_this2.isPush) {
-              _this2.onPush(pendingToPushVm);
+            if (_this3.pre === null) {
+              _this3.onInitial(pendingToPushVm);
+            } else if (_this3.isReplace) {
+              _this3.onReplace(pendingToPushVm);
+            } else if (_this3.isPush) {
+              _this3.onPush(pendingToPushVm);
             } else {
-              _this2.onBack(pendingToPushVm);
+              _this3.onBack(pendingToPushVm);
             } // console.log(current)
 
 
-            _this2.pre = current; // this.SetIdle(true)
+            _this3.pre = current; // this.SetIdle(true)
 
-            _this2.preStateId = _this2.stackPointer;
+            _this3.preStateId = _this3.stackPointer;
 
             if (!isPlaceHolderVm(pendingToPushVm)) {
-              _this2.historyShouldChange = false;
+              _this3.historyShouldChange = false;
             }
           });
         });
@@ -454,20 +402,20 @@
     }, {
       key: "hackRouter",
       value: function hackRouter() {
-        var _this3 = this;
+        var _this4 = this;
 
         this._hackRouter = new RouterHacker(this.router);
 
         this._hackRouter.beforeReplace(function () {
-          _this3.isReplace = true;
-          _this3.replacePrePath = currentPathOf(_this3.router);
+          _this4.isReplace = true;
+          _this4.replacePrePath = currentPathOf(_this4.router);
         }, function (e) {
-          _this3.isReplace = false;
-          _this3.replacePrePath = undefined;
+          _this4.isReplace = false;
+          _this4.replacePrePath = undefined;
         }).beforeGo(function () {
-          _this3.isReplace = false;
+          _this4.isReplace = false;
         }).beforePush(function () {
-          _this3.isReplace = false;
+          _this4.isReplace = false;
         });
       }
     }, {
@@ -555,9 +503,9 @@
     }]);
 
     return Core;
-  }();
-
+  }(); // vnode 生成key
   // 提供根据key清除cache的方法
+
 
   var StackKeepAliveImpl = {
     name: "StackKeepAlive",
@@ -572,8 +520,8 @@
       replaceStay: [Array],
       mode: String
     },
-    setup: function setup(props, _ref) {
-      var slots = _ref.slots;
+    setup: function setup(props, _ref2) {
+      var slots = _ref2.slots;
       var instance = Vue.getCurrentInstance(); // KeepAlive communicates with the instantiated renderer via the
       // ctx where the renderer passes in its internals,
       // and the KeepAlive instance exposes activate/deactivate implementations.
@@ -590,11 +538,9 @@
       var cache = new Map();
       var keys = new Set();
       var current = null;
-
       {
         window.__v_cache = instance.__v_cache = cache;
       }
-
       var parentSuspense = instance.suspense;
       var _sharedContext$render = sharedContext.renderer,
           patch = _sharedContext$render.p,
@@ -675,7 +621,6 @@
 
 
       var router;
-
       {
         router = VueRouter__default["default"].useRouter();
       }
@@ -692,15 +637,14 @@
 
       {
         window.__core = _core;
-      }
-
+      } // prune cache on include/exclude prop change
 
       Vue.watch(function () {
         return [props.include, props.exclude];
-      }, function (_ref2) {
-        var _ref3 = _slicedToArray(_ref2, 2),
-            include = _ref3[0],
-            exclude = _ref3[1];
+      }, function (_ref3) {
+        var _ref4 = _slicedToArray(_ref3, 2),
+            include = _ref4[0],
+            exclude = _ref4[1];
 
         include && pruneCache(function (name) {
           return matches(include, name);
@@ -762,7 +706,6 @@
           {
             Vue.warn("KeepAlive should contain exactly one component child.");
           }
-
           current = null;
 
           _core.genInitialKeyNextTime();
@@ -837,7 +780,6 @@
       };
     }
   };
-
   var StackKeepAlive = StackKeepAliveImpl;
 
   function matches(pattern, name) {
@@ -877,7 +819,6 @@
   var components = {
     StackKeepAlive: StackKeepAlive
   };
-
   var plugin = {
     install: function install(Vue) {
       for (var prop in components) {
@@ -888,7 +829,5 @@
       }
     }
   };
-
   return plugin;
-
-}));
+});
