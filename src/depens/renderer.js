@@ -1,4 +1,4 @@
-import { queuePostFlushCb } from 'Vue';
+import { queuePostFlushCb } from 'vue';
 import { isArray } from '@vue/shared';
 
 export const MoveType = {

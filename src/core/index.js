@@ -11,7 +11,7 @@ import {
 
 import HistoryStack from './Stack';
 
-import { nextTick } from 'Vue'
+import { nextTick } from 'vue'
 
 import { hackHistory, RouterHacker } from '../hacks/index';
 

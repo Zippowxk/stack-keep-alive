@@ -1,4 +1,4 @@
-import { callWithAsyncErrorHandling } from 'Vue'
+import { callWithAsyncErrorHandling } from 'vue'
 const VNODE_HOOK = 7
 export function invokeVNodeHook(
     hook,

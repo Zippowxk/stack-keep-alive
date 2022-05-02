@@ -3,7 +3,7 @@ import {
     cloneVNode,
     isVNode,
     warn
-} from 'Vue'
+} from 'vue'
 import { isDef } from '../core/utils'
 import {
     getComponentName, // fix done
@@ -19,7 +19,7 @@ import {
     onUnmounted, // fix
     onMounted, // fix
     onUpdated // fix
-  } from 'Vue'
+  } from 'vue'
   import {
     isString, // fix
     isArray, // fix
@@ -30,19 +30,19 @@ import {
     invokeArrayFns
   } from '../depens/share'
 
-  import { watch } from 'Vue' // fix done
+  import { watch } from 'vue' // fix done
   import {
     queuePostRenderEffect, // fix done
     MoveType,
   } from '../depens/renderer'
-  import { setTransitionHooks } from 'Vue' // fix done
+  import { setTransitionHooks } from 'vue' // fix done
 //   import { devtoolsComponentAdded } from '../devtools' // TODO: fixed
   import { isAsyncWrapper } from '../depens/apiAsyncComponent' // fix done
   
   // import { hackRouter, hackHistory } from '../hacks/index'
 
   import Core from '../core/index'
-  import VueRouter from 'vue-router';
+  import { useRouter } from 'vue-router';
   // vnode 生成key
   // 提供根据key清除cache的方法
 
@@ -183,7 +183,7 @@ import {
       if (__TEST__) {
         router = global.router
       } else {
-        router = VueRouter.useRouter()
+        router = useRouter()
       }
       if (!router) {
         throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()")

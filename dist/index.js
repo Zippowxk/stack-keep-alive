@@ -19,17 +19,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 (function (global, factory) {
-  (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('Vue'), require('@vue/shared'), require('vue-router')) : typeof define === 'function' && define.amd ? define(['Vue', '@vue/shared', 'vue-router'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.StackKeepAlive = factory(global.Vue, global["vue/shared"], global.VueRouter));
-})(this, function (Vue, shared, VueRouter) {
+  (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('vue'), require('@vue/shared'), require('vue-router')) : typeof define === 'function' && define.amd ? define(['vue', '@vue/shared', 'vue-router'], factory) : (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.StackKeepAlive = factory(global.vue, global["vue/shared"], global.VueRouter));
+})(this, function (vue, shared, vueRouter) {
   'use strict';
-
-  function _interopDefaultLegacy(e) {
-    return e && _typeof(e) === 'object' && 'default' in e ? e : {
-      'default': e
-    };
-  }
-
-  var VueRouter__default = /*#__PURE__*/_interopDefaultLegacy(VueRouter);
 
   var isDef = function isDef(v) {
     return v !== undefined && v !== null;
@@ -115,7 +107,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
   function invokeVNodeHook(hook, instance, vnode) {
     var prevVNode = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-    Vue.callWithAsyncErrorHandling(hook, instance, VNODE_HOOK, [vnode, prevVNode]);
+    vue.callWithAsyncErrorHandling(hook, instance, VNODE_HOOK, [vnode, prevVNode]);
   }
 
   var MoveType = {
@@ -123,7 +115,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     LEAVE: 1,
     REORDER: 2
   };
-  var queuePostRenderEffect = Vue.queuePostFlushCb;
+  var queuePostRenderEffect = vue.queuePostFlushCb;
 
   var isAsyncWrapper = function isAsyncWrapper(i) {
     return !!i.__asyncLoader;
@@ -370,7 +362,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         router.afterEach(function (to, from) {
           _this3.historyShouldChange = true; // get the vm instance after render
 
-          Vue.nextTick(function () {
+          vue.nextTick(function () {
             var current = _this3.currentVm;
             var pendingToPushVm = resolvePushedVm(current);
 
@@ -522,7 +514,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
     },
     setup: function setup(props, _ref2) {
       var slots = _ref2.slots;
-      var instance = Vue.getCurrentInstance(); // KeepAlive communicates with the instantiated renderer via the
+      var instance = vue.getCurrentInstance(); // KeepAlive communicates with the instantiated renderer via the
       // ctx where the renderer passes in its internals,
       // and the KeepAlive instance exposes activate/deactivate implementations.
       // The whole point of this is to avoid importing KeepAlive directly in the
@@ -622,7 +614,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
       var router;
       {
-        router = VueRouter__default["default"].useRouter();
+        router = vueRouter.useRouter();
       }
 
       if (!router) {
@@ -639,7 +631,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         window.__core = _core;
       } // prune cache on include/exclude prop change
 
-      Vue.watch(function () {
+      vue.watch(function () {
         return [props.include, props.exclude];
       }, function (_ref3) {
         var _ref4 = _slicedToArray(_ref3, 2),
@@ -667,9 +659,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         }
       };
 
-      Vue.onMounted(cacheSubtree);
-      Vue.onUpdated(cacheSubtree);
-      Vue.onBeforeUnmount(function () {
+      vue.onMounted(cacheSubtree);
+      vue.onUpdated(cacheSubtree);
+      vue.onBeforeUnmount(function () {
         cache.forEach(function (cached) {
           var subTree = instance.subTree,
               suspense = instance.suspense;
@@ -704,14 +696,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
         if (children.length > 1) {
           {
-            Vue.warn("KeepAlive should contain exactly one component child.");
+            vue.warn("KeepAlive should contain exactly one component child.");
           }
           current = null;
 
           _core.genInitialKeyNextTime();
 
           return children;
-        } else if (!Vue.isVNode(rawVNode) || !(rawVNode.shapeFlag === ShapeFlags.STATEFUL_COMPONENT) && !(rawVNode.shapeFlag === ShapeFlags.SUSPENSE)) {
+        } else if (!vue.isVNode(rawVNode) || !(rawVNode.shapeFlag === ShapeFlags.STATEFUL_COMPONENT) && !(rawVNode.shapeFlag === ShapeFlags.SUSPENSE)) {
           _core.genInitialKeyNextTime();
 
           current = null;
@@ -736,7 +728,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         var cachedVNode = cache.get(key); // clone vnode if it's reused because we are going to mutate it
 
         if (vnode.el) {
-          vnode = Vue.cloneVNode(vnode);
+          vnode = vue.cloneVNode(vnode);
 
           if (rawVNode.shapeFlag & ShapeFlags.SUSPENSE) {
             rawVNode.ssContent = vnode;
@@ -757,7 +749,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
           if (vnode.transition) {
             // recursively update transition hooks on subTree
-            Vue.setTransitionHooks(vnode, vnode.transition);
+            vue.setTransitionHooks(vnode, vnode.transition);
           } // avoid vnode being mounted as fresh
 
 

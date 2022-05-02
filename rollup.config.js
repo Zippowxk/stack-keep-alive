@@ -6,22 +6,22 @@ import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 export default [
   {
     input: 'src/index.js',
-    external: ['Vue', 'vue-router', '@vue/shared'],
+    external: ['vue', 'vue-router', '@vue/shared'],
     output: [
       {
         format: 'esm',
-        file: 'dist/library.mjs'
+        file: 'dist/library.esm.js'
       },
       {
         format: 'cjs',
-        file: 'dist/library.js'
+        file: 'dist/library.cjs.js'
       },
       {
           name: 'StackKeepAlive',
           format: 'umd',
           file: `dist/index.js`,
           globals: {
-            'Vue': 'Vue',
+            'vue': 'vue',
             'vue-router': 'VueRouter',
             '@vue/shared': 'vue/shared'
           },
