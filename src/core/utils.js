@@ -1,3 +1,22 @@
+ let _ShapeFlags
+
+;(function(ShapeFlags) {
+  ShapeFlags[(ShapeFlags["ELEMENT"] = 1)] = "ELEMENT"
+  ShapeFlags[(ShapeFlags["FUNCTIONAL_COMPONENT"] = 2)] = "FUNCTIONAL_COMPONENT"
+  ShapeFlags[(ShapeFlags["STATEFUL_COMPONENT"] = 4)] = "STATEFUL_COMPONENT"
+  ShapeFlags[(ShapeFlags["TEXT_CHILDREN"] = 8)] = "TEXT_CHILDREN"
+  ShapeFlags[(ShapeFlags["ARRAY_CHILDREN"] = 16)] = "ARRAY_CHILDREN"
+  ShapeFlags[(ShapeFlags["SLOTS_CHILDREN"] = 32)] = "SLOTS_CHILDREN"
+  ShapeFlags[(ShapeFlags["TELEPORT"] = 64)] = "TELEPORT"
+  ShapeFlags[(ShapeFlags["SUSPENSE"] = 128)] = "SUSPENSE"
+  ShapeFlags[(ShapeFlags["COMPONENT_SHOULD_KEEP_ALIVE"] = 256)] =
+    "COMPONENT_SHOULD_KEEP_ALIVE"
+  ShapeFlags[(ShapeFlags["COMPONENT_KEPT_ALIVE"] = 512)] =
+    "COMPONENT_KEPT_ALIVE"
+  ShapeFlags[(ShapeFlags["COMPONENT"] = 6)] = "COMPONENT"
+})(_ShapeFlags || (_ShapeFlags = {}))
+
+export const ShapeFlags = _ShapeFlags
 export const isDef = function (v) {
   return v !== undefined && v !== null;
 };
@@ -59,3 +78,42 @@ export const replaceState = function (mode, router, id) {
 };
 
 export const inBrowser = typeof window !== 'undefined';
+
+export const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
+
+export const Comment = Symbol(__DEV__ ? 'Comment' : undefined)
+export const Fragment = Symbol(__DEV__ ? 'Fragment' : undefined)
+
+export function isSameVNodeType(n1, n2){
+  if (
+    __DEV__ &&
+    n2.shapeFlag & ShapeFlags.COMPONENT
+  ) {
+    // HMR only: if the component has been hot-updated, force a reload.
+    return false
+  }
+  return n1.type === n2.type && n1.key === n2.key
+}
+
+var _ErrorCodes
+
+;(function(ErrorCodes) {
+  ErrorCodes[(ErrorCodes["SETUP_FUNCTION"] = 0)] = "SETUP_FUNCTION"
+  ErrorCodes[(ErrorCodes["RENDER_FUNCTION"] = 1)] = "RENDER_FUNCTION"
+  ErrorCodes[(ErrorCodes["WATCH_GETTER"] = 2)] = "WATCH_GETTER"
+  ErrorCodes[(ErrorCodes["WATCH_CALLBACK"] = 3)] = "WATCH_CALLBACK"
+  ErrorCodes[(ErrorCodes["WATCH_CLEANUP"] = 4)] = "WATCH_CLEANUP"
+  ErrorCodes[(ErrorCodes["NATIVE_EVENT_HANDLER"] = 5)] = "NATIVE_EVENT_HANDLER"
+  ErrorCodes[(ErrorCodes["COMPONENT_EVENT_HANDLER"] = 6)] =
+    "COMPONENT_EVENT_HANDLER"
+  ErrorCodes[(ErrorCodes["VNODE_HOOK"] = 7)] = "VNODE_HOOK"
+  ErrorCodes[(ErrorCodes["DIRECTIVE_HOOK"] = 8)] = "DIRECTIVE_HOOK"
+  ErrorCodes[(ErrorCodes["TRANSITION_HOOK"] = 9)] = "TRANSITION_HOOK"
+  ErrorCodes[(ErrorCodes["APP_ERROR_HANDLER"] = 10)] = "APP_ERROR_HANDLER"
+  ErrorCodes[(ErrorCodes["APP_WARN_HANDLER"] = 11)] = "APP_WARN_HANDLER"
+  ErrorCodes[(ErrorCodes["FUNCTION_REF"] = 12)] = "FUNCTION_REF"
+  ErrorCodes[(ErrorCodes["ASYNC_COMPONENT_LOADER"] = 13)] =
+    "ASYNC_COMPONENT_LOADER"
+  ErrorCodes[(ErrorCodes["SCHEDULER"] = 14)] = "SCHEDULER"
+})(_ErrorCodes || (_ErrorCodes = {}))
+export const ErrorCodes = _ErrorCodes

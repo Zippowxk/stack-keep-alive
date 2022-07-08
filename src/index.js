@@ -5,7 +5,7 @@ const plugin = {
     for (const prop in components) {
       if (components.hasOwnProperty(prop)) {
         const component = components[prop]
-        Vue.component(component.name, component)
+        Vue.component(component.displayName || component.name, component)
       }
     }
   }

@@ -1,3 +1,3 @@
 import { StackKeepAlive } from './KeepAlive'
-
-export default { StackKeepAlive }
+import { Transition } from './Transition'
+export default { StackKeepAlive, Transition }

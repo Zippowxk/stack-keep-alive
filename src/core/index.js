@@ -63,6 +63,7 @@ export default class Core {
    */
   genKeyForVnode() {
     const { router } = this
+    this.alreadyGen = true
     if (this.isReplace || this._initial) {
       this._initial = false
       return genKey(this.stackPointer, router);
