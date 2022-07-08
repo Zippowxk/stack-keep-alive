@@ -19,7 +19,7 @@ export default [
       {
           name: 'StackKeepAlive',
           format: 'umd',
-          file: `dist/index.js`,
+          file: `/Users/wxkmac/Documents/Github/stack-keep-alive-js-sample/debug/index.js`,
           globals: {
             'vue': 'vue',
             'vue-router': 'VueRouter',
@@ -43,7 +43,7 @@ export default [
 function createReplace() {
     const replacements = {
         __DEV__ : true,
-        __FEATURE_SUSPENSE__ : false,
+        __FEATURE_SUSPENSE__ : true,
         __COMPAT__ : false,
         __TEST__: false,
     }

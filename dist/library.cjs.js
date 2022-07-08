@@ -1,12 +1,10 @@
 'use strict';
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
@@ -18,11 +16,45 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 var vue = require('vue');
 
 var shared = require('@vue/shared');
 
 var vueRouter = require('vue-router');
+
+var runtimeCore = require('@vue/runtime-core');
+
+var reactivity = require('@vue/reactivity');
+
+var _ShapeFlags;
+
+(function (ShapeFlags) {
+  ShapeFlags[ShapeFlags["ELEMENT"] = 1] = "ELEMENT";
+  ShapeFlags[ShapeFlags["FUNCTIONAL_COMPONENT"] = 2] = "FUNCTIONAL_COMPONENT";
+  ShapeFlags[ShapeFlags["STATEFUL_COMPONENT"] = 4] = "STATEFUL_COMPONENT";
+  ShapeFlags[ShapeFlags["TEXT_CHILDREN"] = 8] = "TEXT_CHILDREN";
+  ShapeFlags[ShapeFlags["ARRAY_CHILDREN"] = 16] = "ARRAY_CHILDREN";
+  ShapeFlags[ShapeFlags["SLOTS_CHILDREN"] = 32] = "SLOTS_CHILDREN";
+  ShapeFlags[ShapeFlags["TELEPORT"] = 64] = "TELEPORT";
+  ShapeFlags[ShapeFlags["SUSPENSE"] = 128] = "SUSPENSE";
+  ShapeFlags[ShapeFlags["COMPONENT_SHOULD_KEEP_ALIVE"] = 256] = "COMPONENT_SHOULD_KEEP_ALIVE";
+  ShapeFlags[ShapeFlags["COMPONENT_KEPT_ALIVE"] = 512] = "COMPONENT_KEPT_ALIVE";
+  ShapeFlags[ShapeFlags["COMPONENT"] = 6] = "COMPONENT";
+})(_ShapeFlags || (_ShapeFlags = {}));
+
+var ShapeFlags$1 = _ShapeFlags;
 
 var isDef = function isDef(v) {
   return v !== undefined && v !== null;
@@ -74,6 +106,43 @@ var replaceState = function replaceState(mode, router, id) {
   history.replaceState(state, '', isFilSys ? null : path);
 };
 
+var isKeepAlive = function isKeepAlive(vnode) {
+  return vnode.type.__isKeepAlive;
+};
+
+var Comment = Symbol('Comment');
+var Fragment = Symbol('Fragment');
+
+function isSameVNodeType(n1, n2) {
+  if (n2.shapeFlag & ShapeFlags$1.COMPONENT) {
+    // HMR only: if the component has been hot-updated, force a reload.
+    return false;
+  }
+
+  return n1.type === n2.type && n1.key === n2.key;
+}
+
+var _ErrorCodes;
+
+(function (ErrorCodes) {
+  ErrorCodes[ErrorCodes["SETUP_FUNCTION"] = 0] = "SETUP_FUNCTION";
+  ErrorCodes[ErrorCodes["RENDER_FUNCTION"] = 1] = "RENDER_FUNCTION";
+  ErrorCodes[ErrorCodes["WATCH_GETTER"] = 2] = "WATCH_GETTER";
+  ErrorCodes[ErrorCodes["WATCH_CALLBACK"] = 3] = "WATCH_CALLBACK";
+  ErrorCodes[ErrorCodes["WATCH_CLEANUP"] = 4] = "WATCH_CLEANUP";
+  ErrorCodes[ErrorCodes["NATIVE_EVENT_HANDLER"] = 5] = "NATIVE_EVENT_HANDLER";
+  ErrorCodes[ErrorCodes["COMPONENT_EVENT_HANDLER"] = 6] = "COMPONENT_EVENT_HANDLER";
+  ErrorCodes[ErrorCodes["VNODE_HOOK"] = 7] = "VNODE_HOOK";
+  ErrorCodes[ErrorCodes["DIRECTIVE_HOOK"] = 8] = "DIRECTIVE_HOOK";
+  ErrorCodes[ErrorCodes["TRANSITION_HOOK"] = 9] = "TRANSITION_HOOK";
+  ErrorCodes[ErrorCodes["APP_ERROR_HANDLER"] = 10] = "APP_ERROR_HANDLER";
+  ErrorCodes[ErrorCodes["APP_WARN_HANDLER"] = 11] = "APP_WARN_HANDLER";
+  ErrorCodes[ErrorCodes["FUNCTION_REF"] = 12] = "FUNCTION_REF";
+  ErrorCodes[ErrorCodes["ASYNC_COMPONENT_LOADER"] = 13] = "ASYNC_COMPONENT_LOADER";
+  ErrorCodes[ErrorCodes["SCHEDULER"] = 14] = "SCHEDULER";
+})(_ErrorCodes || (_ErrorCodes = {}));
+
+var ErrorCodes = _ErrorCodes;
 var ShapeFlags = {
   ELEMENT: 1,
   FUNCTIONAL_COMPONENT: 1 << 1,
@@ -116,7 +185,22 @@ var MoveType = {
   LEAVE: 1,
   REORDER: 2
 };
-var queuePostRenderEffect = vue.queuePostFlushCb;
+
+function queueEffectWithSuspense(fn, suspense) {
+  if (suspense && suspense.pendingBranch) {
+    if (shared.isArray(fn)) {
+      var _suspense$effects;
+
+      (_suspense$effects = suspense.effects).push.apply(_suspense$effects, _toConsumableArray(fn));
+    } else {
+      suspense.effects.push(fn);
+    }
+  } else {
+    vue.queuePostFlushCb(fn);
+  }
+}
+
+var queuePostRenderEffect = queueEffectWithSuspense;
 
 var isAsyncWrapper = function isAsyncWrapper(i) {
   return !!i.__asyncLoader;
@@ -339,6 +423,7 @@ var Core = /*#__PURE__*/function () {
     key: "genKeyForVnode",
     value: function genKeyForVnode() {
       var router = this.router;
+      this.alreadyGen = true;
 
       if (this.isReplace || this._initial) {
         this._initial = false;
@@ -500,6 +585,7 @@ var Core = /*#__PURE__*/function () {
 // 提供根据key清除cache的方法
 
 
+var _core = null;
 var StackKeepAliveImpl = {
   name: "StackKeepAlive",
   // Marker for special handling inside the renderer. We are not using a ===
@@ -600,12 +686,12 @@ var StackKeepAliveImpl = {
     function pruneCacheEntry(key) {
       var cached = cache.get(key);
 
-      if (!current || cached.type !== current.type) {
-        unmount(cached);
-      } else if (current) {
+      if (current.key === key) {
         // current active instance should no longer be kept-alive.
         // we can't unmount it now but it might be later, so reset its flag now.
         resetShapeFlag(current);
+      } else if (current) {
+        unmount(cached);
       }
 
       cache["delete"](key);
@@ -622,12 +708,11 @@ var StackKeepAliveImpl = {
       throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()");
     }
 
-    var _core = new Core({
+    _core = new Core({
       router: router,
       pruneCacheEntry: pruneCacheEntry,
       replaceStay: props.replaceStay
     });
-
     {
       window.__core = _core;
     } // prune cache on include/exclude prop change
@@ -688,12 +773,18 @@ var StackKeepAliveImpl = {
       } // generate a specific key for every vnode
 
 
-      var _key = _core.genKeyForVnode();
+      var _key = _core.genKeyForVnode(); // router.currentRoute.__key = _key
 
+
+      router.__key = _key;
       var children = slots["default"]({
         'key': _key
       });
-      var rawVNode = children[0];
+      var rawVNode = children[0]; // debugger
+
+      if (instance.vnode) {
+        instance.vnode.__oldChild = children[0];
+      }
 
       if (children.length > 1) {
         {
@@ -807,17 +898,786 @@ function resetShapeFlag(vnode) {
 
 function getInnerChild(vnode) {
   return vnode.shapeFlag & ShapeFlags.SUSPENSE ? vnode.ssContent : vnode;
+} // import { Comment, isSameVNodeType, Fragment } from "../vnode"
+
+
+function useTransitionState() {
+  var state = {
+    isMounted: false,
+    isLeaving: false,
+    isUnmounting: false,
+    leavingVNodes: new Map()
+  };
+  vue.onMounted(function () {
+    state.isMounted = true;
+  });
+  vue.onBeforeUnmount(function () {
+    state.isUnmounting = true;
+  });
+  return state;
+}
+
+var TransitionHookValidator = [Function, Array];
+var BaseTransitionImpl = {
+  name: "BaseTransition",
+  props: {
+    mode: String,
+    appear: Boolean,
+    persisted: Boolean,
+    // enter
+    onBeforeEnter: TransitionHookValidator,
+    onEnter: TransitionHookValidator,
+    onAfterEnter: TransitionHookValidator,
+    onEnterCancelled: TransitionHookValidator,
+    // leave
+    onBeforeLeave: TransitionHookValidator,
+    onLeave: TransitionHookValidator,
+    onAfterLeave: TransitionHookValidator,
+    onLeaveCancelled: TransitionHookValidator,
+    // appear
+    onBeforeAppear: TransitionHookValidator,
+    onAppear: TransitionHookValidator,
+    onAfterAppear: TransitionHookValidator,
+    onAppearCancelled: TransitionHookValidator
+  },
+  setup: function setup(props, _ref5) {
+    var slots = _ref5.slots;
+    var instance = vue.getCurrentInstance();
+    var state = useTransitionState();
+    var prevTransitionKey;
+    return function () {
+      var children = slots["default"] && getTransitionRawChildren(slots["default"](), true);
+
+      if (!children || !children.length) {
+        return;
+      }
+
+      var child = children[0];
+
+      if (children.length > 1) {
+        var hasFound = false; // locate first non-comment child
+
+        var _iterator = _createForOfIteratorHelper(children),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var c = _step.value;
+
+            if (c.type !== Comment) {
+              if (hasFound) {
+                // warn more than one non-comment child
+                vue.warn("<transition> can only be used on a single element or component. " + "Use <transition-group> for lists.");
+                break;
+              }
+
+              child = c;
+              hasFound = true;
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      } // there's no need to track reactivity for these props so use the raw
+      // props for a bit better perf
+
+
+      var rawProps = reactivity.toRaw(props);
+      var mode = rawProps.mode; // check mode
+
+      if (mode && mode !== "in-out" && mode !== "out-in" && mode !== "default") {
+        vue.warn("invalid <transition> mode: ".concat(mode));
+      }
+
+      if (state.isLeaving) {
+        return emptyPlaceholder(child);
+      } // in the case of <transition><keep-alive/></transition>, we need to
+      // compare the type of the kept-alive children.
+
+
+      var innerChild = getKeepAliveChild(child);
+
+      if (!innerChild) {
+        return emptyPlaceholder(child);
+      }
+
+      var enterHooks = resolveTransitionHooks(innerChild, rawProps, state, instance);
+      setTransitionHooks(innerChild, enterHooks);
+      var oldChild = instance.subTree;
+      var oldInnerChild = oldChild && getKeepAliveChild(oldChild);
+      var transitionKeyChanged = false;
+      var getTransitionKey = innerChild.type.getTransitionKey;
+
+      if (getTransitionKey) {
+        var key = getTransitionKey();
+
+        if (prevTransitionKey === undefined) {
+          prevTransitionKey = key;
+        } else if (key !== prevTransitionKey) {
+          prevTransitionKey = key;
+          transitionKeyChanged = true;
+        }
+      } // handle mode
+
+
+      if (oldInnerChild && oldInnerChild.type !== Comment && (!isSameVNodeType(innerChild, oldInnerChild) || transitionKeyChanged)) {
+        var leavingHooks = resolveTransitionHooks(oldInnerChild, rawProps, state, instance); // update old tree's hooks in case of dynamic transition
+
+        setTransitionHooks(oldInnerChild, leavingHooks); // switching between different views
+
+        if (mode === "out-in") {
+          state.isLeaving = true; // return placeholder node and queue update when leave finishes
+
+          leavingHooks.afterLeave = function () {
+            state.isLeaving = false;
+            instance.update();
+          };
+
+          return emptyPlaceholder(child);
+        } else if (mode === "in-out" && innerChild.type !== Comment) {
+          leavingHooks.delayLeave = function (el, earlyRemove, delayedLeave) {
+            var leavingVNodesCache = getLeavingNodesForType(state, oldInnerChild);
+            leavingVNodesCache[String(oldInnerChild.key)] = oldInnerChild; // early removal callback
+
+            el._leaveCb = function () {
+              earlyRemove();
+              el._leaveCb = undefined;
+              delete enterHooks.delayedLeave;
+            };
+
+            enterHooks.delayedLeave = delayedLeave;
+          };
+        }
+      }
+
+      return child;
+    };
+  }
+}; // export the public type for h/tsx inference
+// also to avoid inline import() in generated d.ts files
+
+var BaseTransition = BaseTransitionImpl;
+
+function getLeavingNodesForType(state, vnode) {
+  var leavingVNodes = state.leavingVNodes;
+  var leavingVNodesCache = leavingVNodes.get(vnode.type);
+
+  if (!leavingVNodesCache) {
+    leavingVNodesCache = Object.create(null);
+    leavingVNodes.set(vnode.type, leavingVNodesCache);
+  }
+
+  return leavingVNodesCache;
+} // The transition hooks are attached to the vnode as vnode.transition
+// and will be called at appropriate timing in the renderer.
+
+
+function resolveTransitionHooks(vnode, props, state, instance) {
+  var appear = props.appear,
+      mode = props.mode,
+      _props$persisted = props.persisted,
+      persisted = _props$persisted === void 0 ? false : _props$persisted,
+      onBeforeEnter = props.onBeforeEnter,
+      onEnter = props.onEnter,
+      onAfterEnter = props.onAfterEnter,
+      onEnterCancelled = props.onEnterCancelled,
+      onBeforeLeave = props.onBeforeLeave,
+      onLeave = props.onLeave,
+      onAfterLeave = props.onAfterLeave,
+      onLeaveCancelled = props.onLeaveCancelled,
+      onBeforeAppear = props.onBeforeAppear,
+      onAppear = props.onAppear,
+      onAfterAppear = props.onAfterAppear,
+      onAppearCancelled = props.onAppearCancelled;
+  var key = String(vnode.key);
+  var leavingVNodesCache = getLeavingNodesForType(state, vnode);
+
+  var callHook = function callHook(hook, args) {
+    hook && vue.callWithAsyncErrorHandling(hook, instance, ErrorCodes.TRANSITION_HOOK, args);
+  };
+
+  var callAsyncHook = function callAsyncHook(hook, args) {
+    var done = args[1];
+    callHook(hook, args);
+
+    if (shared.isArray(hook)) {
+      if (hook.every(function (hook) {
+        return hook.length <= 1;
+      })) done();
+    } else if (hook.length <= 1) {
+      done();
+    }
+  };
+
+  var hooks = {
+    mode: mode,
+    persisted: persisted,
+    beforeEnter: function beforeEnter(el) {
+      var hook = onBeforeEnter;
+
+      if (!state.isMounted) {
+        if (appear) {
+          hook = onBeforeAppear || onBeforeEnter;
+        } else {
+          return;
+        }
+      } // for same element (v-show)
+
+
+      if (el._leaveCb) {
+        el._leaveCb(true
+        /* cancelled */
+        );
+      } // for toggled element with same key (v-if)
+
+
+      var leavingVNode = leavingVNodesCache[key];
+
+      if (leavingVNode && isSameVNodeType(vnode, leavingVNode) && leavingVNode.el._leaveCb) {
+        // force early removal (not cancelled)
+        leavingVNode.el._leaveCb();
+      }
+
+      callHook(hook, [el]);
+    },
+    enter: function enter(el) {
+      var hook = onEnter;
+      var afterHook = onAfterEnter;
+      var cancelHook = onEnterCancelled;
+
+      if (!state.isMounted) {
+        if (appear) {
+          hook = onAppear || onEnter;
+          afterHook = onAfterAppear || onAfterEnter;
+          cancelHook = onAppearCancelled || onEnterCancelled;
+        } else {
+          return;
+        }
+      }
+
+      var called = false;
+
+      var done = el._enterCb = function (cancelled) {
+        if (called) return;
+        called = true;
+
+        if (cancelled) {
+          callHook(cancelHook, [el]);
+        } else {
+          callHook(afterHook, [el]);
+        }
+
+        if (hooks.delayedLeave) {
+          hooks.delayedLeave();
+        }
+
+        el._enterCb = undefined;
+      };
+
+      if (hook) {
+        callAsyncHook(hook, [el, done]);
+      } else {
+        done();
+      }
+    },
+    leave: function leave(el, remove) {
+      var key = String(vnode.key);
+
+      if (el._enterCb) {
+        el._enterCb(true
+        /* cancelled */
+        );
+      }
+
+      if (state.isUnmounting) {
+        return remove();
+      }
+
+      callHook(onBeforeLeave, [el]);
+      var called = false;
+
+      var done = el._leaveCb = function (cancelled) {
+        if (called) return;
+        called = true;
+        remove();
+
+        if (cancelled) {
+          callHook(onLeaveCancelled, [el]);
+        } else {
+          callHook(onAfterLeave, [el]);
+        }
+
+        el._leaveCb = undefined;
+
+        if (leavingVNodesCache[key] === vnode) {
+          delete leavingVNodesCache[key];
+        }
+      };
+
+      leavingVNodesCache[key] = vnode;
+
+      if (onLeave) {
+        callAsyncHook(onLeave, [el, done]);
+      } else {
+        done();
+      }
+    },
+    clone: function clone(vnode) {
+      return resolveTransitionHooks(vnode, props, state, instance);
+    }
+  };
+  return hooks;
+} // the placeholder really only handles one special case: KeepAlive
+// in the case of a KeepAlive in a leave phase we need to return a KeepAlive
+// placeholder with empty content to avoid the KeepAlive instance from being
+// unmounted.
+
+
+function emptyPlaceholder(vnode) {
+  if (isKeepAlive(vnode)) {
+    vnode = vue.cloneVNode(vnode);
+    vnode.children = null;
+    return vnode;
+  }
+}
+
+function getKeepAliveChild(vnode) {
+  var oldChild = vnode.__oldChild;
+
+  if (oldChild) {
+    return oldChild;
+  }
+
+  return isKeepAlive(vnode) ? vnode.children ? shared.isArray(vnode.children) ? vnode.children[0] : vnode.children["default"]({
+    key: ''
+  })[0] : undefined : vnode;
+}
+
+function setTransitionHooks(vnode, hooks) {
+  if (vnode.shapeFlag & ShapeFlags$1.COMPONENT && vnode.component) {
+    setTransitionHooks(vnode.component.subTree, hooks);
+  } else if (vnode.shapeFlag & ShapeFlags$1.SUSPENSE) {
+    vnode.ssContent.transition = hooks.clone(vnode.ssContent);
+    vnode.ssFallback.transition = hooks.clone(vnode.ssFallback);
+  } else {
+    vnode.transition = hooks;
+  }
+}
+
+function getTransitionRawChildren(children) {
+  var keepComment = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var parentKey = arguments.length > 2 ? arguments[2] : undefined;
+  var ret = [];
+  var keyedFragmentCount = 0;
+
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i]; // #5360 inherit parent key in case of <template v-for>
+
+    var key = parentKey == null ? child.key : String(parentKey) + String(child.key != null ? child.key : i); // handle fragment children case, e.g. v-for
+
+    if (child.type === Fragment) {
+      if (child.patchFlag & shared.PatchFlags.KEYED_FRAGMENT) keyedFragmentCount++;
+      ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
+    } // comment placeholders should be skipped, e.g. v-if
+    else if (keepComment || child.type !== Comment) {
+      ret.push(key != null ? vue.cloneVNode(child, {
+        key: key
+      }) : child);
+    }
+  } // #1126 if a transition children list contains multiple sub fragments, these
+  // fragments will be merged into a flat children array. Since each v-for
+  // fragment may contain different static bindings inside, we need to de-op
+  // these children to force full diffs to ensure correct behavior.
+
+
+  if (keyedFragmentCount > 1) {
+    for (var _i2 = 0; _i2 < ret.length; _i2++) {
+      ret[_i2].patchFlag = shared.PatchFlags.BAIL;
+    }
+  }
+
+  return ret;
+}
+
+var TRANSITION = "transition";
+var ANIMATION = "animation"; // DOM Transition is a higher-order-component based on the platform-agnostic
+// base Transition component, with DOM-specific logic.
+
+var Transition = function Transition(props, _ref6) {
+  var slots = _ref6.slots;
+  return runtimeCore.h(BaseTransition, resolveTransitionProps(props), slots);
+};
+
+Transition.displayName = "SkTransition";
+var DOMTransitionPropsValidators = {
+  name: String,
+  type: String,
+  css: {
+    type: Boolean,
+    "default": true
+  },
+  duration: [String, Number, Object],
+  enterFromClass: String,
+  enterActiveClass: String,
+  enterToClass: String,
+  appearFromClass: String,
+  appearActiveClass: String,
+  appearToClass: String,
+  leaveFromClass: String,
+  leaveActiveClass: String,
+  leaveToClass: String
+};
+Transition.props = /*#__PURE__*/shared.extend({}, BaseTransition.props, DOMTransitionPropsValidators);
+/**
+ * #3227 Incoming hooks may be merged into arrays when wrapping Transition
+ * with custom HOCs.
+ */
+
+var callHook = function callHook(hook) {
+  var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+  if (shared.isArray(hook)) {
+    hook.forEach(function (h) {
+      return h.apply(void 0, _toConsumableArray(args));
+    });
+  } else if (hook) {
+    hook.apply(void 0, _toConsumableArray(args));
+  }
+};
+/**
+ * Check if a hook expects a callback (2nd arg), which means the user
+ * intends to explicitly control the end of the transition.
+ */
+
+
+var hasExplicitCallback = function hasExplicitCallback(hook) {
+  return hook ? shared.isArray(hook) ? hook.some(function (h) {
+    return h.length > 1;
+  }) : hook.length > 1 : false;
+};
+
+function resolveTransitionProps(rawProps) {
+  var baseProps = {};
+
+  for (var key in rawProps) {
+    if (!(key in DOMTransitionPropsValidators)) {
+      baseProps[key] = rawProps[key];
+    }
+  }
+
+  if (rawProps.css === false) {
+    return baseProps;
+  }
+
+  var _rawProps$name = rawProps.name,
+      name = _rawProps$name === void 0 ? "v" : _rawProps$name,
+      type = rawProps.type,
+      duration = rawProps.duration,
+      _rawProps$enterFromCl = rawProps.enterFromClass,
+      enterFromClass = _rawProps$enterFromCl === void 0 ? "".concat(name, "-enter-from") : _rawProps$enterFromCl,
+      _rawProps$enterActive = rawProps.enterActiveClass,
+      enterActiveClass = _rawProps$enterActive === void 0 ? "".concat(name, "-enter-active") : _rawProps$enterActive,
+      _rawProps$enterToClas = rawProps.enterToClass,
+      enterToClass = _rawProps$enterToClas === void 0 ? "".concat(name, "-enter-to") : _rawProps$enterToClas,
+      _rawProps$appearFromC = rawProps.appearFromClass,
+      appearFromClass = _rawProps$appearFromC === void 0 ? enterFromClass : _rawProps$appearFromC,
+      _rawProps$appearActiv = rawProps.appearActiveClass,
+      appearActiveClass = _rawProps$appearActiv === void 0 ? enterActiveClass : _rawProps$appearActiv,
+      _rawProps$appearToCla = rawProps.appearToClass,
+      appearToClass = _rawProps$appearToCla === void 0 ? enterToClass : _rawProps$appearToCla,
+      _rawProps$leaveFromCl = rawProps.leaveFromClass,
+      leaveFromClass = _rawProps$leaveFromCl === void 0 ? "".concat(name, "-leave-from") : _rawProps$leaveFromCl,
+      _rawProps$leaveActive = rawProps.leaveActiveClass,
+      leaveActiveClass = _rawProps$leaveActive === void 0 ? "".concat(name, "-leave-active") : _rawProps$leaveActive,
+      _rawProps$leaveToClas = rawProps.leaveToClass,
+      leaveToClass = _rawProps$leaveToClas === void 0 ? "".concat(name, "-leave-to") : _rawProps$leaveToClas;
+  var durations = normalizeDuration(duration);
+  var enterDuration = durations && durations[0];
+  var leaveDuration = durations && durations[1];
+
+  var _onBeforeEnter = baseProps.onBeforeEnter,
+      onEnter = baseProps.onEnter,
+      _onEnterCancelled = baseProps.onEnterCancelled,
+      _onLeave = baseProps.onLeave,
+      _onLeaveCancelled = baseProps.onLeaveCancelled,
+      _baseProps$onBeforeAp = baseProps.onBeforeAppear,
+      _onBeforeAppear = _baseProps$onBeforeAp === void 0 ? _onBeforeEnter : _baseProps$onBeforeAp,
+      _baseProps$onAppear = baseProps.onAppear,
+      onAppear = _baseProps$onAppear === void 0 ? onEnter : _baseProps$onAppear,
+      _baseProps$onAppearCa = baseProps.onAppearCancelled,
+      _onAppearCancelled = _baseProps$onAppearCa === void 0 ? _onEnterCancelled : _baseProps$onAppearCa;
+
+  var finishEnter = function finishEnter(el, isAppear, done) {
+    removeTransitionClass(el, isAppear ? appearToClass : enterToClass);
+    removeTransitionClass(el, isAppear ? appearActiveClass : enterActiveClass);
+    done && done();
+  };
+
+  var finishLeave = function finishLeave(el, done) {
+    el._isLeaving = false;
+    removeTransitionClass(el, leaveFromClass);
+    removeTransitionClass(el, leaveToClass);
+    removeTransitionClass(el, leaveActiveClass);
+    done && done();
+  };
+
+  var makeEnterHook = function makeEnterHook(isAppear) {
+    return function (el, done) {
+      var hook = isAppear ? onAppear : onEnter;
+
+      var resolve = function resolve() {
+        return finishEnter(el, isAppear, done);
+      };
+
+      callHook(hook, [el, resolve]);
+      nextFrame(function () {
+        removeTransitionClass(el, isAppear ? appearFromClass : enterFromClass);
+        addTransitionClass(el, isAppear ? appearToClass : enterToClass);
+
+        if (!hasExplicitCallback(hook)) {
+          whenTransitionEnds(el, type, enterDuration, resolve);
+        }
+      });
+    };
+  };
+
+  return shared.extend(baseProps, {
+    onBeforeEnter: function onBeforeEnter(el) {
+      callHook(_onBeforeEnter, [el]);
+      addTransitionClass(el, enterFromClass);
+      addTransitionClass(el, enterActiveClass);
+    },
+    onBeforeAppear: function onBeforeAppear(el) {
+      callHook(_onBeforeAppear, [el]);
+      addTransitionClass(el, appearFromClass);
+      addTransitionClass(el, appearActiveClass);
+    },
+    onEnter: makeEnterHook(false),
+    onAppear: makeEnterHook(true),
+    onLeave: function onLeave(el, done) {
+      el._isLeaving = true;
+
+      var resolve = function resolve() {
+        return finishLeave(el, done);
+      };
+
+      addTransitionClass(el, leaveFromClass); // force reflow so *-leave-from classes immediately take effect (#2593)
+
+      forceReflow();
+      addTransitionClass(el, leaveActiveClass);
+      nextFrame(function () {
+        if (!el._isLeaving) {
+          // cancelled
+          return;
+        }
+
+        removeTransitionClass(el, leaveFromClass);
+        addTransitionClass(el, leaveToClass);
+
+        if (!hasExplicitCallback(_onLeave)) {
+          whenTransitionEnds(el, type, leaveDuration, resolve);
+        }
+      });
+      callHook(_onLeave, [el, resolve]);
+    },
+    onEnterCancelled: function onEnterCancelled(el) {
+      finishEnter(el, false);
+      callHook(_onEnterCancelled, [el]);
+    },
+    onAppearCancelled: function onAppearCancelled(el) {
+      finishEnter(el, true);
+      callHook(_onAppearCancelled, [el]);
+    },
+    onLeaveCancelled: function onLeaveCancelled(el) {
+      finishLeave(el);
+      callHook(_onLeaveCancelled, [el]);
+    }
+  });
+}
+
+function normalizeDuration(duration) {
+  if (duration == null) {
+    return null;
+  } else if (shared.isObject(duration)) {
+    return [NumberOf(duration.enter), NumberOf(duration.leave)];
+  } else {
+    var n = NumberOf(duration);
+    return [n, n];
+  }
+}
+
+function NumberOf(val) {
+  var res = shared.toNumber(val);
+  validateDuration(res);
+  return res;
+}
+
+function validateDuration(val) {
+  if (typeof val !== "number") {
+    runtimeCore.warn("<transition> explicit duration is not a valid number - " + "got ".concat(JSON.stringify(val), "."));
+  } else if (isNaN(val)) {
+    runtimeCore.warn("<transition> explicit duration is NaN - " + "the duration expression might be incorrect.");
+  }
+}
+
+function addTransitionClass(el, cls) {
+  cls.split(/\s+/).forEach(function (c) {
+    return c && el.classList.add(c);
+  });
+  (el._vtc || (el._vtc = new Set())).add(cls);
+}
+
+function removeTransitionClass(el, cls) {
+  cls.split(/\s+/).forEach(function (c) {
+    return c && el.classList.remove(c);
+  });
+  var _vtc = el._vtc;
+
+  if (_vtc) {
+    _vtc["delete"](cls);
+
+    if (!_vtc.size) {
+      el._vtc = undefined;
+    }
+  }
+}
+
+function nextFrame(cb) {
+  requestAnimationFrame(function () {
+    requestAnimationFrame(cb);
+  });
+}
+
+var endId = 0;
+
+function whenTransitionEnds(el, expectedType, explicitTimeout, resolve) {
+  var id = el._endId = ++endId;
+
+  var resolveIfNotStale = function resolveIfNotStale() {
+    if (id === el._endId) {
+      resolve();
+    }
+  };
+
+  if (explicitTimeout) {
+    return setTimeout(resolveIfNotStale, explicitTimeout);
+  }
+
+  var _getTransitionInfo = getTransitionInfo(el, expectedType),
+      type = _getTransitionInfo.type,
+      timeout = _getTransitionInfo.timeout,
+      propCount = _getTransitionInfo.propCount;
+
+  if (!type) {
+    return resolve();
+  }
+
+  var endEvent = type + "end";
+  var ended = 0;
+
+  var end = function end() {
+    el.removeEventListener(endEvent, onEnd);
+    resolveIfNotStale();
+  };
+
+  var onEnd = function onEnd(e) {
+    if (e.target === el && ++ended >= propCount) {
+      end();
+    }
+  };
+
+  setTimeout(function () {
+    if (ended < propCount) {
+      end();
+    }
+  }, timeout + 1);
+  el.addEventListener(endEvent, onEnd);
+}
+
+function getTransitionInfo(el, expectedType) {
+  var styles = window.getComputedStyle(el); // JSDOM may return undefined for transition properties
+
+  var getStyleProperties = function getStyleProperties(key) {
+    return (styles[key] || "").split(", ");
+  };
+
+  var transitionDelays = getStyleProperties(TRANSITION + "Delay");
+  var transitionDurations = getStyleProperties(TRANSITION + "Duration");
+  var transitionTimeout = getTimeout(transitionDelays, transitionDurations);
+  var animationDelays = getStyleProperties(ANIMATION + "Delay");
+  var animationDurations = getStyleProperties(ANIMATION + "Duration");
+  var animationTimeout = getTimeout(animationDelays, animationDurations);
+  var type = null;
+  var timeout = 0;
+  var propCount = 0;
+  /* istanbul ignore if */
+
+  if (expectedType === TRANSITION) {
+    if (transitionTimeout > 0) {
+      type = TRANSITION;
+      timeout = transitionTimeout;
+      propCount = transitionDurations.length;
+    }
+  } else if (expectedType === ANIMATION) {
+    if (animationTimeout > 0) {
+      type = ANIMATION;
+      timeout = animationTimeout;
+      propCount = animationDurations.length;
+    }
+  } else {
+    timeout = Math.max(transitionTimeout, animationTimeout);
+    type = timeout > 0 ? transitionTimeout > animationTimeout ? TRANSITION : ANIMATION : null;
+    propCount = type ? type === TRANSITION ? transitionDurations.length : animationDurations.length : 0;
+  }
+
+  var hasTransform = type === TRANSITION && /\b(transform|all)(,|$)/.test(styles[TRANSITION + "Property"]);
+  return {
+    type: type,
+    timeout: timeout,
+    propCount: propCount,
+    hasTransform: hasTransform
+  };
+}
+
+function getTimeout(delays, durations) {
+  while (delays.length < durations.length) {
+    delays = delays.concat(delays);
+  }
+
+  return Math.max.apply(Math, _toConsumableArray(durations.map(function (d, i) {
+    return toMs(d) + toMs(delays[i]);
+  })));
+} // Old versions of Chromium (below 61.0.3163.100) formats floating pointer
+// numbers in a locale-dependent way, using a comma instead of a dot.
+// If comma is not replaced with a dot, the input will be rounded down
+// (i.e. acting as a floor function) causing unexpected behaviors
+
+
+function toMs(s) {
+  return Number(s.slice(0, -1).replace(",", ".")) * 1000;
+} // synchronously force layout to put elements into a certain state
+
+
+function forceReflow() {
+  return document.body.offsetHeight;
 }
 
 var components = {
-  StackKeepAlive: StackKeepAlive
+  StackKeepAlive: StackKeepAlive,
+  Transition: Transition
 };
 var plugin = {
   install: function install(Vue) {
     for (var prop in components) {
+      console.log('====================================');
+      console.log(prop);
+      console.log('====================================');
+
       if (components.hasOwnProperty(prop)) {
         var component = components[prop];
-        Vue.component(component.name, component);
+        Vue.component(component.displayName || component.name, component);
       }
     }
   }

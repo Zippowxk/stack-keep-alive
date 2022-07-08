@@ -46,6 +46,8 @@ import {
   // vnode 生成key
   // 提供根据key清除cache的方法
 
+  let  _core = null
+
   const StackKeepAliveImpl = {
     name: `StackKeepAlive`,
   
@@ -61,7 +63,7 @@ import {
       replaceStay: [Array],
       mode: String,
     },
-  
+
     setup(props, { slots } ) {
       const instance = getCurrentInstance()
       // KeepAlive communicates with the instantiated renderer via the
@@ -167,12 +169,12 @@ import {
   
       function pruneCacheEntry(key) {
         const cached = cache.get(key)
-        if (!current || cached.type !== current.type) {
-          unmount(cached)
-        } else if (current) {
+        if (current.key === key) {
           // current active instance should no longer be kept-alive.
           // we can't unmount it now but it might be later, so reset its flag now.
           resetShapeFlag(current)
+        } else if (current) {
+          unmount(cached)
         }
         cache.delete(key)
         keys.delete(key)
@@ -188,7 +190,8 @@ import {
       if (!router) {
         throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()")
       }
-      const _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay })
+      
+      _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay })
       if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
         window.__core = _core
       }
@@ -235,15 +238,20 @@ import {
   
       return () => {
         pendingCacheKey = null
-  
+
         if (!slots.default) {
           return null
         }
         // generate a specific key for every vnode
         const _key = _core.genKeyForVnode()
-        
+        // router.currentRoute.__key = _key
+        router.__key = _key
         const children = slots.default({'key': _key})
         const rawVNode = children[0]
+        // debugger
+        if (instance.vnode) {
+          instance.vnode.__oldChild = children[0]
+        }
         if (children.length > 1) {
           if (__DEV__) {
             warn(`KeepAlive should contain exactly one component child.`)
