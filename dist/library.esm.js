@@ -1665,10 +1665,6 @@ var components = {
 var plugin = {
   install: function install(Vue) {
     for (var prop in components) {
-      console.log('====================================');
-      console.log(prop);
-      console.log('====================================');
-
       if (components.hasOwnProperty(prop)) {
         var component = components[prop];
         Vue.component(component.displayName || component.name, component);
