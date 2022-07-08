@@ -55,12 +55,29 @@ app.use(StackKeepAlive)
     <component :is="Component" :key='key'/>
 </stack-keep-alive>
 ```
+2. 配合transition使用，需要使用内置sk-transition组件替换transition组件
+
+```vue
+    <router-view v-slot="{ Component }">
+      <sk-transition name='your-animation-name'>
+        <stack-keep-alive v-slot='{ key }'>
+          <component :is="Component"
+                     :key='key' />
+        </stack-keep-alive>
+      </sk-transition>
+    </router-view>
+```
+
+
 
 ### 更新日志
+
+#### v1.0.0
+1. 修复配合transition组件无效的问题
+
 #### v1.0.0-beta.0
 1. 支持Vue3
 2. 单元测试
-
 ### Sample code
 
 1. [静态文件引入](./examples/)
