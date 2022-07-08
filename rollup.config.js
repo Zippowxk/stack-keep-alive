@@ -19,7 +19,8 @@ export default [
       {
           name: 'StackKeepAlive',
           format: 'umd',
-          file: `/Users/wxkmac/Documents/Github/stack-keep-alive-js-sample/debug/index.js`,
+          file: 'dist/index.js',
+          // file: `/Users/wxkmac/Documents/Github/stack-keep-alive-js-sample/debug/index.js`,
           globals: {
             'vue': 'vue',
             'vue-router': 'VueRouter',
