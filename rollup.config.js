@@ -11,6 +11,7 @@ export default [
       {
         format: 'esm',
         file: 'dist/library.esm.js'
+        // file: `/Users/wxkmac/Documents/Github/stack-keep-alive-js-sample/debug/vue.esm.js`,
       },
       {
         format: 'cjs',

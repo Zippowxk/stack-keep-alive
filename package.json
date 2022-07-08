@@ -19,7 +19,8 @@
   "license": "ISC",
   "peerDependencies": {
     "vue": "^3.2.21",
-    "vue-router": "^4.0.14"
+    "vue-router": "^4.0.14",
+    "@vue/shared": "^3.2.21"
   },
   "devDependencies": {
     "@babel/core": "^7.17.9",

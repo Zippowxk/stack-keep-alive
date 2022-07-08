@@ -117,3 +117,23 @@ var _ErrorCodes
   ErrorCodes[(ErrorCodes["SCHEDULER"] = 14)] = "SCHEDULER"
 })(_ErrorCodes || (_ErrorCodes = {}))
 export const ErrorCodes = _ErrorCodes
+
+var _PatchFlags
+
+;(function(PatchFlags) {
+  PatchFlags[(PatchFlags["TEXT"] = 1)] = "TEXT"
+  PatchFlags[(PatchFlags["CLASS"] = 2)] = "CLASS"
+  PatchFlags[(PatchFlags["STYLE"] = 4)] = "STYLE"
+  PatchFlags[(PatchFlags["PROPS"] = 8)] = "PROPS"
+  PatchFlags[(PatchFlags["FULL_PROPS"] = 16)] = "FULL_PROPS"
+  PatchFlags[(PatchFlags["HYDRATE_EVENTS"] = 32)] = "HYDRATE_EVENTS"
+  PatchFlags[(PatchFlags["STABLE_FRAGMENT"] = 64)] = "STABLE_FRAGMENT"
+  PatchFlags[(PatchFlags["KEYED_FRAGMENT"] = 128)] = "KEYED_FRAGMENT"
+  PatchFlags[(PatchFlags["UNKEYED_FRAGMENT"] = 256)] = "UNKEYED_FRAGMENT"
+  PatchFlags[(PatchFlags["NEED_PATCH"] = 512)] = "NEED_PATCH"
+  PatchFlags[(PatchFlags["DYNAMIC_SLOTS"] = 1024)] = "DYNAMIC_SLOTS"
+  PatchFlags[(PatchFlags["DEV_ROOT_FRAGMENT"] = 2048)] = "DEV_ROOT_FRAGMENT"
+  PatchFlags[(PatchFlags["HOISTED"] = -1)] = "HOISTED"
+  PatchFlags[(PatchFlags["BAIL"] = -2)] = "BAIL"
+})(_PatchFlags || (_PatchFlags = {}))
+export const PatchFlags = _PatchFlags

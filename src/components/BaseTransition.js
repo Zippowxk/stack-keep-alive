@@ -2,14 +2,14 @@
 import { callWithAsyncErrorHandling } from "vue"
 
 import { toRaw } from "@vue/reactivity"
-import { PatchFlags, isArray } from "@vue/shared"
+import { isArray } from "@vue/shared"
 
 import {
   getCurrentInstance,
   cloneVNode,
   warn
 } from 'vue'
-import { isKeepAlive, Comment, Fragment, ShapeFlags, isSameVNodeType, ErrorCodes } from '../core/utils'
+import { isKeepAlive, Comment, Fragment, ShapeFlags, isSameVNodeType, ErrorCodes, PatchFlags } from '../core/utils'
 // import { isSameVNodeType } from '@vue/runtime-core'
 import {
   onBeforeUnmount, // fix

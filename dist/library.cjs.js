@@ -143,6 +143,27 @@ var _ErrorCodes;
 })(_ErrorCodes || (_ErrorCodes = {}));
 
 var ErrorCodes = _ErrorCodes;
+
+var _PatchFlags;
+
+(function (PatchFlags) {
+  PatchFlags[PatchFlags["TEXT"] = 1] = "TEXT";
+  PatchFlags[PatchFlags["CLASS"] = 2] = "CLASS";
+  PatchFlags[PatchFlags["STYLE"] = 4] = "STYLE";
+  PatchFlags[PatchFlags["PROPS"] = 8] = "PROPS";
+  PatchFlags[PatchFlags["FULL_PROPS"] = 16] = "FULL_PROPS";
+  PatchFlags[PatchFlags["HYDRATE_EVENTS"] = 32] = "HYDRATE_EVENTS";
+  PatchFlags[PatchFlags["STABLE_FRAGMENT"] = 64] = "STABLE_FRAGMENT";
+  PatchFlags[PatchFlags["KEYED_FRAGMENT"] = 128] = "KEYED_FRAGMENT";
+  PatchFlags[PatchFlags["UNKEYED_FRAGMENT"] = 256] = "UNKEYED_FRAGMENT";
+  PatchFlags[PatchFlags["NEED_PATCH"] = 512] = "NEED_PATCH";
+  PatchFlags[PatchFlags["DYNAMIC_SLOTS"] = 1024] = "DYNAMIC_SLOTS";
+  PatchFlags[PatchFlags["DEV_ROOT_FRAGMENT"] = 2048] = "DEV_ROOT_FRAGMENT";
+  PatchFlags[PatchFlags["HOISTED"] = -1] = "HOISTED";
+  PatchFlags[PatchFlags["BAIL"] = -2] = "BAIL";
+})(_PatchFlags || (_PatchFlags = {}));
+
+var PatchFlags = _PatchFlags;
 var ShapeFlags = {
   ELEMENT: 1,
   FUNCTIONAL_COMPONENT: 1 << 1,
@@ -1278,7 +1299,7 @@ function getTransitionRawChildren(children) {
     var key = parentKey == null ? child.key : String(parentKey) + String(child.key != null ? child.key : i); // handle fragment children case, e.g. v-for
 
     if (child.type === Fragment) {
-      if (child.patchFlag & shared.PatchFlags.KEYED_FRAGMENT) keyedFragmentCount++;
+      if (child.patchFlag & PatchFlags.KEYED_FRAGMENT) keyedFragmentCount++;
       ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
     } // comment placeholders should be skipped, e.g. v-if
     else if (keepComment || child.type !== Comment) {
@@ -1294,7 +1315,7 @@ function getTransitionRawChildren(children) {
 
   if (keyedFragmentCount > 1) {
     for (var _i2 = 0; _i2 < ret.length; _i2++) {
-      ret[_i2].patchFlag = shared.PatchFlags.BAIL;
+      ret[_i2].patchFlag = PatchFlags.BAIL;
     }
   }
 
