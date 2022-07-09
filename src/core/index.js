@@ -24,6 +24,7 @@ export default class Core {
     this.mode = router.mode; // hash or history
     this.historyShouldChange = false;
     this.isReplace = false;
+    this.isBackward = false; // expose backward or forward for developers
     this.replacePrePath = undefined;
     this.preStateId = 0;
     this.pre = null;
@@ -35,6 +36,8 @@ export default class Core {
       }
     });
     this.init();
+    // expose this core
+    this.router.__core = this
   }
 
   init() {
@@ -84,6 +87,7 @@ export default class Core {
       this.historyShouldChange = true;
       // get the vm instance after render
       nextTick(() => {
+        this.isBackward = false
         const current = this.currentVm;
         const pendingToPushVm = resolvePushedVm(current);
         if (this.pre === null) {
@@ -118,7 +122,10 @@ export default class Core {
       this.isReplace = false;
       this.replacePrePath = undefined;
     })
-    .beforeGo(()=>{
+    .beforeGo((num)=>{
+      if ( num < 0 ) {
+        this.isBackward = true
+      }
       this.isReplace = false;
     })
     .beforePush(()=>{

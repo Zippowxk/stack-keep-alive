@@ -316,7 +316,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         var gstmp = router.go;
 
         var gstmpf = function gstmpf(number) {
-          cb();
+          cb(number);
           return gstmp.call(router, number);
         };
 
@@ -389,6 +389,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 
       this.historyShouldChange = false;
       this.isReplace = false;
+      this.isBackward = false; // expose backward or forward for developers
+
       this.replacePrePath = undefined;
       this.preStateId = 0;
       this.pre = null;
@@ -400,7 +402,9 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           _this2.destroyCaches(_vm.vnode.key);
         }
       });
-      this.init();
+      this.init(); // expose this core
+
+      this.router.__core = this;
     }
 
     _createClass(Core, [{
@@ -465,6 +469,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
           _this3.historyShouldChange = true; // get the vm instance after render
 
           vue.nextTick(function () {
+            _this3.isBackward = false;
             var current = _this3.currentVm;
             var pendingToPushVm = resolvePushedVm(current);
 
@@ -506,7 +511,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
         }, function (e) {
           _this4.isReplace = false;
           _this4.replacePrePath = undefined;
-        }).beforeGo(function () {
+        }).beforeGo(function (num) {
+          if (num < 0) {
+            _this4.isBackward = true;
+          }
+
           _this4.isReplace = false;
         }).beforePush(function () {
           _this4.isReplace = false;

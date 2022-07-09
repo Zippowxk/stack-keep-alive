@@ -24,7 +24,7 @@ export class RouterHacker {
     const { router } = this
     const gstmp = router.go;
     const gstmpf = (number) => {
-      cb()
+      cb(number)
       return gstmp.call(router, number);
     };
     router.go = function (num) {
