@@ -7,6 +7,7 @@ import {
   isPlaceHolderVm,
   replaceState,
   currentPathOf,
+  getStateForward
 } from './utils';
 
 import HistoryStack from './Stack';
@@ -24,12 +25,11 @@ export default class Core {
     this.mode = router.mode; // hash or history
     this.historyShouldChange = false;
     this.isReplace = false;
-    this.isBackward = false; // expose backward or forward for developers
     this.replacePrePath = undefined;
     this.preStateId = 0;
     this.pre = null;
     this.replaceStay = replaceStay || [];
-    this._initial = false; //闲置状态
+    this._initial = true; //闲置状态
     this.historyStack = new HistoryStack((_vm) => {
       if ( _vm ) {
         this.destroyCaches( _vm.vnode.key )
@@ -38,6 +38,13 @@ export default class Core {
     this.init();
     // expose this core
     this.router.__core = this
+    this._routeTo = undefined
+  }
+
+  isBackward(from) {
+    // console.log(history.state.forward)
+    // console.log(from.fullPath)
+    return from ? getStateForward() === from.fullPath : false
   }
 
   init() {
@@ -66,14 +73,15 @@ export default class Core {
    */
   genKeyForVnode() {
     const { router } = this
-    this.alreadyGen = true
+    // console.log('genKey- isPush',this.isPush)
+    // console.log('genKey- isReplace_initial',this.isReplace || this._initial)
     if (this.isReplace || this._initial) {
       this._initial = false
-      return genKey(this.stackPointer, router);
+      return genKey(this.stackPointer, router, this._routeTo);
     } else if ( this.isPush) {
-      return genKey(this.stackPointer + 1, router);
+      return genKey(this.stackPointer + 1, router, this._routeTo);
     } else {
-      return genKey(this.stackPointer - 1, router);
+      return genKey(this.stackPointer - 1, router, this._routeTo);
     }
   }
   /**
@@ -82,12 +90,13 @@ export default class Core {
   routerHooks() {
     const { router } = this
     router.beforeEach((to, from) => {
+      // console.log("before each:",this.isBackward(from))
+      this._routeTo = to.path
     })
     router.afterEach((to, from) => {
       this.historyShouldChange = true;
       // get the vm instance after render
       nextTick(() => {
-        this.isBackward = false
         const current = this.currentVm;
         const pendingToPushVm = resolvePushedVm(current);
         if (this.pre === null) {
@@ -123,9 +132,6 @@ export default class Core {
       this.replacePrePath = undefined;
     })
     .beforeGo((num)=>{
-      if ( num < 0 ) {
-        this.isBackward = true
-      }
       this.isReplace = false;
     })
     .beforePush(()=>{

@@ -81,16 +81,25 @@ var getStateId = function getStateId() {
   return isDef(state) ? state.id : undefined;
 };
 
+var getStateForward = function getStateForward() {
+  var state = getCurrentState();
+  return isDef(state) ? state.forward : undefined;
+};
+
 var getCurrentState = function getCurrentState() {
   return history.state;
 };
 
 var genKey = function genKey(num, router) {
-  return "keep-alive-vnode-key-".concat(Number(num), "-").concat(currentPathOf(router));
+  var routeTo = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  // return `keep-alive-vnode-key-${Number(num)}-`;
+  return "keep-alive-vnode-key-".concat(Number(num), "-").concat(routeTo ? routeTo : currentPathOf(router));
 };
 
 var getCurrentVM = function getCurrentVM(router) {
-  return router.currentRoute._value.matched.length > 0 ? router.currentRoute._value.matched[0].instances["default"].$ : undefined;
+  var _router$currentRoute$;
+
+  return router.currentRoute._value.matched.length > 0 ? (_router$currentRoute$ = router.currentRoute._value.matched[0].instances["default"]) === null || _router$currentRoute$ === void 0 ? void 0 : _router$currentRoute$.$ : undefined;
 };
 
 var replaceState = function replaceState(mode, router, id) {
@@ -108,10 +117,9 @@ var replaceState = function replaceState(mode, router, id) {
 
 var isKeepAlive = function isKeepAlive(vnode) {
   return vnode.type.__isKeepAlive;
-};
+}; // export const Comment = Symbol(true ? 'Comment' : undefined)
+// export const Fragment = Symbol(true ? 'Fragment' : undefined)
 
-var Comment = Symbol('Comment');
-var Fragment = Symbol('Fragment');
 
 function isSameVNodeType(n1, n2) {
   if (n2.shapeFlag & ShapeFlags$1.COMPONENT) {
@@ -394,13 +402,11 @@ var Core = /*#__PURE__*/function () {
 
     this.historyShouldChange = false;
     this.isReplace = false;
-    this.isBackward = false; // expose backward or forward for developers
-
     this.replacePrePath = undefined;
     this.preStateId = 0;
     this.pre = null;
     this.replaceStay = replaceStay || [];
-    this._initial = false; //闲置状态
+    this._initial = true; //闲置状态
 
     this.historyStack = new HistoryStack(function (_vm) {
       if (_vm) {
@@ -410,9 +416,17 @@ var Core = /*#__PURE__*/function () {
     this.init(); // expose this core
 
     this.router.__core = this;
+    this._routeTo = undefined;
   }
 
   _createClass(Core, [{
+    key: "isBackward",
+    value: function isBackward(from) {
+      // console.log(history.state.forward)
+      // console.log(from.fullPath)
+      return from ? getStateForward() === from.fullPath : false;
+    }
+  }, {
     key: "init",
     value: function init() {
       this.initStackPointer();
@@ -447,16 +461,16 @@ var Core = /*#__PURE__*/function () {
   }, {
     key: "genKeyForVnode",
     value: function genKeyForVnode() {
-      var router = this.router;
-      this.alreadyGen = true;
+      var router = this.router; // console.log('genKey- isPush',this.isPush)
+      // console.log('genKey- isReplace_initial',this.isReplace || this._initial)
 
       if (this.isReplace || this._initial) {
         this._initial = false;
-        return genKey(this.stackPointer, router);
+        return genKey(this.stackPointer, router, this._routeTo);
       } else if (this.isPush) {
-        return genKey(this.stackPointer + 1, router);
+        return genKey(this.stackPointer + 1, router, this._routeTo);
       } else {
-        return genKey(this.stackPointer - 1, router);
+        return genKey(this.stackPointer - 1, router, this._routeTo);
       }
     }
     /**
@@ -469,12 +483,14 @@ var Core = /*#__PURE__*/function () {
       var _this3 = this;
 
       var router = this.router;
-      router.beforeEach(function (to, from) {});
+      router.beforeEach(function (to, from) {
+        // console.log("before each:",this.isBackward(from))
+        _this3._routeTo = to.path;
+      });
       router.afterEach(function (to, from) {
         _this3.historyShouldChange = true; // get the vm instance after render
 
         vue.nextTick(function () {
-          _this3.isBackward = false;
           var current = _this3.currentVm;
           var pendingToPushVm = resolvePushedVm(current);
 
@@ -517,10 +533,6 @@ var Core = /*#__PURE__*/function () {
         _this4.isReplace = false;
         _this4.replacePrePath = undefined;
       }).beforeGo(function (num) {
-        if (num < 0) {
-          _this4.isBackward = true;
-        }
-
         _this4.isReplace = false;
       }).beforePush(function () {
         _this4.isReplace = false;
@@ -659,10 +671,21 @@ var StackKeepAliveImpl = {
     var storageContainer = createElement('div');
 
     sharedContext.activate = function (vnode, container, anchor, isSVG, optimized) {
+      debugger;
       var instance = vnode.component;
       move(vnode, container, anchor, MoveType.ENTER, parentSuspense); // in case props have changed
+      // patch(
+      //   instance.vnode,
+      //   vnode,
+      //   container,
+      //   anchor,
+      //   instance,
+      //   parentSuspense,
+      //   isSVG,
+      //   vnode.slotScopeIds,
+      //   optimized
+      // )
 
-      patch(instance.vnode, vnode, container, anchor, instance, parentSuspense, isSVG, vnode.slotScopeIds, optimized);
       queuePostRenderEffect(function () {
         instance.isDeactivated = false;
 
@@ -803,14 +826,14 @@ var StackKeepAliveImpl = {
       } // generate a specific key for every vnode
 
 
-      var _key = _core.genKeyForVnode(); // router.currentRoute.__key = _key
-
+      var _key = _core.genKeyForVnode();
 
       router.__key = _key;
+      debugger;
       var children = slots["default"]({
         'key': _key
       });
-      var rawVNode = children[0]; // debugger
+      var rawVNode = children[0];
 
       if (instance.vnode) {
         instance.vnode.__oldChild = children[0];
@@ -913,6 +936,7 @@ function matches(pattern, name) {
 }
 
 function resetShapeFlag(vnode) {
+  if (!vnode) return;
   var shapeFlag = vnode.shapeFlag;
 
   if (shapeFlag & ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE) {
@@ -947,6 +971,7 @@ function useTransitionState() {
   return state;
 }
 
+var PLACEHOLDER = '_placeholder';
 var TransitionHookValidator = [Function, Array];
 var BaseTransitionImpl = {
   name: "BaseTransition",
@@ -994,7 +1019,7 @@ var BaseTransitionImpl = {
           for (_iterator.s(); !(_step = _iterator.n()).done;) {
             var c = _step.value;
 
-            if (c.type !== Comment) {
+            if (c.type !== runtimeCore.Comment) {
               if (hasFound) {
                 // warn more than one non-comment child
                 vue.warn("<transition> can only be used on a single element or component. " + "Use <transition-group> for lists.");
@@ -1010,6 +1035,86 @@ var BaseTransitionImpl = {
         } finally {
           _iterator.f();
         }
+      } // fix enter issue
+      // debugger
+
+
+      if (child && child.type && child.type.name && child.type.name === 'StackKeepAlive') {
+        console.log(child);
+        child._R;
+        var now = null;
+
+        var _child = new Proxy(child.children, {
+          get: function get(target, property, receiver) {
+            if (property == 'default') {
+              // cache it 
+              if (now) {
+                return now;
+              }
+
+              var pre = Reflect.get(target, property, receiver);
+
+              now = function _now() {
+                child._R ? child._R[0] : undefined;
+
+                for (var _len = arguments.length, args = new Array(_len), _key2 = 0; _key2 < _len; _key2++) {
+                  args[_key2] = arguments[_key2];
+                }
+
+                var newKey = args && args[0] ? args[0].key : undefined;
+                var oldKey = child._R && child._R[0] ? child._R[0].key : undefined;
+                console.log('new key : ', newKey);
+                console.log('old key : ', oldKey); // r newKey oldKey
+
+                if (newKey === PLACEHOLDER) {
+                  var m = pre.apply(void 0, args);
+                  var newType = m[0].type;
+
+                  if (newType !== runtimeCore.Comment) {
+                    console.log('cache');
+                    return child._R = m;
+                  } else {
+                    console.log('no cache');
+                    return m;
+                  }
+                } else if (child._R) {
+                  // 替换Key
+                  child._R[0].key = newKey;
+                  child._R[0].props && (child._R[0].props.key = newKey);
+                  console.log('use cache');
+                  return child._R;
+                } else {
+                  var _m = pre.apply(void 0, args);
+
+                  console.log('cache');
+                  return child._R = _m;
+                } // if ( r ) {
+                //   if (args && args[0].key && (r[0].key === PLACEHOLDER) && args[0].key) {
+                //     r[0].key = args[0].key
+                //     r[0].props && (r[0].props.key = args[0].key)
+                //   }
+                //   // console.log('use cache:',r)
+                //   return r
+                // }
+                // let m = pre(...args)
+                // if (m[0].type !== Comment) {
+                //   // console.log('cache:',m)
+                //   return r = m
+                // } else {
+                //   // console.log('use no cache:',m)
+                //   return m
+                // }
+
+              };
+
+              return now;
+            }
+
+            return Reflect.get(target, property, receiver);
+          }
+        });
+
+        child.children = _child;
       } // there's no need to track reactivity for these props so use the raw
       // props for a bit better perf
 
@@ -1052,7 +1157,7 @@ var BaseTransitionImpl = {
       } // handle mode
 
 
-      if (oldInnerChild && oldInnerChild.type !== Comment && (!isSameVNodeType(innerChild, oldInnerChild) || transitionKeyChanged)) {
+      if (oldInnerChild && oldInnerChild.type !== runtimeCore.Comment && (!isSameVNodeType(innerChild, oldInnerChild) || transitionKeyChanged)) {
         var leavingHooks = resolveTransitionHooks(oldInnerChild, rawProps, state, instance); // update old tree's hooks in case of dynamic transition
 
         setTransitionHooks(oldInnerChild, leavingHooks); // switching between different views
@@ -1063,10 +1168,14 @@ var BaseTransitionImpl = {
           leavingHooks.afterLeave = function () {
             state.isLeaving = false;
             instance.update();
-          };
+          }; // setTimeout(()=>{
+          //   state.isLeaving = false
+          //   instance.update()
+          // },200)
+
 
           return emptyPlaceholder(child);
-        } else if (mode === "in-out" && innerChild.type !== Comment) {
+        } else if (mode === "in-out" && innerChild.type !== runtimeCore.Comment) {
           leavingHooks.delayLeave = function (el, earlyRemove, delayedLeave) {
             var leavingVNodesCache = getLeavingNodesForType(state, oldInnerChild);
             leavingVNodesCache[String(oldInnerChild.key)] = oldInnerChild; // early removal callback
@@ -1274,14 +1383,13 @@ function emptyPlaceholder(vnode) {
 }
 
 function getKeepAliveChild(vnode) {
-  var oldChild = vnode.__oldChild;
-
-  if (oldChild) {
-    return oldChild;
-  }
-
+  //   const oldChild = vnode.__oldChild
+  //   if (oldChild) { 
+  //       return oldChild
+  //   }
+  // // debugger
   return isKeepAlive(vnode) ? vnode.children ? shared.isArray(vnode.children) ? vnode.children[0] : vnode.children["default"]({
-    key: ''
+    key: PLACEHOLDER
   })[0] : undefined : vnode;
 }
 
@@ -1307,11 +1415,11 @@ function getTransitionRawChildren(children) {
 
     var key = parentKey == null ? child.key : String(parentKey) + String(child.key != null ? child.key : i); // handle fragment children case, e.g. v-for
 
-    if (child.type === Fragment) {
+    if (child.type === runtimeCore.Fragment) {
       if (child.patchFlag & PatchFlags.KEYED_FRAGMENT) keyedFragmentCount++;
       ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
     } // comment placeholders should be skipped, e.g. v-if
-    else if (keepComment || child.type !== Comment) {
+    else if (keepComment || child.type !== runtimeCore.Comment) {
       ret.push(key != null ? vue.cloneVNode(child, {
         key: key
       }) : child);
@@ -1475,11 +1583,13 @@ function resolveTransitionProps(rawProps) {
 
   return shared.extend(baseProps, {
     onBeforeEnter: function onBeforeEnter(el) {
+      debugger;
       callHook(_onBeforeEnter, [el]);
       addTransitionClass(el, enterFromClass);
       addTransitionClass(el, enterActiveClass);
     },
     onBeforeAppear: function onBeforeAppear(el) {
+      debugger;
       callHook(_onBeforeAppear, [el]);
       addTransitionClass(el, appearFromClass);
       addTransitionClass(el, appearActiveClass);
@@ -1699,13 +1809,14 @@ var components = {
   Transition: Transition
 };
 var plugin = {
-  install: function install(Vue) {
+  install: function install(app) {
     for (var prop in components) {
       if (components.hasOwnProperty(prop)) {
         var component = components[prop];
-        Vue.component(component.displayName || component.name, component);
+        app.component(component.displayName || component.name, component);
       }
     }
-  }
+  },
+  "ATransition": Transition
 };
 module.exports = plugin;

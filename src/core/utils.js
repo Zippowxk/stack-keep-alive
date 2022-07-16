@@ -35,6 +35,10 @@ export const getStateId = function () {
   const state = getCurrentState();
   return isDef(state) ? state.id : undefined;
 };
+export const getStateForward = function () {
+  const state = getCurrentState();
+  return isDef(state) ? state.forward : undefined;
+}
 
 export const getQuery = function (params) {
   let query = '';
@@ -52,12 +56,13 @@ const getCurrentState = function () {
   return history.state;
 };
 
-export const genKey = function (num, router) {
-  return `keep-alive-vnode-key-${Number(num)}-${currentPathOf(router)}`;
+export const genKey = function (num, router, routeTo = null) {
+  // return `keep-alive-vnode-key-${Number(num)}-`;
+  return `keep-alive-vnode-key-${Number(num)}-${routeTo?routeTo:currentPathOf(router)}`;
 };
 export const getCurrentVM = function (router) {
   return router.currentRoute._value.matched.length > 0
-    ? router.currentRoute._value.matched[0].instances.default.$
+    ? router.currentRoute._value.matched[0].instances.default?.$
     : undefined;
 };
 export const setCurrentVnodeKey = function (router, key) {
@@ -81,8 +86,8 @@ export const inBrowser = typeof window !== 'undefined';
 
 export const isKeepAlive = (vnode) => vnode.type.__isKeepAlive;
 
-export const Comment = Symbol(__DEV__ ? 'Comment' : undefined)
-export const Fragment = Symbol(__DEV__ ? 'Fragment' : undefined)
+// export const Comment = Symbol(__DEV__ ? 'Comment' : undefined)
+// export const Fragment = Symbol(__DEV__ ? 'Fragment' : undefined)
 
 export function isSameVNodeType(n1, n2){
   if (
