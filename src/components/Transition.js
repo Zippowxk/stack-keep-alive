@@ -167,6 +167,7 @@ export function resolveTransitionProps(rawProps) {
 
   return extend(baseProps, {
     onBeforeEnter(el) {
+      debugger
       callHook(onBeforeEnter, [el])
       addTransitionClass(el, enterFromClass)
       if (__COMPAT__ && legacyClassEnabled) {
@@ -176,6 +177,7 @@ export function resolveTransitionProps(rawProps) {
     },
 
     onBeforeAppear(el) {
+      debugger
       callHook(onBeforeAppear, [el])
       addTransitionClass(el, appearFromClass)
       if (__COMPAT__ && legacyClassEnabled) {

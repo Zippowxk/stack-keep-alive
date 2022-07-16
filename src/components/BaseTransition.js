@@ -3,13 +3,13 @@ import { callWithAsyncErrorHandling } from "vue"
 
 import { toRaw } from "@vue/reactivity"
 import { isArray } from "@vue/shared"
-
+import { Comment, Fragment } from '@vue/runtime-core'
 import {
   getCurrentInstance,
   cloneVNode,
   warn
 } from 'vue'
-import { isKeepAlive, Comment, Fragment, ShapeFlags, isSameVNodeType, ErrorCodes, PatchFlags } from '../core/utils'
+import { isKeepAlive, ShapeFlags, isSameVNodeType, ErrorCodes, PatchFlags } from '../core/utils'
 // import { isSameVNodeType } from '@vue/runtime-core'
 import {
   onBeforeUnmount, // fix
@@ -32,6 +32,7 @@ export function useTransitionState() {
   return state
 }
 
+const PLACEHOLDER = '_placeholder'
 const TransitionHookValidator = [Function, Array]
 
 const BaseTransitionImpl = {
@@ -63,7 +64,6 @@ const BaseTransitionImpl = {
     const state = useTransitionState()
 
     let prevTransitionKey
-
     return () => {
       const children =
         slots.default && getTransitionRawChildren(slots.default(), true)
@@ -91,6 +91,76 @@ const BaseTransitionImpl = {
           }
         }
       }
+
+      // fix enter issue
+      // debugger
+      if (child && child.type && child.type.name && child.type.name === 'StackKeepAlive') {
+        console.log(child)
+        child._R
+        let now = null
+        const _child = new Proxy(child.children, {
+          get: function (target, property, receiver) {
+              if (property == 'default') {
+                  // cache it 
+                  if (now) {
+                    return now
+                  }
+                  var pre = Reflect.get(target, property, receiver);
+                  now = function _now(...args) {
+                    const oldM = child._R ? child._R[0] : undefined
+                    const newKey = (args && args[0] ) ? args[0].key : undefined
+                    const oldKey = (child._R && child._R[0]) ? child._R[0].key : undefined
+                    console.log('new key : ',newKey)
+                    console.log('old key : ',oldKey)
+                   
+                    // r newKey oldKey
+                    if (newKey === PLACEHOLDER) {
+                      let m = pre(...args)
+                      const newType = m[0].type
+                      if (newType !== Comment) {
+                        console.log('cache')
+                        return child._R = m
+                      } else {
+                        console.log('no cache')
+                        return m
+                      }
+                    } else if (child._R){
+                      // 替换Key
+                      child._R[0].key = newKey
+                      child._R[0].props && (child._R[0].props.key = newKey)
+                      console.log('use cache')
+                      return child._R
+                    } else {
+                      let m = pre(...args)
+                      console.log('cache')
+                      return child._R = m
+                    }
+                   
+                    // if ( r ) {
+                    //   if (args && args[0].key && (r[0].key === PLACEHOLDER) && args[0].key) {
+                    //     r[0].key = args[0].key
+                    //     r[0].props && (r[0].props.key = args[0].key)
+                    //   }
+                    //   // console.log('use cache:',r)
+                    //   return r
+                    // }
+                    // let m = pre(...args)
+                    // if (m[0].type !== Comment) {
+                    //   // console.log('cache:',m)
+                    //   return r = m
+                    // } else {
+                    //   // console.log('use no cache:',m)
+                    //   return m
+                    // }
+                  }
+                  return now;
+              }
+              return Reflect.get(target, property, receiver);
+          },
+        })
+        child.children = _child
+      }
+
 
       // there's no need to track reactivity for these props so use the raw
       // props for a bit better perf
@@ -140,7 +210,6 @@ const BaseTransitionImpl = {
           transitionKeyChanged = true
         }
       }
-
       // handle mode
       if (
         oldInnerChild &&
@@ -163,6 +232,10 @@ const BaseTransitionImpl = {
             state.isLeaving = false
             instance.update()
           }
+          // setTimeout(()=>{
+          //   state.isLeaving = false
+          //   instance.update()
+          // },200)
           return emptyPlaceholder(child)
         } else if (mode === "in-out" && innerChild.type !== Comment) {
           leavingHooks.delayLeave = (el, earlyRemove, delayedLeave) => {
@@ -364,15 +437,16 @@ function emptyPlaceholder(vnode) {
 }
 
 function getKeepAliveChild(vnode) {
-  const oldChild = vnode.__oldChild
-  if (oldChild) { 
-      return oldChild
-  }
+//   const oldChild = vnode.__oldChild
+//   if (oldChild) { 
+//       return oldChild
+//   }
+// // debugger
   return isKeepAlive(vnode)
       ? vnode.children
           ? isArray(vnode.children)
               ? vnode.children[0]
-              : (vnode.children.default({key:''}))[0]
+              : (vnode.children.default({key: PLACEHOLDER}))[0]
           : undefined
       : vnode;
 }

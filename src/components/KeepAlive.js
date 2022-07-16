@@ -78,7 +78,7 @@ import {
       if (!sharedContext.renderer) {
         return slots.default
       }
-  
+
       const cache = new Map()
       const keys = new Set()
   
@@ -101,20 +101,21 @@ import {
       const storageContainer = createElement('div')
   
       sharedContext.activate = (vnode, container, anchor, isSVG, optimized) => {
+        debugger
         const instance = vnode.component
         move(vnode, container, anchor, MoveType.ENTER, parentSuspense)
         // in case props have changed
-        patch(
-          instance.vnode,
-          vnode,
-          container,
-          anchor,
-          instance,
-          parentSuspense,
-          isSVG,
-          vnode.slotScopeIds,
-          optimized
-        )
+        // patch(
+        //   instance.vnode,
+        //   vnode,
+        //   container,
+        //   anchor,
+        //   instance,
+        //   parentSuspense,
+        //   isSVG,
+        //   vnode.slotScopeIds,
+        //   optimized
+        // )
         queuePostRenderEffect(() => {
           instance.isDeactivated = false
           if (instance.a) {
@@ -235,7 +236,6 @@ import {
           unmount(cached)
         })
       })
-  
       return () => {
         pendingCacheKey = null
 
@@ -244,11 +244,11 @@ import {
         }
         // generate a specific key for every vnode
         const _key = _core.genKeyForVnode()
-        // router.currentRoute.__key = _key
+
         router.__key = _key
+        debugger
         const children = slots.default({'key': _key})
         const rawVNode = children[0]
-        // debugger
         if (instance.vnode) {
           instance.vnode.__oldChild = children[0]
         }
@@ -290,7 +290,7 @@ import {
           current = vnode
           return rawVNode
         }
-  
+
         const key = vnode.key == null ? comp : vnode.key
         const cachedVNode = cache.get(key)
         // clone vnode if it's reused because we are going to mutate it
@@ -421,6 +421,7 @@ import {
   }
   
   function resetShapeFlag(vnode) {
+    if (!vnode) return
     let shapeFlag = vnode.shapeFlag
     if (shapeFlag & ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE) {
       shapeFlag -= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE
