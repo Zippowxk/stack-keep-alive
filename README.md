@@ -56,7 +56,7 @@ app.use(StackKeepAlive)
 </stack-keep-alive>
 ```
 2. 配合transition使用，需要使用内置sk-transition组件替换transition组件.
-  使用name和back_name 实现两种不同动画效果
+  使用`name`和 `back_name` 实现两种不同动画效果
 
 ```vue
     <router-view v-slot="{ Component }">
