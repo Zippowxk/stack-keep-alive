@@ -1,5 +1,6 @@
 // import { Comment, isSameVNodeType, Fragment } from "../vnode"
 import { callWithAsyncErrorHandling } from "vue"
+import { SingleCore } from '../core/index'
 
 import { toRaw } from "@vue/reactivity"
 import { isArray } from "@vue/shared"
@@ -44,19 +45,27 @@ const BaseTransitionImpl = {
     persisted: Boolean,
     // enter
     onBeforeEnter: TransitionHookValidator,
+    _onBeforeEnter: TransitionHookValidator,
     onEnter: TransitionHookValidator,
+    _onEnter: TransitionHookValidator,
     onAfterEnter: TransitionHookValidator,
     onEnterCancelled: TransitionHookValidator,
+    _onEnterCancelled: TransitionHookValidator,
     // leave
     onBeforeLeave: TransitionHookValidator,
     onLeave: TransitionHookValidator,
+    _onLeave: TransitionHookValidator,
     onAfterLeave: TransitionHookValidator,
     onLeaveCancelled: TransitionHookValidator,
+    _onLeaveCancelled: TransitionHookValidator,
     // appear
     onBeforeAppear: TransitionHookValidator,
+    _onBeforeAppear: TransitionHookValidator,
     onAppear: TransitionHookValidator,
+    _onAppear: TransitionHookValidator,
     onAfterAppear: TransitionHookValidator,
-    onAppearCancelled: TransitionHookValidator
+    onAppearCancelled: TransitionHookValidator,
+    _onAppearCancelled: TransitionHookValidator
   },
 
   setup(props, { slots }) {
@@ -95,63 +104,33 @@ const BaseTransitionImpl = {
       // fix enter issue
       // debugger
       if (child && child.type && child.type.name && child.type.name === 'StackKeepAlive') {
+        child.__id = Math.floor(Math.random()*1000)
         console.log(child)
         child._R
-        let now = null
+        // let now = null
         const _child = new Proxy(child.children, {
           get: function (target, property, receiver) {
               if (property == 'default') {
-                  // cache it 
-                  if (now) {
-                    return now
-                  }
+                  // if (now) {
+                  //   return now
+                  // }
                   var pre = Reflect.get(target, property, receiver);
-                  now = function _now(...args) {
-                    const oldM = child._R ? child._R[0] : undefined
-                    const newKey = (args && args[0] ) ? args[0].key : undefined
-                    const oldKey = (child._R && child._R[0]) ? child._R[0].key : undefined
-                    console.log('new key : ',newKey)
-                    console.log('old key : ',oldKey)
-                   
-                    // r newKey oldKey
-                    if (newKey === PLACEHOLDER) {
-                      let m = pre(...args)
-                      const newType = m[0].type
-                      if (newType !== Comment) {
-                        console.log('cache')
-                        return child._R = m
-                      } else {
-                        console.log('no cache')
-                        return m
+                  const now = function _now(arg) {
+                    const res = pre(arg)
+                    if (child._R && !child._R.reused) {
+                      if (arg.key !== PLACEHOLDER) {
+                        child._R[0].key = arg.key
+                        child._R[0].props.key = arg.key
+                        child._R.reused = true
                       }
-                    } else if (child._R){
-                      // 替换Key
-                      child._R[0].key = newKey
-                      child._R[0].props && (child._R[0].props.key = newKey)
-                      console.log('use cache')
                       return child._R
-                    } else {
-                      let m = pre(...args)
-                      console.log('cache')
-                      return child._R = m
                     }
-                   
-                    // if ( r ) {
-                    //   if (args && args[0].key && (r[0].key === PLACEHOLDER) && args[0].key) {
-                    //     r[0].key = args[0].key
-                    //     r[0].props && (r[0].props.key = args[0].key)
-                    //   }
-                    //   // console.log('use cache:',r)
-                    //   return r
-                    // }
-                    // let m = pre(...args)
-                    // if (m[0].type !== Comment) {
-                    //   // console.log('cache:',m)
-                    //   return r = m
-                    // } else {
-                    //   // console.log('use no cache:',m)
-                    //   return m
-                    // }
+                    
+                    if (res[0].type !== Comment) {
+                      child._R = res
+                    }
+                    console.log('get')
+                    return res
                   }
                   return now;
               }
@@ -286,21 +265,30 @@ export function resolveTransitionHooks(vnode, props, state, instance) {
     mode,
     persisted = false,
     onBeforeEnter,
+    _onBeforeEnter,
     onEnter,
+    _onEnter,
     onAfterEnter,
     onEnterCancelled,
+    _onEnterCancelled,
     onBeforeLeave,
+    _onBeforeLeave,
     onLeave,
+    _onLeave,
     onAfterLeave,
     onLeaveCancelled,
+    _onLeaveCancelled,
     onBeforeAppear,
+    _onBeforeAppear,
     onAppear,
+    _onAppear,
     onAfterAppear,
-    onAppearCancelled
+    onAppearCancelled,
+    _onAppearCancelled,
   } = props
   const key = String(vnode.key)
   const leavingVNodesCache = getLeavingNodesForType(state, vnode)
-
+  const _core = SingleCore()
   const callHook = (hook, args) => {
     hook &&
       callWithAsyncErrorHandling(
@@ -325,10 +313,11 @@ export function resolveTransitionHooks(vnode, props, state, instance) {
     mode,
     persisted,
     beforeEnter(el) {
-      let hook = onBeforeEnter
+      // debugger
+      let hook =  _core.isBacking ? _onBeforeEnter : onBeforeEnter
       if (!state.isMounted) {
         if (appear) {
-          hook = onBeforeAppear || onBeforeEnter
+          hook = _core.isBacking ? (_onBeforeAppear || _onBeforeEnter) : (onBeforeAppear || onBeforeEnter)
         } else {
           return
         }
@@ -351,14 +340,14 @@ export function resolveTransitionHooks(vnode, props, state, instance) {
     },
 
     enter(el) {
-      let hook = onEnter
+      let hook =  _core.isBacking ? _onEnter : onEnter
       let afterHook = onAfterEnter
-      let cancelHook = onEnterCancelled
+      let cancelHook = _core.isBacking ? _onEnterCancelled : onEnterCancelled
       if (!state.isMounted) {
         if (appear) {
-          hook = onAppear || onEnter
-          afterHook = onAfterAppear || onAfterEnter
-          cancelHook = onAppearCancelled || onEnterCancelled
+          hook = _core.isBacking ? (_onAppear || _onEnter) : (onAppear || onEnter)
+          afterHook = (onAfterAppear || onAfterEnter)
+          cancelHook = _core.isBacking ? (_onAppearCancelled || _onEnterCancelled) : (onAppearCancelled || onEnterCancelled)
         } else {
           return
         }
@@ -399,7 +388,7 @@ export function resolveTransitionHooks(vnode, props, state, instance) {
         called = true
         remove()
         if (cancelled) {
-          callHook(onLeaveCancelled, [el])
+          callHook(_core.isBacking ? _onLeaveCancelled : onLeaveCancelled, [el])
         } else {
           callHook(onAfterLeave, [el])
         }
@@ -409,8 +398,8 @@ export function resolveTransitionHooks(vnode, props, state, instance) {
         }
       })
       leavingVNodesCache[key] = vnode
-      if (onLeave) {
-        callAsyncHook(onLeave, [el, done])
+      if (onLeave && _onLeave) {
+        callAsyncHook(_core.isBacking ? _onLeave : onLeave, [el, done])
       } else {
         done()
       }

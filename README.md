@@ -55,19 +55,18 @@ app.use(StackKeepAlive)
     <component :is="Component" :key='key'/>
 </stack-keep-alive>
 ```
-2. 配合transition使用，需要使用内置sk-transition组件替换transition组件
+2. 配合transition使用，需要使用内置sk-transition组件替换transition组件.
+  使用name和back_name 实现两种不同动画效果
 
 ```vue
     <router-view v-slot="{ Component }">
-      <sk-transition name='your-animation-name'>
-        <stack-keep-alive v-slot='{ key }'>
-          <component :is="Component"
-                     :key='key' />
+      <sk-transition name='slide-left' back_name='slide-right'>
+        <stack-keep-alive v-slot="{ key }">
+          <component :is="Component" :key='key'/>
         </stack-keep-alive>
       </sk-transition>
     </router-view>
 ```
-
 
 
 ### 更新日志

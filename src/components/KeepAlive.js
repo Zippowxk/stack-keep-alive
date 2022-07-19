@@ -41,7 +41,7 @@ import {
   
   // import { hackRouter, hackHistory } from '../hacks/index'
 
-  import Core from '../core/index'
+  import { SingleCore } from '../core/index'
   import { useRouter } from 'vue-router';
   // vnode 生成key
   // 提供根据key清除cache的方法
@@ -101,7 +101,7 @@ import {
       const storageContainer = createElement('div')
   
       sharedContext.activate = (vnode, container, anchor, isSVG, optimized) => {
-        debugger
+        // debugger
         const instance = vnode.component
         move(vnode, container, anchor, MoveType.ENTER, parentSuspense)
         // in case props have changed
@@ -191,8 +191,8 @@ import {
       if (!router) {
         throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()")
       }
-      
-      _core = new Core({ router, pruneCacheEntry, replaceStay: props.replaceStay })
+      // debugger
+      _core = SingleCore({ router, pruneCacheEntry, replaceStay: props.replaceStay }) 
       if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
         window.__core = _core
       }
@@ -244,11 +244,9 @@ import {
         }
         // generate a specific key for every vnode
         const _key = _core.genKeyForVnode()
-
-        router.__key = _key
-        debugger
         const children = slots.default({'key': _key})
         const rawVNode = children[0]
+
         if (instance.vnode) {
           instance.vnode.__oldChild = children[0]
         }
