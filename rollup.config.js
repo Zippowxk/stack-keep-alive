@@ -2,6 +2,28 @@ import vue from 'rollup-plugin-vue'
 import peerDepsExternal from 'rollup-plugin-peer-deps-external'
 import replace from '@rollup/plugin-replace'
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import { terser } from 'rollup-plugin-terser'
+
+
+const plugins = [
+  vue(), 
+  peerDepsExternal(),
+  createReplace(),
+  getBabelOutputPlugin({
+    presets: ['@babel/preset-env'],
+    allowAllFormats: true,
+    exclude: 'node_modules/**',
+  })
+]
+
+if (process.env.NODE_ENV === 'production') {
+  plugins.push(terser({
+    compress: {
+      pure_funcs: ["console.log"]
+    }
+  }))
+}
+
 
 export default [
   {
@@ -20,8 +42,8 @@ export default [
       {
           name: 'StackKeepAlive',
           format: 'umd',
-          // file: 'dist/index.js',
-          file: `/Users/wxkmac/Documents/Github/stack-keep-alive-js-sample/debug/index.js`,
+          file: 'dist/index.js',
+          // file: `/Users/wxkmac/Documents/Github/stack-keep-alive-js-sample/debug/index.js`,
           globals: {
             'vue': 'vue',
             'vue-router': 'VueRouter',
@@ -29,16 +51,7 @@ export default [
           },
       }
     ],
-    plugins: [
-      vue(), 
-      peerDepsExternal(),
-      createReplace(),
-      getBabelOutputPlugin({
-        presets: ['@babel/preset-env'],
-        allowAllFormats: true,
-        exclude: 'node_modules/**',
-      })
-    ]
+    plugins
   }
 ]
 

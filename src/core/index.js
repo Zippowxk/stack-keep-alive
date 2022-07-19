@@ -16,8 +16,22 @@ import { nextTick } from 'vue'
 
 import { hackHistory, RouterHacker } from '../hacks/index';
 
+let _core
+export const SingleCore = function(args) {
+  if (!_core) {
+    _core = new Core()
+  }
+  if (args) {
+    _core.setup(args)
+  }
+  return _core
+}
+
 export default class Core {
-  constructor({ router, pruneCacheEntry , replaceStay }) {
+  constructor() {
+  }
+  setup({ router, pruneCacheEntry , replaceStay }) {
+
     hackHistory(history)
     this.destroyCaches = pruneCacheEntry;
     this.router = router;
@@ -39,12 +53,16 @@ export default class Core {
     // expose this core
     this.router.__core = this
     this._routeTo = undefined
+    // this.isBacking = false
   }
 
-  isBackward(from) {
-    // console.log(history.state.forward)
+
+  get isBacking() {
+    // console.log(history.state)
     // console.log(from.fullPath)
-    return from ? getStateForward() === from.fullPath : false
+    // console.log(from.fullPath)
+    return !(this.isPush || this.isReplace)
+    // return from ? getStateForward() === from.fullPath : false
   }
 
   init() {
@@ -90,7 +108,6 @@ export default class Core {
   routerHooks() {
     const { router } = this
     router.beforeEach((to, from) => {
-      // console.log("before each:",this.isBackward(from))
       this._routeTo = to.path
     })
     router.afterEach((to, from) => {

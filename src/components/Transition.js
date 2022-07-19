@@ -22,6 +22,7 @@ if (__COMPAT__) {
 
 const DOMTransitionPropsValidators = {
   name: String,
+  back_name: String,
   type: String,
   css: {
     type: Boolean,
@@ -93,7 +94,19 @@ export function resolveTransitionProps(rawProps) {
     appearToClass = enterToClass,
     leaveFromClass = `${name}-leave-from`,
     leaveActiveClass = `${name}-leave-active`,
-    leaveToClass = `${name}-leave-to`
+    leaveToClass = `${name}-leave-to`,
+    back_name = "v",
+    back_type,
+    back_duration,
+    back_enterFromClass = `${back_name}-enter-from`,
+    back_enterActiveClass = `${back_name}-enter-active`,
+    back_enterToClass = `${back_name}-enter-to`,
+    back_appearFromClass = back_enterFromClass,
+    back_appearActiveClass = back_enterActiveClass,
+    back_appearToClass = back_enterToClass,
+    back_leaveFromClass = `${back_name}-leave-from`,
+    back_leaveActiveClass = `${back_name}-leave-active`,
+    back_leaveToClass = `${back_name}-leave-to`,
   } = rawProps
 
   // legacy transition class compat
@@ -103,6 +116,9 @@ export function resolveTransitionProps(rawProps) {
   let legacyEnterFromClass
   let legacyAppearFromClass
   let legacyLeaveFromClass
+  let back_legacyEnterFromClass
+  let back_legacyAppearFromClass
+  let back_legacyLeaveFromClass
   if (__COMPAT__ && legacyClassEnabled) {
     const toLegacyClass = cls => cls.replace(/-from$/, "")
     if (!rawProps.enterFromClass) {
@@ -114,6 +130,16 @@ export function resolveTransitionProps(rawProps) {
     if (!rawProps.leaveFromClass) {
       legacyLeaveFromClass = toLegacyClass(leaveFromClass)
     }
+    if (!rawProps.back_enterFromClass) {
+      back_legacyEnterFromClass = toLegacyClass(back_enterFromClass)
+    }
+    if (!rawProps.back_appearFromClass) {
+      back_legacyAppearFromClass = toLegacyClass(back_appearFromClass)
+    }
+    if (!rawProps.back_leaveFromClass) {
+      back_legacyLeaveFromClass = toLegacyClass(back_leaveFromClass)
+    }
+
   }
 
   const durations = normalizeDuration(duration)
@@ -164,10 +190,44 @@ export function resolveTransitionProps(rawProps) {
       })
     }
   }
+  const _finishLeave = (el, done) => {
+    el._isLeaving = false
+    removeTransitionClass(el, back_leaveFromClass)
+    removeTransitionClass(el, back_leaveToClass)
+    removeTransitionClass(el, back_leaveActiveClass)
+    done && done()
+  }
+  const _finishEnter = (el, isAppear, done) => {
+    removeTransitionClass(el, isAppear ? back_appearToClass : back_enterToClass)
+    removeTransitionClass(el, isAppear ? back_appearActiveClass : back_enterActiveClass)
+    done && done()
+  }
+  const _makeEnterHook = isAppear => {
+    return (el, done) => {
+      const hook = isAppear ? onAppear : onEnter
+      const resolve = () => _finishEnter(el, isAppear, done)
+      callHook(hook, [el, resolve])
+      nextFrame(() => {
+        removeTransitionClass(el, isAppear ? back_appearFromClass : back_enterFromClass)
+        if (__COMPAT__ && legacyClassEnabled) {
+          removeTransitionClass(
+            el,
+            isAppear ? back_legacyAppearFromClass : back_legacyEnterFromClass
+          )
+        }
+        addTransitionClass(el, isAppear ? back_appearToClass : back_enterToClass)
+        if (!hasExplicitCallback(hook)) {
+          whenTransitionEnds(el, type, enterDuration, resolve)
+        }
+      })
+    }
+  }
 
+
+
+  // const _core = SingleCore()
   return extend(baseProps, {
     onBeforeEnter(el) {
-      debugger
       callHook(onBeforeEnter, [el])
       addTransitionClass(el, enterFromClass)
       if (__COMPAT__ && legacyClassEnabled) {
@@ -175,9 +235,16 @@ export function resolveTransitionProps(rawProps) {
       }
       addTransitionClass(el, enterActiveClass)
     },
+    _onBeforeEnter(el) {
+      callHook(onBeforeEnter, [el])
+      addTransitionClass(el, back_enterFromClass)
+      if (__COMPAT__ && legacyClassEnabled) {
+        addTransitionClass(el, back_legacyEnterFromClass)
+      }
+      addTransitionClass(el, back_enterActiveClass)
+    },
 
     onBeforeAppear(el) {
-      debugger
       callHook(onBeforeAppear, [el])
       addTransitionClass(el, appearFromClass)
       if (__COMPAT__ && legacyClassEnabled) {
@@ -185,7 +252,16 @@ export function resolveTransitionProps(rawProps) {
       }
       addTransitionClass(el, appearActiveClass)
     },
-
+    _onBeforeAppear(el) {
+      callHook(onBeforeAppear, [el])
+      addTransitionClass(el, back_appearFromClass)
+      if (__COMPAT__ && legacyClassEnabled) {
+        addTransitionClass(el, back_legacyAppearFromClass)
+      }
+      addTransitionClass(el, back_appearActiveClass)
+    },
+    _onEnter: _makeEnterHook(false),
+    _onAppear: _makeEnterHook(true),
     onEnter: makeEnterHook(false),
     onAppear: makeEnterHook(true),
 
@@ -216,8 +292,38 @@ export function resolveTransitionProps(rawProps) {
       callHook(onLeave, [el, resolve])
     },
 
+    _onLeave(el, done) {
+      el._isLeaving = true
+      const resolve = () => _finishLeave(el, done)
+      addTransitionClass(el, back_leaveFromClass)
+      if (__COMPAT__ && legacyClassEnabled) {
+        addTransitionClass(el, back_legacyLeaveFromClass)
+      }
+      // force reflow so *-leave-from classes immediately take effect (#2593)
+      forceReflow()
+      addTransitionClass(el, back_leaveActiveClass)
+      nextFrame(() => {
+        if (!el._isLeaving) {
+          // cancelled
+          return
+        }
+        removeTransitionClass(el, back_leaveFromClass)
+        if (__COMPAT__ && legacyClassEnabled) {
+          removeTransitionClass(el, back_legacyLeaveFromClass)
+        }
+        addTransitionClass(el, back_leaveToClass)
+        if (!hasExplicitCallback(onLeave)) {
+          whenTransitionEnds(el, type, leaveDuration, resolve)
+        }
+      })
+      callHook(onLeave, [el, resolve])
+    },
     onEnterCancelled(el) {
       finishEnter(el, false)
+      callHook(onEnterCancelled, [el])
+    },
+    _onEnterCancelled(el) {
+      _finishEnter(el, false)
       callHook(onEnterCancelled, [el])
     },
 
@@ -225,9 +331,18 @@ export function resolveTransitionProps(rawProps) {
       finishEnter(el, true)
       callHook(onAppearCancelled, [el])
     },
+    _onAppearCancelled(el) {
+      _finishEnter(el, true)
+      callHook(onAppearCancelled, [el])
+    },
 
     onLeaveCancelled(el) {
       finishLeave(el)
+      callHook(onLeaveCancelled, [el])
+    },
+
+    _onLeaveCancelled(el) {
+      _finishLeave(el)
       callHook(onLeaveCancelled, [el])
     }
   })

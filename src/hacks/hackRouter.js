@@ -8,7 +8,7 @@ export class RouterHacker {
     const router = this.router;
     const rtmp = router.replace;
     const rtmpf = (location, onComplete, onAbort) => {
-      cb()
+      cb(location)
       rtmp.call(router, location, onComplete, (e) => {
         onerror()
         isDef(onAbort) && onAbort(e);
