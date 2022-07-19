@@ -88,6 +88,9 @@ app.use(StackKeepAlive)
 ### Sample code
 
 1. [静态文件引入](./examples/)
+2. [工程化+完整动画](https://github.com/Zippowxk/stack-keep-alive-sample)
+![动画](https://github.com/Zippowxk/stack-keep-alive-sample/blob/main/imgs/sample.gif)
+
 
 欢迎添加微信 **OmniBug **探讨交流，Email: zippowangxinkai@gmail.com
 
