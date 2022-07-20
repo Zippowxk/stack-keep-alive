@@ -121,6 +121,18 @@ export const AppStay = {
   components: { StackKeepAlive },
 };
 
+export const AppSingleton = {
+  template: `
+      <router-view v-slot="{ Component }">
+          <stack-keep-alive v-slot='{ key }' :singleton="['/bar']"> 
+              <component :is="Component" :key='key'/>
+          </stack-keep-alive>
+      </router-view>
+      `,
+  components: { StackKeepAlive },
+};
+
+
 export const routes = [
   { path: "/", component: Home },
   { path: "/foo", component: Foo },

@@ -61,6 +61,7 @@ import {
       exclude: [String, RegExp, Array],
       max: [String, Number],
       replaceStay: [Array],
+      singleton: [Array],
       mode: String,
     },
 
@@ -192,7 +193,7 @@ import {
         throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()")
       }
       // debugger
-      _core = SingleCore({ router, pruneCacheEntry, replaceStay: props.replaceStay }) 
+      _core = SingleCore({ router, pruneCacheEntry, replaceStay: props.replaceStay, singleton: props.singleton }) 
       if (__DEV__ || __FEATURE_PROD_DEVTOOLS__) {
         window.__core = _core
       }

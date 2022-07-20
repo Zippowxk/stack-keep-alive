@@ -60,9 +60,15 @@ export const genKey = function (num, router, routeTo = null) {
   // return `keep-alive-vnode-key-${Number(num)}-`;
   return `keep-alive-vnode-key-${Number(num)}-${routeTo?routeTo:currentPathOf(router)}`;
 };
+export const genSingletonKey = function (router, routeTo = null) {
+  return `keep-alive-vnode-key-singleton-${routeTo?routeTo:currentPathOf(router)}`;
+};
+export const isSingletonNode = function(vnode) {
+  return vnode && vnode.key.startsWith('keep-alive-vnode-key-singleton-')
+}
 export const getCurrentVM = function (router) {
-  return router.currentRoute._value.matched.length > 0
-    ? router.currentRoute._value.matched[0].instances.default?.$
+  return router?.currentRoute?._value?.matched?.length > 0
+    ? router.currentRoute._value.matched[0].instances?.default?.$
     : undefined;
 };
 export const setCurrentVnodeKey = function (router, key) {
