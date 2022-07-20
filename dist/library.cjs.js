@@ -1,1 +1,1956 @@
-"use strict";function e(e,n){return function(e){if(Array.isArray(e))return e}(e)||function(e,n){var t=null==e?null:"undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(null==t)return;var r,o,a=[],i=!0,u=!1;try{for(t=t.call(e);!(i=(r=t.next()).done)&&(a.push(r.value),!n||a.length!==n);i=!0);}catch(e){u=!0,o=e}finally{try{i||null==t.return||t.return()}finally{if(u)throw o}}return a}(e,n)||a(e,n)||function(){throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function n(e,n){if(!(e instanceof n))throw new TypeError("Cannot call a class as a function")}function t(e,n){for(var t=0;t<n.length;t++){var r=n[t];r.enumerable=r.enumerable||!1,r.configurable=!0,"value"in r&&(r.writable=!0),Object.defineProperty(e,r.key,r)}}function r(e,n,r){return n&&t(e.prototype,n),r&&t(e,r),Object.defineProperty(e,"prototype",{writable:!1}),e}function o(e){return function(e){if(Array.isArray(e))return i(e)}(e)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(e)||a(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function a(e,n){if(e){if("string"==typeof e)return i(e,n);var t=Object.prototype.toString.call(e).slice(8,-1);return"Object"===t&&e.constructor&&(t=e.constructor.name),"Map"===t||"Set"===t?Array.from(e):"Arguments"===t||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t)?i(e,n):void 0}}function i(e,n){(null==n||n>e.length)&&(n=e.length);for(var t=0,r=new Array(n);t<n;t++)r[t]=e[t];return r}var u,c=require("vue"),s=require("@vue/shared"),l=require("vue-router"),f=require("@vue/runtime-core"),v=require("@vue/reactivity");!function(e){e[e.ELEMENT=1]="ELEMENT",e[e.FUNCTIONAL_COMPONENT=2]="FUNCTIONAL_COMPONENT",e[e.STATEFUL_COMPONENT=4]="STATEFUL_COMPONENT",e[e.TEXT_CHILDREN=8]="TEXT_CHILDREN",e[e.ARRAY_CHILDREN=16]="ARRAY_CHILDREN",e[e.SLOTS_CHILDREN=32]="SLOTS_CHILDREN",e[e.TELEPORT=64]="TELEPORT",e[e.SUSPENSE=128]="SUSPENSE",e[e.COMPONENT_SHOULD_KEEP_ALIVE=256]="COMPONENT_SHOULD_KEEP_ALIVE",e[e.COMPONENT_KEPT_ALIVE=512]="COMPONENT_KEPT_ALIVE",e[e.COMPONENT=6]="COMPONENT"}(u||(u={}));var p,h=u,d=function(e){return null!=e},y={__placeholder:!0},_=function(e){return e.currentRoute._value.path},E=function(){var e=A();return d(e)?e.id:void 0},A=function(){return history.state},C=function(e,n){var t=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;return"keep-alive-vnode-key-".concat(Number(e),"-").concat(t||_(n))},m=function(e){return e.type.__isKeepAlive};function g(e,n){return!(n.shapeFlag&h.COMPONENT)&&(e.type===n.type&&e.key===n.key)}!function(e){e[e.SETUP_FUNCTION=0]="SETUP_FUNCTION",e[e.RENDER_FUNCTION=1]="RENDER_FUNCTION",e[e.WATCH_GETTER=2]="WATCH_GETTER",e[e.WATCH_CALLBACK=3]="WATCH_CALLBACK",e[e.WATCH_CLEANUP=4]="WATCH_CLEANUP",e[e.NATIVE_EVENT_HANDLER=5]="NATIVE_EVENT_HANDLER",e[e.COMPONENT_EVENT_HANDLER=6]="COMPONENT_EVENT_HANDLER",e[e.VNODE_HOOK=7]="VNODE_HOOK",e[e.DIRECTIVE_HOOK=8]="DIRECTIVE_HOOK",e[e.TRANSITION_HOOK=9]="TRANSITION_HOOK",e[e.APP_ERROR_HANDLER=10]="APP_ERROR_HANDLER",e[e.APP_WARN_HANDLER=11]="APP_WARN_HANDLER",e[e.FUNCTION_REF=12]="FUNCTION_REF",e[e.ASYNC_COMPONENT_LOADER=13]="ASYNC_COMPONENT_LOADER",e[e.SCHEDULER=14]="SCHEDULER"}(p||(p={}));var S,T=p;!function(e){e[e.TEXT=1]="TEXT",e[e.CLASS=2]="CLASS",e[e.STYLE=4]="STYLE",e[e.PROPS=8]="PROPS",e[e.FULL_PROPS=16]="FULL_PROPS",e[e.HYDRATE_EVENTS=32]="HYDRATE_EVENTS",e[e.STABLE_FRAGMENT=64]="STABLE_FRAGMENT",e[e.KEYED_FRAGMENT=128]="KEYED_FRAGMENT",e[e.UNKEYED_FRAGMENT=256]="UNKEYED_FRAGMENT",e[e.NEED_PATCH=512]="NEED_PATCH",e[e.DYNAMIC_SLOTS=1024]="DYNAMIC_SLOTS",e[e.DEV_ROOT_FRAGMENT=2048]="DEV_ROOT_FRAGMENT",e[e.HOISTED=-1]="HOISTED",e[e.BAIL=-2]="BAIL"}(S||(S={}));var N=S,k=4,R=128,P=256,L=512,O=function(e){for(var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,t=0;t<e.length;t++)e[t](n)};function b(e){return"function"==typeof e&&e.displayName||e.name}function I(e,n,t){var r=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null;c.callWithAsyncErrorHandling(e,n,7,[t,r])}var F=0,M=1;var D,w=function(e,n){var t;n&&n.pendingBranch?s.isArray(e)?(t=n.effects).push.apply(t,o(e)):n.effects.push(e):c.queuePostFlushCb(e)},H=function(){function e(t){n(this,e),this.historyStackMap=[],this.destroyCache=t}return r(e,[{key:"push",value:function(e,n){var t=this.historyStackMap[n];if(Array.isArray(t))!t.includes(e)&&t.push(e),this.historyStackMap[n]=t.filter((function(e){return!e._isDestroyed}));else{var r=[];r.push(e),this.historyStackMap[n]=r}}},{key:"pop",value:function(){var e=this,n=arguments.length>0&&void 0!==arguments[0]&&arguments[0],t=this.historyStackMap.pop();if(Array.isArray(t))if(n){var r=t.pop();r&&this.destroyCache(r)}else t.forEach((function(n){return n&&e.destroyCache(n)}))}},{key:"removeGreater",value:function(e){for(;this.historyStackMap.length>=e;)this.pop()}},{key:"clear",value:function(){this.historyStackMap=[]}}]),e}(),B=function(){function e(t){n(this,e),this.router=t}return r(e,[{key:"beforeReplace",value:function(e,n){var t=this.router,r=t.replace;return t.replace=function(o,a,i){!function(o,a,i){e(o),r.call(t,o,a,(function(e){n(),d(i)&&i(e)}))}(o,a,i)},this}},{key:"beforeGo",value:function(e){var n=this.router,t=n.go;return n.go=function(r){return e(o=r),t.call(n,o);var o},this}},{key:"beforePush",value:function(e){var n=this.router,t=n.push;return n.push=function(r,o,a){return function(r,o,a){if(e(),!o&&!a&&"undefined"!=typeof Promise)return t.call(n,r,o,a);t.call(n,r,o,a)}(r,o,a)},this}}]),e}();var U=function(e){return D||(D=new V),e&&D.setup(e),D},V=function(){function e(){n(this,e)}return r(e,[{key:"setup",value:function(e){var n=this,t=e.router,r=e.pruneCacheEntry,o=e.replaceStay;!function(e){var n=e.replaceState;e.replaceState=function(t,r,o){var a=Object.assign({},e.state),i=Object.assign(a,t);n.call(e,i,r,o)};var t=e.pushState;e.pushState=function(n,r,o){var a=Object.assign({},e.state),i=Object.assign(a,n);t.call(e,i,r,o)}}(history),this.destroyCaches=r,this.router=t,this.router._stack=0,this.mode=t.mode,this.historyShouldChange=!1,this.isReplace=!1,this.replacePrePath=void 0,this.preStateId=0,this.pre=null,this.replaceStay=o||[],this._initial=!0,this.historyStack=new H((function(e){e&&n.destroyCaches(e.vnode.key)})),this.init(),this.router.__core=this,this._routeTo=void 0}},{key:"isBacking",get:function(){return!(this.isPush||this.isReplace)}},{key:"init",value:function(){this.initStackPointer(),this.routerHooks(),this.hackRouter()}},{key:"initStackPointer",value:function(){var e=E();d(e)?this.setStackPointer(e):this.setState(0)}},{key:"genInitialKeyNextTime",value:function(){this._initial=!0}},{key:"genKeyForVnode",value:function(){var e=this.router;return this.isReplace||this._initial?(this._initial=!1,C(this.stackPointer,e,this._routeTo)):this.isPush?C(this.stackPointer+1,e,this._routeTo):C(this.stackPointer-1,e,this._routeTo)}},{key:"routerHooks",value:function(){var e=this,n=this.router;n.beforeEach((function(n,t){e._routeTo=n.path})),n.afterEach((function(n,t){e.historyShouldChange=!0,c.nextTick((function(){var n,t=e.currentVm,r=function(e){return d(e)?e:y}(t);null===e.pre?e.onInitial(r):e.isReplace?e.onReplace(r):e.isPush?e.onPush(r):e.onBack(r),e.pre=t,e.preStateId=e.stackPointer,(n=r)&&n.__placeholder||(e.historyShouldChange=!1)}))}))}},{key:"hackRouter",value:function(){var e=this;this._hackRouter=new B(this.router),this._hackRouter.beforeReplace((function(){e.isReplace=!0,e.replacePrePath=_(e.router)}),(function(n){e.isReplace=!1,e.replacePrePath=void 0})).beforeGo((function(n){e.isReplace=!1})).beforePush((function(){e.isReplace=!1}))}},{key:"onInitial",value:function(e){this.historyStack.push(e,this.stackPointer)}},{key:"onPush",value:function(e){var n,t;this.setState(this.increaseStackPointer()),this.historyStack.push(e,this.stackPointer),null===(n=this.pre)||void 0===n||null===(t=n.$clearParent)||void 0===t||t.call(n,e),this.pre=null}},{key:"onBack",value:function(e){this.historyStack.pop(),this.decreaseStackPointer(),this.historyStack.push(e,this.stackPointer)}},{key:"onReplace",value:function(e){var n=this.replacePrePath===_(this.router);!(d(this.replacePrePath)&&this.replaceStay.includes(this.replacePrePath)||n)&&this.historyStack.pop(!0),this.pre=null,this.setState(this.stackPointer),this.historyStack.push(e,this.stackPointer),this.isReplace=!1,this.replacePrePath=void 0}},{key:"currentVm",get:function(){return(e=this.router).currentRoute._value.matched.length>0?null===(n=e.currentRoute._value.matched[0].instances.default)||void 0===n?void 0:n.$:void 0;var e,n}},{key:"isPush",get:function(){if(!this.isReplace){var e=E();return!d(e)||this.preStateId<=e}return!1}},{key:"stackPointer",get:function(){return this.router._stack}},{key:"setStackPointer",value:function(e){this.router._stack=e}},{key:"setState",value:function(e){this.setStackPointer(e),function(e,n,t){var r=window.location,o=r.pathname,a=r.search,i=r.hash,u="".concat(o).concat(a).concat(i),c=d(history.state)?history.state:{};c.id=t;var s=window.location.href.startsWith("file://");history.replaceState(c,"",s?null:u)}(this.mode,this.router,e)}},{key:"increaseStackPointer",value:function(){return this.router._stack+=1}},{key:"decreaseStackPointer",value:function(){return this.router._stack-=1}}]),e}(),K=null,x={name:"StackKeepAlive",__isKeepAlive:!0,props:{include:[String,RegExp,Array],exclude:[String,RegExp,Array],max:[String,Number],replaceStay:[Array],mode:String},setup:function(n,t){var r=t.slots,o=c.getCurrentInstance(),a=o.ctx;if(!a.renderer)return r.default;var i=new Map,u=new Set,s=null;window.__v_cache=o.__v_cache=i;var f,v=o.suspense,p=a.renderer,h=(p.p,p.m),d=p.um,y=(0,p.o.createElement)("div");function _(e){j(e),d(e,o,v,!0)}function E(e){i.forEach((function(n,t){var r=b(n.type);!r||e&&e(r)||A(t)}))}function A(e){var n=i.get(e);s.key===e?j(s):s&&_(n),i.delete(e),u.delete(e)}if(a.activate=function(e,n,t,r,o){var a=e.component;h(e,n,t,F,v),w((function(){a.isDeactivated=!1,a.a&&O(a.a);var n=e.props&&e.props.onVnodeMounted;n&&I(n,a.parent,e)}),v)},a.deactivate=function(e){var n=e.component;h(e,y,null,M,v),w((function(){n.da&&O(n.da);var t=e.props&&e.props.onVnodeUnmounted;t&&I(t,n.parent,e),n.isDeactivated=!0}),v)},!(f=l.useRouter()))throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()");K=U({router:f,pruneCacheEntry:A,replaceStay:n.replaceStay}),window.__core=K,c.watch((function(){return[n.include,n.exclude]}),(function(n){var t=e(n,2),r=t[0],o=t[1];r&&E((function(e){return Y(r,e)})),o&&E((function(e){return!Y(o,e)}))}),{flush:"post",deep:!0});var C=null,m=function(){null!=C&&i.set(C,G(o.subTree))};return c.onMounted(m),c.onUpdated(m),c.onBeforeUnmount((function(){i.forEach((function(e){var n=o.subTree,t=o.suspense,r=G(n);if(e.type!==r.type)_(e);else{j(r);var a=r.component.da;a&&w(a,t)}}))})),function(){if(C=null,!r.default)return null;var e=K.genKeyForVnode(),t=r.default({key:e}),a=t[0];if(o.vnode&&(o.vnode.__oldChild=t[0]),t.length>1)return c.warn("KeepAlive should contain exactly one component child."),s=null,K.genInitialKeyNextTime(),t;if(!c.isVNode(a)||a.shapeFlag!==k&&a.shapeFlag!==R)return K.genInitialKeyNextTime(),s=null,a;var l=G(a),f=l.type,v=b(l.__asyncLoader?l.type.__asyncResolved||{}:f),p=n.include,h=n.exclude,d=n.max;if(p&&(!v||!Y(p,v))||h&&v&&Y(h,v))return s=l,a;var y=null==l.key?f:l.key,_=i.get(y);return l.el&&(l=c.cloneVNode(l),a.shapeFlag&R&&(a.ssContent=l)),C=y,_?(l.el=_.el,l.component=_.component,l.transition&&c.setTransitionHooks(l,l.transition),l.shapeFlag|=L,u.delete(y),u.add(y)):(u.add(y),d&&u.size>parseInt(d,10)&&A(u.values().next().value)),l.shapeFlag|=P,s=l,a}}};function Y(e,n){return s.isArray(e)?e.some((function(e){return Y(e,n)})):s.isString(e)?e.split(",").includes(n):!!e.test&&e.test(n)}function j(e){if(e){var n=e.shapeFlag;n&P&&(n-=P),n&L&&(n-=L),e.shapeFlag=n}}function G(e){return e.shapeFlag&R?e.ssContent:e}var W=[Function,Array],q={name:"BaseTransition",props:{mode:String,appear:Boolean,persisted:Boolean,onBeforeEnter:W,_onBeforeEnter:W,onEnter:W,_onEnter:W,onAfterEnter:W,onEnterCancelled:W,_onEnterCancelled:W,onBeforeLeave:W,onLeave:W,_onLeave:W,onAfterLeave:W,onLeaveCancelled:W,_onLeaveCancelled:W,onBeforeAppear:W,_onBeforeAppear:W,onAppear:W,_onAppear:W,onAfterAppear:W,onAppearCancelled:W,_onAppearCancelled:W},setup:function(e,n){var t,r=n.slots,o=c.getCurrentInstance(),i=function(){var e={isMounted:!1,isLeaving:!1,isUnmounting:!1,leavingVNodes:new Map};return c.onMounted((function(){e.isMounted=!0})),c.onBeforeUnmount((function(){e.isUnmounting=!0})),e}();return function(){var n=r.default&&Z(r.default(),!0);if(n&&n.length){var u=n[0];if(n.length>1){var s,l=!1,p=function(e,n){var t="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!t){if(Array.isArray(e)||(t=a(e))||n&&e&&"number"==typeof e.length){t&&(e=t);var r=0,o=function(){};return{s:o,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:o}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var i,u=!0,c=!1;return{s:function(){t=t.call(e)},n:function(){var e=t.next();return u=e.done,e},e:function(e){c=!0,i=e},f:function(){try{u||null==t.return||t.return()}finally{if(c)throw i}}}}(n);try{for(p.s();!(s=p.n()).done;){var h=s.value;if(h.type!==f.Comment){if(l){c.warn("<transition> can only be used on a single element or component. Use <transition-group> for lists.");break}u=h,l=!0}}}catch(e){p.e(e)}finally{p.f()}}if(u&&u.type&&u.type.name&&"StackKeepAlive"===u.type.name){u.__id=Math.floor(1e3*Math.random()),u._R;var d=new Proxy(u.children,{get:function(e,n,t){if("default"==n){var r=Reflect.get(e,n,t);return function(e){var n=r(e);return u._R&&!u._R.reused?("_placeholder"!==e.key&&(u._R[0].key=e.key,u._R[0].props.key=e.key,u._R.reused=!0),u._R):(n[0].type!==f.Comment&&(u._R=n),n)}}return Reflect.get(e,n,t)}});u.children=d}var y=v.toRaw(e),_=y.mode;if(_&&"in-out"!==_&&"out-in"!==_&&"default"!==_&&c.warn("invalid <transition> mode: ".concat(_)),i.isLeaving)return z(u);var E=J(u);if(!E)return z(u);var A=$(E,y,i,o);Q(E,A);var C=o.subTree,m=C&&J(C),S=!1,T=E.type.getTransitionKey;if(T){var N=T();void 0===t?t=N:N!==t&&(t=N,S=!0)}if(m&&m.type!==f.Comment&&(!g(E,m)||S)){var k=$(m,y,i,o);if(Q(m,k),"out-in"===_)return i.isLeaving=!0,k.afterLeave=function(){i.isLeaving=!1,o.update()},z(u);"in-out"===_&&E.type!==f.Comment&&(k.delayLeave=function(e,n,t){X(i,m)[String(m.key)]=m,e._leaveCb=function(){n(),e._leaveCb=void 0,delete A.delayedLeave},A.delayedLeave=t})}return u}}}};function X(e,n){var t=e.leavingVNodes,r=t.get(n.type);return r||(r=Object.create(null),t.set(n.type,r)),r}function $(e,n,t,r){var o=n.appear,a=n.mode,i=n.persisted,u=void 0!==i&&i,l=n.onBeforeEnter,f=n._onBeforeEnter,v=n.onEnter,p=n._onEnter,h=n.onAfterEnter,d=n.onEnterCancelled,y=n._onEnterCancelled,_=n.onBeforeLeave,E=(n._onBeforeLeave,n.onLeave),A=n._onLeave,C=n.onAfterLeave,m=n.onLeaveCancelled,S=n._onLeaveCancelled,N=n.onBeforeAppear,k=n._onBeforeAppear,R=n.onAppear,P=n._onAppear,L=n.onAfterAppear,O=n.onAppearCancelled,b=n._onAppearCancelled,I=String(e.key),F=X(t,e),M=U(),D=function(e,n){e&&c.callWithAsyncErrorHandling(e,r,T.TRANSITION_HOOK,n)},w=function(e,n){var t=n[1];D(e,n),s.isArray(e)?e.every((function(e){return e.length<=1}))&&t():e.length<=1&&t()},H={mode:a,persisted:u,beforeEnter:function(n){var r=M.isBacking?f:l;if(!t.isMounted){if(!o)return;r=M.isBacking?k||f:N||l}n._leaveCb&&n._leaveCb(!0);var a=F[I];a&&g(e,a)&&a.el._leaveCb&&a.el._leaveCb(),D(r,[n])},enter:function(e){var n=M.isBacking?p:v,r=h,a=M.isBacking?y:d;if(!t.isMounted){if(!o)return;n=M.isBacking?P||p:R||v,r=L||h,a=M.isBacking?b||y:O||d}var i=!1,u=e._enterCb=function(n){i||(i=!0,D(n?a:r,[e]),H.delayedLeave&&H.delayedLeave(),e._enterCb=void 0)};n?w(n,[e,u]):u()},leave:function(n,r){var o=String(e.key);if(n._enterCb&&n._enterCb(!0),t.isUnmounting)return r();D(_,[n]);var a=!1,i=n._leaveCb=function(t){a||(a=!0,r(),D(t?M.isBacking?S:m:C,[n]),n._leaveCb=void 0,F[o]===e&&delete F[o])};F[o]=e,E&&A?w(M.isBacking?A:E,[n,i]):i()},clone:function(e){return $(e,n,t,r)}};return H}function z(e){if(m(e))return(e=c.cloneVNode(e)).children=null,e}function J(e){return m(e)?e.children?s.isArray(e.children)?e.children[0]:e.children.default({key:"_placeholder"})[0]:void 0:e}function Q(e,n){e.shapeFlag&h.COMPONENT&&e.component?Q(e.component.subTree,n):e.shapeFlag&h.SUSPENSE?(e.ssContent.transition=n.clone(e.ssContent),e.ssFallback.transition=n.clone(e.ssFallback)):e.transition=n}function Z(e){for(var n=arguments.length>1&&void 0!==arguments[1]&&arguments[1],t=arguments.length>2?arguments[2]:void 0,r=[],o=0,a=0;a<e.length;a++){var i=e[a],u=null==t?i.key:String(t)+String(null!=i.key?i.key:a);i.type===f.Fragment?(i.patchFlag&N.KEYED_FRAGMENT&&o++,r=r.concat(Z(i.children,n,u))):(n||i.type!==f.Comment)&&r.push(null!=u?c.cloneVNode(i,{key:u}):i)}if(o>1)for(var s=0;s<r.length;s++)r[s].patchFlag=N.BAIL;return r}var ee="transition",ne=function(e,n){var t=n.slots;return f.h(q,function(e){var n={};for(var t in e)t in te||(n[t]=e[t]);if(!1===e.css)return n;var r=e.name,o=void 0===r?"v":r,a=e.type,i=e.duration,u=e.enterFromClass,c=void 0===u?"".concat(o,"-enter-from"):u,l=e.enterActiveClass,f=void 0===l?"".concat(o,"-enter-active"):l,v=e.enterToClass,p=void 0===v?"".concat(o,"-enter-to"):v,h=e.appearFromClass,d=void 0===h?c:h,y=e.appearActiveClass,_=void 0===y?f:y,E=e.appearToClass,A=void 0===E?p:E,C=e.leaveFromClass,m=void 0===C?"".concat(o,"-leave-from"):C,g=e.leaveActiveClass,S=void 0===g?"".concat(o,"-leave-active"):g,T=e.leaveToClass,N=void 0===T?"".concat(o,"-leave-to"):T,k=e.back_name,R=void 0===k?"v":k,P=(e.back_type,e.back_duration,e.back_enterFromClass),L=void 0===P?"".concat(R,"-enter-from"):P,O=e.back_enterActiveClass,b=void 0===O?"".concat(R,"-enter-active"):O,I=e.back_enterToClass,F=void 0===I?"".concat(R,"-enter-to"):I,M=e.back_appearFromClass,D=void 0===M?L:M,w=e.back_appearActiveClass,H=void 0===w?b:w,B=e.back_appearToClass,U=void 0===B?F:B,V=e.back_leaveFromClass,K=void 0===V?"".concat(R,"-leave-from"):V,x=e.back_leaveActiveClass,Y=void 0===x?"".concat(R,"-leave-active"):x,j=e.back_leaveToClass,G=void 0===j?"".concat(R,"-leave-to"):j,W=function(e){if(null==e)return null;if(s.isObject(e))return[ae(e.enter),ae(e.leave)];var n=ae(e);return[n,n]}(i),q=W&&W[0],X=W&&W[1],$=n.onBeforeEnter,z=n.onEnter,J=n.onEnterCancelled,Q=n.onLeave,Z=n.onLeaveCancelled,ee=n.onBeforeAppear,ne=void 0===ee?$:ee,se=n.onAppear,fe=void 0===se?z:se,ve=n.onAppearCancelled,he=void 0===ve?J:ve,de=function(e,n,t){ue(e,n?A:p),ue(e,n?_:f),t&&t()},ye=function(e,n){e._isLeaving=!1,ue(e,m),ue(e,N),ue(e,S),n&&n()},_e=function(e){return function(n,t){var r=e?fe:z,o=function(){return de(n,e,t)};re(r,[n,o]),ce((function(){ue(n,e?d:c),ie(n,e?A:p),oe(r)||le(n,a,q,o)}))}},Ee=function(e,n){e._isLeaving=!1,ue(e,K),ue(e,G),ue(e,Y),n&&n()},Ae=function(e,n,t){ue(e,n?U:F),ue(e,n?H:b),t&&t()},Ce=function(e){return function(n,t){var r=e?fe:z,o=function(){return Ae(n,e,t)};re(r,[n,o]),ce((function(){ue(n,e?D:L),ie(n,e?U:F),oe(r)||le(n,a,q,o)}))}};return s.extend(n,{onBeforeEnter:function(e){re($,[e]),ie(e,c),ie(e,f)},_onBeforeEnter:function(e){re($,[e]),ie(e,L),ie(e,b)},onBeforeAppear:function(e){re(ne,[e]),ie(e,d),ie(e,_)},_onBeforeAppear:function(e){re(ne,[e]),ie(e,D),ie(e,H)},_onEnter:Ce(!1),_onAppear:Ce(!0),onEnter:_e(!1),onAppear:_e(!0),onLeave:function(e,n){e._isLeaving=!0;var t=function(){return ye(e,n)};ie(e,m),pe(),ie(e,S),ce((function(){e._isLeaving&&(ue(e,m),ie(e,N),oe(Q)||le(e,a,X,t))})),re(Q,[e,t])},_onLeave:function(e,n){e._isLeaving=!0;var t=function(){return Ee(e,n)};ie(e,K),pe(),ie(e,Y),ce((function(){e._isLeaving&&(ue(e,K),ie(e,G),oe(Q)||le(e,a,X,t))})),re(Q,[e,t])},onEnterCancelled:function(e){de(e,!1),re(J,[e])},_onEnterCancelled:function(e){Ae(e,!1),re(J,[e])},onAppearCancelled:function(e){de(e,!0),re(he,[e])},_onAppearCancelled:function(e){Ae(e,!0),re(he,[e])},onLeaveCancelled:function(e){ye(e),re(Z,[e])},_onLeaveCancelled:function(e){Ee(e),re(Z,[e])}})}(e),t)};ne.displayName="SkTransition";var te={name:String,back_name:String,type:String,css:{type:Boolean,default:!0},duration:[String,Number,Object],enterFromClass:String,enterActiveClass:String,enterToClass:String,appearFromClass:String,appearActiveClass:String,appearToClass:String,leaveFromClass:String,leaveActiveClass:String,leaveToClass:String};ne.props=s.extend({},q.props,te);var re=function(e){var n=arguments.length>1&&void 0!==arguments[1]?arguments[1]:[];s.isArray(e)?e.forEach((function(e){return e.apply(void 0,o(n))})):e&&e.apply(void 0,o(n))},oe=function(e){return!!e&&(s.isArray(e)?e.some((function(e){return e.length>1})):e.length>1)};function ae(e){var n=s.toNumber(e);return function(e){"number"!=typeof e?f.warn("<transition> explicit duration is not a valid number - "+"got ".concat(JSON.stringify(e),".")):isNaN(e)&&f.warn("<transition> explicit duration is NaN - the duration expression might be incorrect.")}(n),n}function ie(e,n){n.split(/\s+/).forEach((function(n){return n&&e.classList.add(n)})),(e._vtc||(e._vtc=new Set)).add(n)}function ue(e,n){n.split(/\s+/).forEach((function(n){return n&&e.classList.remove(n)}));var t=e._vtc;t&&(t.delete(n),t.size||(e._vtc=void 0))}function ce(e){requestAnimationFrame((function(){requestAnimationFrame(e)}))}var se=0;function le(e,n,t,r){var o=e._endId=++se,a=function(){o===e._endId&&r()};if(t)return setTimeout(a,t);var i=function(e,n){var t=window.getComputedStyle(e),r=function(e){return(t[e]||"").split(", ")},o=r("transitionDelay"),a=r("transitionDuration"),i=fe(o,a),u=r("animationDelay"),c=r("animationDuration"),s=fe(u,c),l=null,f=0,v=0;n===ee?i>0&&(l=ee,f=i,v=a.length):"animation"===n?s>0&&(l="animation",f=s,v=c.length):v=(l=(f=Math.max(i,s))>0?i>s?ee:"animation":null)?l===ee?a.length:c.length:0;var p=l===ee&&/\b(transform|all)(,|$)/.test(t.transitionProperty);return{type:l,timeout:f,propCount:v,hasTransform:p}}(e,n),u=i.type,c=i.timeout,s=i.propCount;if(!u)return r();var l=u+"end",f=0,v=function(){e.removeEventListener(l,p),a()},p=function(n){n.target===e&&++f>=s&&v()};setTimeout((function(){f<s&&v()}),c+1),e.addEventListener(l,p)}function fe(e,n){for(;e.length<n.length;)e=e.concat(e);return Math.max.apply(Math,o(n.map((function(n,t){return ve(n)+ve(e[t])}))))}function ve(e){return 1e3*Number(e.slice(0,-1).replace(",","."))}function pe(){return document.body.offsetHeight}var he={StackKeepAlive:x,Transition:ne},de={install:function(e){for(var n in he)if(he.hasOwnProperty(n)){var t=he[n];e.component(t.displayName||t.name,t)}},ATransition:ne};module.exports=de;
+'use strict';
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var vue = require('vue');
+
+var shared = require('@vue/shared');
+
+var vueRouter = require('vue-router');
+
+var runtimeCore = require('@vue/runtime-core');
+
+var reactivity = require('@vue/reactivity');
+
+var _ShapeFlags;
+
+(function (ShapeFlags) {
+  ShapeFlags[ShapeFlags["ELEMENT"] = 1] = "ELEMENT";
+  ShapeFlags[ShapeFlags["FUNCTIONAL_COMPONENT"] = 2] = "FUNCTIONAL_COMPONENT";
+  ShapeFlags[ShapeFlags["STATEFUL_COMPONENT"] = 4] = "STATEFUL_COMPONENT";
+  ShapeFlags[ShapeFlags["TEXT_CHILDREN"] = 8] = "TEXT_CHILDREN";
+  ShapeFlags[ShapeFlags["ARRAY_CHILDREN"] = 16] = "ARRAY_CHILDREN";
+  ShapeFlags[ShapeFlags["SLOTS_CHILDREN"] = 32] = "SLOTS_CHILDREN";
+  ShapeFlags[ShapeFlags["TELEPORT"] = 64] = "TELEPORT";
+  ShapeFlags[ShapeFlags["SUSPENSE"] = 128] = "SUSPENSE";
+  ShapeFlags[ShapeFlags["COMPONENT_SHOULD_KEEP_ALIVE"] = 256] = "COMPONENT_SHOULD_KEEP_ALIVE";
+  ShapeFlags[ShapeFlags["COMPONENT_KEPT_ALIVE"] = 512] = "COMPONENT_KEPT_ALIVE";
+  ShapeFlags[ShapeFlags["COMPONENT"] = 6] = "COMPONENT";
+})(_ShapeFlags || (_ShapeFlags = {}));
+
+var ShapeFlags$1 = _ShapeFlags;
+
+var isDef = function isDef(v) {
+  return v !== undefined && v !== null;
+};
+
+var PLACEHOLDER_VM = {
+  __placeholder: true
+};
+
+var currentPathOf = function currentPathOf(router) {
+  return router.currentRoute._value.path;
+};
+
+var resolvePushedVm = function resolvePushedVm(current) {
+  return isDef(current) ? current : PLACEHOLDER_VM;
+};
+
+var isPlaceHolderVm = function isPlaceHolderVm(vm) {
+  return vm && !!vm.__placeholder;
+};
+
+var getStateId = function getStateId() {
+  var state = getCurrentState();
+  return isDef(state) ? state.id : undefined;
+};
+
+var getCurrentState = function getCurrentState() {
+  return history.state;
+};
+
+var genKey = function genKey(num, router) {
+  var routeTo = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  // return `keep-alive-vnode-key-${Number(num)}-`;
+  return "keep-alive-vnode-key-".concat(Number(num), "-").concat(routeTo ? routeTo : currentPathOf(router));
+};
+
+var genSingletonKey = function genSingletonKey(router) {
+  var routeTo = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  return "keep-alive-vnode-key-singleton-".concat(routeTo ? routeTo : currentPathOf(router));
+};
+
+var isSingletonNode = function isSingletonNode(vnode) {
+  return vnode && vnode.key.startsWith('keep-alive-vnode-key-singleton-');
+};
+
+var getCurrentVM = function getCurrentVM(router) {
+  var _router$currentRoute, _router$currentRoute$, _router$currentRoute$2, _router$currentRoute$3, _router$currentRoute$4;
+
+  return (router === null || router === void 0 ? void 0 : (_router$currentRoute = router.currentRoute) === null || _router$currentRoute === void 0 ? void 0 : (_router$currentRoute$ = _router$currentRoute._value) === null || _router$currentRoute$ === void 0 ? void 0 : (_router$currentRoute$2 = _router$currentRoute$.matched) === null || _router$currentRoute$2 === void 0 ? void 0 : _router$currentRoute$2.length) > 0 ? (_router$currentRoute$3 = router.currentRoute._value.matched[0].instances) === null || _router$currentRoute$3 === void 0 ? void 0 : (_router$currentRoute$4 = _router$currentRoute$3["default"]) === null || _router$currentRoute$4 === void 0 ? void 0 : _router$currentRoute$4.$ : undefined;
+};
+
+var replaceState = function replaceState(mode, router, id) {
+  var _window$location = window.location,
+      pathname = _window$location.pathname,
+      search = _window$location.search,
+      hash = _window$location.hash;
+  var path = "".concat(pathname).concat(search).concat(hash);
+  var state = isDef(history.state) ? history.state : {};
+  state['id'] = id; // optimize file:// URL
+
+  var isFilSys = window.location.href.startsWith('file://');
+  history.replaceState(state, '', isFilSys ? null : path);
+};
+
+var isKeepAlive = function isKeepAlive(vnode) {
+  return vnode.type.__isKeepAlive;
+}; // export const Comment = Symbol(true ? 'Comment' : undefined)
+// export const Fragment = Symbol(true ? 'Fragment' : undefined)
+
+
+function isSameVNodeType(n1, n2) {
+  if (n2.shapeFlag & ShapeFlags$1.COMPONENT) {
+    // HMR only: if the component has been hot-updated, force a reload.
+    return false;
+  }
+
+  return n1.type === n2.type && n1.key === n2.key;
+}
+
+var _ErrorCodes;
+
+(function (ErrorCodes) {
+  ErrorCodes[ErrorCodes["SETUP_FUNCTION"] = 0] = "SETUP_FUNCTION";
+  ErrorCodes[ErrorCodes["RENDER_FUNCTION"] = 1] = "RENDER_FUNCTION";
+  ErrorCodes[ErrorCodes["WATCH_GETTER"] = 2] = "WATCH_GETTER";
+  ErrorCodes[ErrorCodes["WATCH_CALLBACK"] = 3] = "WATCH_CALLBACK";
+  ErrorCodes[ErrorCodes["WATCH_CLEANUP"] = 4] = "WATCH_CLEANUP";
+  ErrorCodes[ErrorCodes["NATIVE_EVENT_HANDLER"] = 5] = "NATIVE_EVENT_HANDLER";
+  ErrorCodes[ErrorCodes["COMPONENT_EVENT_HANDLER"] = 6] = "COMPONENT_EVENT_HANDLER";
+  ErrorCodes[ErrorCodes["VNODE_HOOK"] = 7] = "VNODE_HOOK";
+  ErrorCodes[ErrorCodes["DIRECTIVE_HOOK"] = 8] = "DIRECTIVE_HOOK";
+  ErrorCodes[ErrorCodes["TRANSITION_HOOK"] = 9] = "TRANSITION_HOOK";
+  ErrorCodes[ErrorCodes["APP_ERROR_HANDLER"] = 10] = "APP_ERROR_HANDLER";
+  ErrorCodes[ErrorCodes["APP_WARN_HANDLER"] = 11] = "APP_WARN_HANDLER";
+  ErrorCodes[ErrorCodes["FUNCTION_REF"] = 12] = "FUNCTION_REF";
+  ErrorCodes[ErrorCodes["ASYNC_COMPONENT_LOADER"] = 13] = "ASYNC_COMPONENT_LOADER";
+  ErrorCodes[ErrorCodes["SCHEDULER"] = 14] = "SCHEDULER";
+})(_ErrorCodes || (_ErrorCodes = {}));
+
+var ErrorCodes = _ErrorCodes;
+
+var _PatchFlags;
+
+(function (PatchFlags) {
+  PatchFlags[PatchFlags["TEXT"] = 1] = "TEXT";
+  PatchFlags[PatchFlags["CLASS"] = 2] = "CLASS";
+  PatchFlags[PatchFlags["STYLE"] = 4] = "STYLE";
+  PatchFlags[PatchFlags["PROPS"] = 8] = "PROPS";
+  PatchFlags[PatchFlags["FULL_PROPS"] = 16] = "FULL_PROPS";
+  PatchFlags[PatchFlags["HYDRATE_EVENTS"] = 32] = "HYDRATE_EVENTS";
+  PatchFlags[PatchFlags["STABLE_FRAGMENT"] = 64] = "STABLE_FRAGMENT";
+  PatchFlags[PatchFlags["KEYED_FRAGMENT"] = 128] = "KEYED_FRAGMENT";
+  PatchFlags[PatchFlags["UNKEYED_FRAGMENT"] = 256] = "UNKEYED_FRAGMENT";
+  PatchFlags[PatchFlags["NEED_PATCH"] = 512] = "NEED_PATCH";
+  PatchFlags[PatchFlags["DYNAMIC_SLOTS"] = 1024] = "DYNAMIC_SLOTS";
+  PatchFlags[PatchFlags["DEV_ROOT_FRAGMENT"] = 2048] = "DEV_ROOT_FRAGMENT";
+  PatchFlags[PatchFlags["HOISTED"] = -1] = "HOISTED";
+  PatchFlags[PatchFlags["BAIL"] = -2] = "BAIL";
+})(_PatchFlags || (_PatchFlags = {}));
+
+var PatchFlags = _PatchFlags;
+var ShapeFlags = {
+  ELEMENT: 1,
+  FUNCTIONAL_COMPONENT: 1 << 1,
+  STATEFUL_COMPONENT: 1 << 2,
+  TEXT_CHILDREN: 1 << 3,
+  ARRAY_CHILDREN: 1 << 4,
+  SLOTS_CHILDREN: 1 << 5,
+  TELEPORT: 1 << 6,
+  SUSPENSE: 1 << 7,
+  COMPONENT_SHOULD_KEEP_ALIVE: 1 << 8,
+  COMPONENT_KEPT_ALIVE: 1 << 9,
+  COMPONENT: 1 << 1 | 1 << 2
+};
+
+var isFunction = function isFunction(val) {
+  return typeof val === 'function';
+};
+
+var invokeArrayFns = function invokeArrayFns(fns) {
+  var arg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+  for (var i = 0; i < fns.length; i++) {
+    fns[i](arg);
+  }
+};
+
+function getComponentName(Component) {
+  return isFunction(Component) ? Component.displayName || Component.name : Component.name;
+}
+
+var VNODE_HOOK = 7;
+
+function invokeVNodeHook(hook, instance, vnode) {
+  var prevVNode = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  vue.callWithAsyncErrorHandling(hook, instance, VNODE_HOOK, [vnode, prevVNode]);
+}
+
+var MoveType = {
+  ENTER: 0,
+  LEAVE: 1,
+  REORDER: 2
+};
+
+function queueEffectWithSuspense(fn, suspense) {
+  if (suspense && suspense.pendingBranch) {
+    if (shared.isArray(fn)) {
+      var _suspense$effects;
+
+      (_suspense$effects = suspense.effects).push.apply(_suspense$effects, _toConsumableArray(fn));
+    } else {
+      suspense.effects.push(fn);
+    }
+  } else {
+    vue.queuePostFlushCb(fn);
+  }
+}
+
+var queuePostRenderEffect = queueEffectWithSuspense;
+
+var isAsyncWrapper = function isAsyncWrapper(i) {
+  return !!i.__asyncLoader;
+};
+
+var HistoryStack = /*#__PURE__*/function () {
+  function HistoryStack(destroyCache) {
+    _classCallCheck(this, HistoryStack);
+
+    this.historyStackMap = [];
+    this.destroyCache = destroyCache;
+  }
+
+  _createClass(HistoryStack, [{
+    key: "push",
+    value: function push(vm, index) {
+      var stack = this.historyStackMap[index];
+
+      if (Array.isArray(stack)) {
+        !stack.includes(vm) && stack.push(vm);
+        this.historyStackMap[index] = stack.filter(function (item) {
+          return !item._isDestroyed;
+        });
+      } else {
+        var vms = [];
+        vms.push(vm);
+        this.historyStackMap[index] = vms;
+      }
+    }
+  }, {
+    key: "pop",
+    value: function pop() {
+      var _this = this;
+
+      var onlyLastOne = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+      var last = this.historyStackMap.pop();
+
+      if (Array.isArray(last)) {
+        if (onlyLastOne) {
+          var vm = last.pop();
+          vm && this.destroyCache(vm);
+        } else {
+          last.forEach(function (vm) {
+            return vm && _this.destroyCache(vm);
+          });
+        }
+      }
+    }
+  }, {
+    key: "removeGreater",
+    value: function removeGreater(index) {
+      while (this.historyStackMap.length >= index) {
+        this.pop();
+      }
+    }
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.historyStackMap = [];
+    }
+  }]);
+
+  return HistoryStack;
+}();
+
+var RouterHacker = /*#__PURE__*/function () {
+  function RouterHacker(router) {
+    _classCallCheck(this, RouterHacker);
+
+    this.router = router;
+  }
+
+  _createClass(RouterHacker, [{
+    key: "beforeReplace",
+    value: function beforeReplace(cb, onerror) {
+      var router = this.router;
+      var rtmp = router.replace;
+
+      var rtmpf = function rtmpf(location, onComplete, onAbort) {
+        cb(location);
+        rtmp.call(router, location, onComplete, function (e) {
+          onerror();
+          isDef(onAbort) && onAbort(e);
+        });
+      };
+
+      router.replace = function (location, onComplete, onAbort) {
+        rtmpf(location, onComplete, onAbort);
+      };
+
+      return this;
+    }
+  }, {
+    key: "beforeGo",
+    value: function beforeGo(cb) {
+      var router = this.router;
+      var gstmp = router.go;
+
+      var gstmpf = function gstmpf(number) {
+        cb(number);
+        return gstmp.call(router, number);
+      };
+
+      router.go = function (num) {
+        return gstmpf(num);
+      };
+
+      return this;
+    }
+  }, {
+    key: "beforePush",
+    value: function beforePush(cb) {
+      var router = this.router;
+      var pstmp = router.push;
+
+      var pstmpf = function pstmpf(location, onComplete, onAbort) {
+        cb();
+
+        if (!onComplete && !onAbort && typeof Promise !== 'undefined') {
+          return pstmp.call(router, location, onComplete, onAbort);
+        } else {
+          pstmp.call(router, location, onComplete, onAbort);
+        }
+      };
+
+      router.push = function (location, onComplete, onAbort) {
+        return pstmpf(location, onComplete, onAbort);
+      };
+
+      return this;
+    }
+  }]);
+
+  return RouterHacker;
+}();
+
+function hackHistory(history) {
+  var rstmp = history.replaceState;
+
+  history.replaceState = function (state, op, path) {
+    var old = Object.assign({}, history.state);
+    var s = Object.assign(old, state);
+    rstmp.call(history, s, op, path);
+  };
+
+  var historyPushState = history.pushState;
+
+  history.pushState = function (state, op, path) {
+    var old = Object.assign({}, history.state);
+    var s = Object.assign(old, state);
+    historyPushState.call(history, s, op, path);
+  };
+}
+
+var _core$1;
+
+var SingleCore = function SingleCore(args) {
+  if (!_core$1) {
+    _core$1 = new Core();
+  }
+
+  if (args) {
+    _core$1.setup(args);
+  }
+
+  return _core$1;
+};
+
+var Core = /*#__PURE__*/function () {
+  function Core() {
+    _classCallCheck(this, Core);
+  }
+
+  _createClass(Core, [{
+    key: "setup",
+    value: function setup(_ref) {
+      var _this2 = this;
+
+      var router = _ref.router,
+          pruneCacheEntry = _ref.pruneCacheEntry,
+          replaceStay = _ref.replaceStay,
+          singleton = _ref.singleton;
+      hackHistory(history);
+      this.destroyCaches = pruneCacheEntry;
+      this.router = router;
+      this.router._stack = 0;
+      this.mode = router.mode; // hash or history
+
+      this.historyShouldChange = false;
+      this.isReplace = false;
+      this.replacePrePath = undefined;
+      this.preStateId = 0;
+      this.pre = null;
+      this.replaceStay = replaceStay || [];
+      this.singleton = singleton || []; // 单例页面
+
+      this._initial = true; //闲置状态
+
+      this.historyStack = new HistoryStack(function (_vm) {
+        if (_vm) {
+          if (_vm.vnode.key && !isSingletonNode(_vm.vnode)) {
+            _this2.destroyCaches(_vm.vnode.key);
+          }
+        }
+      });
+      this.init(); // expose this core
+
+      this.router.__core = this;
+      this._routeTo = undefined; // this.isBacking = false
+    }
+  }, {
+    key: "isBacking",
+    get: function get() {
+      // console.log(history.state)
+      // console.log(from.fullPath)
+      // console.log(from.fullPath)
+      return !(this.isPush || this.isReplace); // return from ? getStateForward() === from.fullPath : false
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      this.initStackPointer();
+      this.routerHooks();
+      this.hackRouter();
+    }
+  }, {
+    key: "initStackPointer",
+    value: function initStackPointer() {
+      var currentStateId = getStateId();
+
+      if (isDef(currentStateId)) {
+        this.setStackPointer(currentStateId);
+      } else {
+        this.setState(0);
+      }
+    }
+    /**
+     * to fix the first time inital Render with path like "/",
+     */
+
+  }, {
+    key: "genInitialKeyNextTime",
+    value: function genInitialKeyNextTime() {
+      this._initial = true;
+    }
+    /**
+     * 
+     * @returns generator for the vnode key of keep-alive slots
+     */
+
+  }, {
+    key: "genKeyForVnode",
+    value: function genKeyForVnode() {
+      var _this3 = this;
+
+      var router = this.router; // console.log('genKey- isPush',this.isPush)
+      // console.log('genKey- isReplace_initial',this.isReplace || this._initial)
+
+      var _genKey = function _genKey(num, router, to) {
+        return to && _this3.singleton.includes(to) ? genSingletonKey(router, to) : genKey(num, router, to);
+      };
+
+      if (this.isReplace || this._initial) {
+        this._initial = false;
+        return _genKey(this.stackPointer, router, this._routeTo);
+      } else if (this.isPush) {
+        return _genKey(this.stackPointer + 1, router, this._routeTo);
+      } else {
+        return _genKey(this.stackPointer - 1, router, this._routeTo);
+      }
+    }
+    /**
+     * use afterEach hook to set state.key and add the reference of vm to the historyStack
+     */
+
+  }, {
+    key: "routerHooks",
+    value: function routerHooks() {
+      var _this4 = this;
+
+      var router = this.router;
+      router.beforeEach(function (to, from, next) {
+        if (_this4.singleton.includes(to.path) && to.path === from.path) {
+          console.warn('警告 [stack-keep-alive]: 单例模式的页面不支持从自身重复路由');
+          console.warn('warning [stack-keep-alive]: the singleton component doesn`t support route to from itself');
+          return;
+        }
+
+        _this4._routeTo = to.path;
+        next();
+      });
+      router.afterEach(function (to, from) {
+        _this4.historyShouldChange = true; // get the vm instance after render
+
+        vue.nextTick(function () {
+          var current = _this4.currentVm;
+          var pendingToPushVm = resolvePushedVm(current);
+
+          if (_this4.pre === null) {
+            _this4.onInitial(pendingToPushVm);
+          } else if (_this4.isReplace) {
+            _this4.onReplace(pendingToPushVm);
+          } else if (_this4.isPush) {
+            _this4.onPush(pendingToPushVm);
+          } else {
+            _this4.onBack(pendingToPushVm);
+          } // console.log(current)
+
+
+          _this4.pre = current; // this.SetIdle(true)
+
+          _this4.preStateId = _this4.stackPointer;
+
+          if (!isPlaceHolderVm(pendingToPushVm)) {
+            _this4.historyShouldChange = false;
+          }
+        });
+      });
+    }
+    /**
+     * @description hack router go , replace and push functions to tell replace from back and push
+     */
+
+  }, {
+    key: "hackRouter",
+    value: function hackRouter() {
+      var _this5 = this;
+
+      this._hackRouter = new RouterHacker(this.router);
+
+      this._hackRouter.beforeReplace(function () {
+        _this5.isReplace = true;
+        _this5.replacePrePath = currentPathOf(_this5.router);
+      }, function (e) {
+        _this5.isReplace = false;
+        _this5.replacePrePath = undefined;
+      }).beforeGo(function (num) {
+        _this5.isReplace = false;
+      }).beforePush(function () {
+        _this5.isReplace = false;
+      });
+    }
+  }, {
+    key: "onInitial",
+    value: function onInitial(vm) {
+      this.historyStack.push(vm, this.stackPointer);
+    }
+  }, {
+    key: "onPush",
+    value: function onPush(vm) {
+      var _this$pre, _this$pre$$clearParen;
+
+      this.setState(this.increaseStackPointer());
+      this.historyStack.push(vm, this.stackPointer);
+      (_this$pre = this.pre) === null || _this$pre === void 0 ? void 0 : (_this$pre$$clearParen = _this$pre.$clearParent) === null || _this$pre$$clearParen === void 0 ? void 0 : _this$pre$$clearParen.call(_this$pre, vm);
+      this.pre = null;
+    }
+  }, {
+    key: "onBack",
+    value: function onBack(vm) {
+      this.historyStack.pop();
+      this.decreaseStackPointer();
+      this.historyStack.push(vm, this.stackPointer);
+    }
+  }, {
+    key: "onReplace",
+    value: function onReplace(vm) {
+      // avoidReplaceQuery is fix the issue : router.replace only a query by same path, may cause error
+      var avoidReplaceQuery = this.replacePrePath === currentPathOf(this.router);
+      var shouldDestroy = !(isDef(this.replacePrePath) && this.replaceStay.includes(this.replacePrePath)) && !avoidReplaceQuery;
+
+      if (shouldDestroy) {
+        // this.destroyCaches(this.pre.vnode.key)
+        this.historyStack.pop(true);
+      }
+
+      this.pre = null;
+      this.setState(this.stackPointer);
+      this.historyStack.push(vm, this.stackPointer);
+      this.isReplace = false;
+      this.replacePrePath = undefined;
+    }
+  }, {
+    key: "currentVm",
+    get: function get() {
+      return getCurrentVM(this.router);
+    }
+  }, {
+    key: "isPush",
+    get: function get() {
+      if (!this.isReplace) {
+        var stateId = getStateId();
+        var v = !isDef(stateId) || this.preStateId <= stateId;
+        return v;
+      }
+
+      return false;
+    }
+  }, {
+    key: "stackPointer",
+    get: function get() {
+      return this.router._stack;
+    }
+  }, {
+    key: "setStackPointer",
+    value: function setStackPointer(val) {
+      this.router._stack = val;
+    }
+  }, {
+    key: "setState",
+    value: function setState(id) {
+      this.setStackPointer(id);
+      replaceState(this.mode, this.router, id);
+    }
+  }, {
+    key: "increaseStackPointer",
+    value: function increaseStackPointer() {
+      return this.router._stack += 1;
+    }
+  }, {
+    key: "decreaseStackPointer",
+    value: function decreaseStackPointer() {
+      return this.router._stack -= 1;
+    }
+  }]);
+
+  return Core;
+}(); // vnode 生成key
+// 提供根据key清除cache的方法
+
+
+var _core = null;
+var StackKeepAliveImpl = {
+  name: "StackKeepAlive",
+  // Marker for special handling inside the renderer. We are not using a ===
+  // check directly on KeepAlive in the renderer, because importing it directly
+  // would prevent it from being tree-shaken.
+  __isKeepAlive: true,
+  props: {
+    include: [String, RegExp, Array],
+    exclude: [String, RegExp, Array],
+    max: [String, Number],
+    replaceStay: [Array],
+    singleton: [Array],
+    mode: String
+  },
+  setup: function setup(props, _ref2) {
+    var slots = _ref2.slots;
+    var instance = vue.getCurrentInstance(); // KeepAlive communicates with the instantiated renderer via the
+    // ctx where the renderer passes in its internals,
+    // and the KeepAlive instance exposes activate/deactivate implementations.
+    // The whole point of this is to avoid importing KeepAlive directly in the
+    // renderer to facilitate tree-shaking.
+
+    var sharedContext = instance.ctx; // if the internal renderer is not registered, it indicates that this is server-side rendering,
+    // for KeepAlive, we just need to render its children
+
+    if (!sharedContext.renderer) {
+      return slots["default"];
+    }
+
+    var cache = new Map();
+    var keys = new Set();
+    var current = null;
+    {
+      window.__v_cache = instance.__v_cache = cache;
+    }
+    var parentSuspense = instance.suspense;
+    var _sharedContext$render = sharedContext.renderer,
+        patch = _sharedContext$render.p,
+        move = _sharedContext$render.m,
+        _unmount = _sharedContext$render.um,
+        createElement = _sharedContext$render.o.createElement;
+    var storageContainer = createElement('div');
+
+    sharedContext.activate = function (vnode, container, anchor, isSVG, optimized) {
+      // debugger
+      var instance = vnode.component;
+      move(vnode, container, anchor, MoveType.ENTER, parentSuspense); // in case props have changed
+      // patch(
+      //   instance.vnode,
+      //   vnode,
+      //   container,
+      //   anchor,
+      //   instance,
+      //   parentSuspense,
+      //   isSVG,
+      //   vnode.slotScopeIds,
+      //   optimized
+      // )
+
+      queuePostRenderEffect(function () {
+        instance.isDeactivated = false;
+
+        if (instance.a) {
+          invokeArrayFns(instance.a);
+        }
+
+        var vnodeHook = vnode.props && vnode.props.onVnodeMounted;
+
+        if (vnodeHook) {
+          invokeVNodeHook(vnodeHook, instance.parent, vnode);
+        }
+      }, parentSuspense);
+    };
+
+    sharedContext.deactivate = function (vnode) {
+      var instance = vnode.component;
+      move(vnode, storageContainer, null, MoveType.LEAVE, parentSuspense);
+      queuePostRenderEffect(function () {
+        if (instance.da) {
+          invokeArrayFns(instance.da);
+        }
+
+        var vnodeHook = vnode.props && vnode.props.onVnodeUnmounted;
+
+        if (vnodeHook) {
+          invokeVNodeHook(vnodeHook, instance.parent, vnode);
+        }
+
+        instance.isDeactivated = true;
+      }, parentSuspense);
+    };
+
+    function unmount(vnode) {
+      // reset the shapeFlag so it can be properly unmounted
+      resetShapeFlag(vnode);
+
+      _unmount(vnode, instance, parentSuspense, true);
+    }
+
+    function pruneCache(filter) {
+      cache.forEach(function (vnode, key) {
+        var name = getComponentName(vnode.type);
+
+        if (name && (!filter || !filter(name))) {
+          pruneCacheEntry(key);
+        }
+      });
+    }
+
+    function pruneCacheEntry(key) {
+      var cached = cache.get(key);
+
+      if (current.key === key) {
+        // current active instance should no longer be kept-alive.
+        // we can't unmount it now but it might be later, so reset its flag now.
+        resetShapeFlag(current);
+      } else if (current) {
+        unmount(cached);
+      }
+
+      cache["delete"](key);
+      keys["delete"](key);
+    } // core
+
+
+    var router;
+    {
+      router = vueRouter.useRouter();
+    }
+
+    if (!router) {
+      throw new Error("router is not found! In unit test mode ,router is got from gloabl.router, otherwise VueRouter.useRouter()");
+    } // debugger
+
+
+    _core = SingleCore({
+      router: router,
+      pruneCacheEntry: pruneCacheEntry,
+      replaceStay: props.replaceStay,
+      singleton: props.singleton
+    });
+    {
+      window.__core = _core;
+    } // prune cache on include/exclude prop change
+
+    vue.watch(function () {
+      return [props.include, props.exclude];
+    }, function (_ref3) {
+      var _ref4 = _slicedToArray(_ref3, 2),
+          include = _ref4[0],
+          exclude = _ref4[1];
+
+      include && pruneCache(function (name) {
+        return matches(include, name);
+      });
+      exclude && pruneCache(function (name) {
+        return !matches(exclude, name);
+      });
+    }, // prune post-render after `current` has been updated
+    {
+      flush: 'post',
+      deep: true
+    }); // cache sub tree after render
+
+    var pendingCacheKey = null;
+
+    var cacheSubtree = function cacheSubtree() {
+      // fix #1621, the pendingCacheKey could be 0
+      if (pendingCacheKey != null) {
+        cache.set(pendingCacheKey, getInnerChild(instance.subTree));
+      }
+    };
+
+    vue.onMounted(cacheSubtree);
+    vue.onUpdated(cacheSubtree);
+    vue.onBeforeUnmount(function () {
+      cache.forEach(function (cached) {
+        var subTree = instance.subTree,
+            suspense = instance.suspense;
+        var vnode = getInnerChild(subTree);
+
+        if (cached.type === vnode.type) {
+          // current instance will be unmounted as part of keep-alive's unmount
+          resetShapeFlag(vnode); // but invoke its deactivated hook here
+
+          var da = vnode.component.da;
+          da && queuePostRenderEffect(da, suspense);
+          return;
+        }
+
+        unmount(cached);
+      });
+    });
+    return function () {
+      pendingCacheKey = null;
+
+      if (!slots["default"]) {
+        return null;
+      } // generate a specific key for every vnode
+
+
+      var _key = _core.genKeyForVnode();
+
+      var children = slots["default"]({
+        'key': _key
+      });
+      var rawVNode = children[0];
+
+      if (instance.vnode) {
+        instance.vnode.__oldChild = children[0];
+      }
+
+      if (children.length > 1) {
+        {
+          vue.warn("KeepAlive should contain exactly one component child.");
+        }
+        current = null;
+
+        _core.genInitialKeyNextTime();
+
+        return children;
+      } else if (!vue.isVNode(rawVNode) || !(rawVNode.shapeFlag === ShapeFlags.STATEFUL_COMPONENT) && !(rawVNode.shapeFlag === ShapeFlags.SUSPENSE)) {
+        _core.genInitialKeyNextTime();
+
+        current = null;
+        return rawVNode;
+      }
+
+      var vnode = getInnerChild(rawVNode);
+      var comp = vnode.type; // for async components, name check should be based in its loaded
+      // inner component if available
+
+      var name = getComponentName(isAsyncWrapper(vnode) ? vnode.type.__asyncResolved || {} : comp);
+      var include = props.include,
+          exclude = props.exclude,
+          max = props.max;
+
+      if (include && (!name || !matches(include, name)) || exclude && name && matches(exclude, name)) {
+        current = vnode;
+        return rawVNode;
+      }
+
+      var key = vnode.key == null ? comp : vnode.key;
+      var cachedVNode = cache.get(key); // clone vnode if it's reused because we are going to mutate it
+
+      if (vnode.el) {
+        vnode = vue.cloneVNode(vnode);
+
+        if (rawVNode.shapeFlag & ShapeFlags.SUSPENSE) {
+          rawVNode.ssContent = vnode;
+        }
+      } // #1513 it's possible for the returned vnode to be cloned due to attr
+      // fallthrough or scopeId, so the vnode here may not be the final vnode
+      // that is mounted. Instead of caching it directly, we store the pending
+      // key and cache `instance.subTree` (the normalized vnode) in
+      // beforeMount/beforeUpdate hooks.
+
+
+      pendingCacheKey = key;
+
+      if (cachedVNode) {
+        // copy over mounted state
+        vnode.el = cachedVNode.el;
+        vnode.component = cachedVNode.component;
+
+        if (vnode.transition) {
+          // recursively update transition hooks on subTree
+          vue.setTransitionHooks(vnode, vnode.transition);
+        } // avoid vnode being mounted as fresh
+
+
+        vnode.shapeFlag |= ShapeFlags.COMPONENT_KEPT_ALIVE; // make this key the freshest
+
+        keys["delete"](key);
+        keys.add(key);
+      } else {
+        keys.add(key); // prune oldest entry
+
+        if (max && keys.size > parseInt(max, 10)) {
+          pruneCacheEntry(keys.values().next().value);
+        }
+      } // avoid vnode being unmounted
+
+
+      vnode.shapeFlag |= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
+      current = vnode;
+      return rawVNode;
+    };
+  }
+};
+var StackKeepAlive = StackKeepAliveImpl;
+
+function matches(pattern, name) {
+  if (shared.isArray(pattern)) {
+    return pattern.some(function (p) {
+      return matches(p, name);
+    });
+  } else if (shared.isString(pattern)) {
+    return pattern.split(',').includes(name);
+  } else if (pattern.test) {
+    return pattern.test(name);
+  }
+  /* istanbul ignore next */
+
+
+  return false;
+}
+
+function resetShapeFlag(vnode) {
+  if (!vnode) return;
+  var shapeFlag = vnode.shapeFlag;
+
+  if (shapeFlag & ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE) {
+    shapeFlag -= ShapeFlags.COMPONENT_SHOULD_KEEP_ALIVE;
+  }
+
+  if (shapeFlag & ShapeFlags.COMPONENT_KEPT_ALIVE) {
+    shapeFlag -= ShapeFlags.COMPONENT_KEPT_ALIVE;
+  }
+
+  vnode.shapeFlag = shapeFlag;
+}
+
+function getInnerChild(vnode) {
+  return vnode.shapeFlag & ShapeFlags.SUSPENSE ? vnode.ssContent : vnode;
+} // import { Comment, isSameVNodeType, Fragment } from "../vnode"
+
+
+function useTransitionState() {
+  var state = {
+    isMounted: false,
+    isLeaving: false,
+    isUnmounting: false,
+    leavingVNodes: new Map()
+  };
+  vue.onMounted(function () {
+    state.isMounted = true;
+  });
+  vue.onBeforeUnmount(function () {
+    state.isUnmounting = true;
+  });
+  return state;
+}
+
+var PLACEHOLDER = '_placeholder';
+var TransitionHookValidator = [Function, Array];
+var BaseTransitionImpl = {
+  name: "BaseTransition",
+  props: {
+    mode: String,
+    appear: Boolean,
+    persisted: Boolean,
+    // enter
+    onBeforeEnter: TransitionHookValidator,
+    _onBeforeEnter: TransitionHookValidator,
+    onEnter: TransitionHookValidator,
+    _onEnter: TransitionHookValidator,
+    onAfterEnter: TransitionHookValidator,
+    onEnterCancelled: TransitionHookValidator,
+    _onEnterCancelled: TransitionHookValidator,
+    // leave
+    onBeforeLeave: TransitionHookValidator,
+    onLeave: TransitionHookValidator,
+    _onLeave: TransitionHookValidator,
+    onAfterLeave: TransitionHookValidator,
+    onLeaveCancelled: TransitionHookValidator,
+    _onLeaveCancelled: TransitionHookValidator,
+    // appear
+    onBeforeAppear: TransitionHookValidator,
+    _onBeforeAppear: TransitionHookValidator,
+    onAppear: TransitionHookValidator,
+    _onAppear: TransitionHookValidator,
+    onAfterAppear: TransitionHookValidator,
+    onAppearCancelled: TransitionHookValidator,
+    _onAppearCancelled: TransitionHookValidator
+  },
+  setup: function setup(props, _ref5) {
+    var slots = _ref5.slots;
+    var instance = vue.getCurrentInstance();
+    var state = useTransitionState();
+    var prevTransitionKey;
+    return function () {
+      var children = slots["default"] && getTransitionRawChildren(slots["default"](), true);
+
+      if (!children || !children.length) {
+        return;
+      }
+
+      var child = children[0];
+
+      if (children.length > 1) {
+        var hasFound = false; // locate first non-comment child
+
+        var _iterator = _createForOfIteratorHelper(children),
+            _step;
+
+        try {
+          for (_iterator.s(); !(_step = _iterator.n()).done;) {
+            var c = _step.value;
+
+            if (c.type !== runtimeCore.Comment) {
+              if (hasFound) {
+                // warn more than one non-comment child
+                vue.warn("<transition> can only be used on a single element or component. " + "Use <transition-group> for lists.");
+                break;
+              }
+
+              child = c;
+              hasFound = true;
+            }
+          }
+        } catch (err) {
+          _iterator.e(err);
+        } finally {
+          _iterator.f();
+        }
+      } // fix enter issue
+      // debugger
+
+
+      if (child && child.type && child.type.name && child.type.name === 'StackKeepAlive') {
+        child.__id = Math.floor(Math.random() * 1000);
+        console.log(child);
+        child._R; // let now = null
+
+        var _child = new Proxy(child.children, {
+          get: function get(target, property, receiver) {
+            if (property == 'default') {
+              // if (now) {
+              //   return now
+              // }
+              var pre = Reflect.get(target, property, receiver);
+
+              var now = function _now(arg) {
+                var res = pre(arg);
+
+                if (child._R && !child._R.reused) {
+                  if (arg.key !== PLACEHOLDER) {
+                    child._R[0].key = arg.key;
+                    child._R[0].props.key = arg.key;
+                    child._R.reused = true;
+                  }
+
+                  return child._R;
+                }
+
+                if (res[0].type !== runtimeCore.Comment) {
+                  child._R = res;
+                }
+
+                console.log('get');
+                return res;
+              };
+
+              return now;
+            }
+
+            return Reflect.get(target, property, receiver);
+          }
+        });
+
+        child.children = _child;
+      } // there's no need to track reactivity for these props so use the raw
+      // props for a bit better perf
+
+
+      var rawProps = reactivity.toRaw(props);
+      var mode = rawProps.mode; // check mode
+
+      if (mode && mode !== "in-out" && mode !== "out-in" && mode !== "default") {
+        vue.warn("invalid <transition> mode: ".concat(mode));
+      }
+
+      if (state.isLeaving) {
+        return emptyPlaceholder(child);
+      } // in the case of <transition><keep-alive/></transition>, we need to
+      // compare the type of the kept-alive children.
+
+
+      var innerChild = getKeepAliveChild(child);
+
+      if (!innerChild) {
+        return emptyPlaceholder(child);
+      }
+
+      var enterHooks = resolveTransitionHooks(innerChild, rawProps, state, instance);
+      setTransitionHooks(innerChild, enterHooks);
+      var oldChild = instance.subTree;
+      var oldInnerChild = oldChild && getKeepAliveChild(oldChild);
+      var transitionKeyChanged = false;
+      var getTransitionKey = innerChild.type.getTransitionKey;
+
+      if (getTransitionKey) {
+        var key = getTransitionKey();
+
+        if (prevTransitionKey === undefined) {
+          prevTransitionKey = key;
+        } else if (key !== prevTransitionKey) {
+          prevTransitionKey = key;
+          transitionKeyChanged = true;
+        }
+      } // handle mode
+
+
+      if (oldInnerChild && oldInnerChild.type !== runtimeCore.Comment && (!isSameVNodeType(innerChild, oldInnerChild) || transitionKeyChanged)) {
+        var leavingHooks = resolveTransitionHooks(oldInnerChild, rawProps, state, instance); // update old tree's hooks in case of dynamic transition
+
+        setTransitionHooks(oldInnerChild, leavingHooks); // switching between different views
+
+        if (mode === "out-in") {
+          state.isLeaving = true; // return placeholder node and queue update when leave finishes
+
+          leavingHooks.afterLeave = function () {
+            state.isLeaving = false;
+            instance.update();
+          }; // setTimeout(()=>{
+          //   state.isLeaving = false
+          //   instance.update()
+          // },200)
+
+
+          return emptyPlaceholder(child);
+        } else if (mode === "in-out" && innerChild.type !== runtimeCore.Comment) {
+          leavingHooks.delayLeave = function (el, earlyRemove, delayedLeave) {
+            var leavingVNodesCache = getLeavingNodesForType(state, oldInnerChild);
+            leavingVNodesCache[String(oldInnerChild.key)] = oldInnerChild; // early removal callback
+
+            el._leaveCb = function () {
+              earlyRemove();
+              el._leaveCb = undefined;
+              delete enterHooks.delayedLeave;
+            };
+
+            enterHooks.delayedLeave = delayedLeave;
+          };
+        }
+      }
+
+      return child;
+    };
+  }
+}; // export the public type for h/tsx inference
+// also to avoid inline import() in generated d.ts files
+
+var BaseTransition = BaseTransitionImpl;
+
+function getLeavingNodesForType(state, vnode) {
+  var leavingVNodes = state.leavingVNodes;
+  var leavingVNodesCache = leavingVNodes.get(vnode.type);
+
+  if (!leavingVNodesCache) {
+    leavingVNodesCache = Object.create(null);
+    leavingVNodes.set(vnode.type, leavingVNodesCache);
+  }
+
+  return leavingVNodesCache;
+} // The transition hooks are attached to the vnode as vnode.transition
+// and will be called at appropriate timing in the renderer.
+
+
+function resolveTransitionHooks(vnode, props, state, instance) {
+  var appear = props.appear,
+      mode = props.mode,
+      _props$persisted = props.persisted,
+      persisted = _props$persisted === void 0 ? false : _props$persisted,
+      onBeforeEnter = props.onBeforeEnter,
+      _onBeforeEnter = props._onBeforeEnter,
+      onEnter = props.onEnter,
+      _onEnter = props._onEnter,
+      onAfterEnter = props.onAfterEnter,
+      onEnterCancelled = props.onEnterCancelled,
+      _onEnterCancelled = props._onEnterCancelled,
+      onBeforeLeave = props.onBeforeLeave,
+      _onBeforeLeave = props._onBeforeLeave,
+      onLeave = props.onLeave,
+      _onLeave = props._onLeave,
+      onAfterLeave = props.onAfterLeave,
+      onLeaveCancelled = props.onLeaveCancelled,
+      _onLeaveCancelled = props._onLeaveCancelled,
+      onBeforeAppear = props.onBeforeAppear,
+      _onBeforeAppear = props._onBeforeAppear,
+      onAppear = props.onAppear,
+      _onAppear = props._onAppear,
+      onAfterAppear = props.onAfterAppear,
+      onAppearCancelled = props.onAppearCancelled,
+      _onAppearCancelled = props._onAppearCancelled;
+  var key = String(vnode.key);
+  var leavingVNodesCache = getLeavingNodesForType(state, vnode);
+
+  var _core = SingleCore();
+
+  var callHook = function callHook(hook, args) {
+    hook && vue.callWithAsyncErrorHandling(hook, instance, ErrorCodes.TRANSITION_HOOK, args);
+  };
+
+  var callAsyncHook = function callAsyncHook(hook, args) {
+    var done = args[1];
+    callHook(hook, args);
+
+    if (shared.isArray(hook)) {
+      if (hook.every(function (hook) {
+        return hook.length <= 1;
+      })) done();
+    } else if (hook.length <= 1) {
+      done();
+    }
+  };
+
+  var hooks = {
+    mode: mode,
+    persisted: persisted,
+    beforeEnter: function beforeEnter(el) {
+      // debugger
+      var hook = _core.isBacking ? _onBeforeEnter : onBeforeEnter;
+
+      if (!state.isMounted) {
+        if (appear) {
+          hook = _core.isBacking ? _onBeforeAppear || _onBeforeEnter : onBeforeAppear || onBeforeEnter;
+        } else {
+          return;
+        }
+      } // for same element (v-show)
+
+
+      if (el._leaveCb) {
+        el._leaveCb(true
+        /* cancelled */
+        );
+      } // for toggled element with same key (v-if)
+
+
+      var leavingVNode = leavingVNodesCache[key];
+
+      if (leavingVNode && isSameVNodeType(vnode, leavingVNode) && leavingVNode.el._leaveCb) {
+        // force early removal (not cancelled)
+        leavingVNode.el._leaveCb();
+      }
+
+      callHook(hook, [el]);
+    },
+    enter: function enter(el) {
+      var hook = _core.isBacking ? _onEnter : onEnter;
+      var afterHook = onAfterEnter;
+      var cancelHook = _core.isBacking ? _onEnterCancelled : onEnterCancelled;
+
+      if (!state.isMounted) {
+        if (appear) {
+          hook = _core.isBacking ? _onAppear || _onEnter : onAppear || onEnter;
+          afterHook = onAfterAppear || onAfterEnter;
+          cancelHook = _core.isBacking ? _onAppearCancelled || _onEnterCancelled : onAppearCancelled || onEnterCancelled;
+        } else {
+          return;
+        }
+      }
+
+      var called = false;
+
+      var done = el._enterCb = function (cancelled) {
+        if (called) return;
+        called = true;
+
+        if (cancelled) {
+          callHook(cancelHook, [el]);
+        } else {
+          callHook(afterHook, [el]);
+        }
+
+        if (hooks.delayedLeave) {
+          hooks.delayedLeave();
+        }
+
+        el._enterCb = undefined;
+      };
+
+      if (hook) {
+        callAsyncHook(hook, [el, done]);
+      } else {
+        done();
+      }
+    },
+    leave: function leave(el, remove) {
+      var key = String(vnode.key);
+
+      if (el._enterCb) {
+        el._enterCb(true
+        /* cancelled */
+        );
+      }
+
+      if (state.isUnmounting) {
+        return remove();
+      }
+
+      callHook(onBeforeLeave, [el]);
+      var called = false;
+
+      var done = el._leaveCb = function (cancelled) {
+        if (called) return;
+        called = true;
+        remove();
+
+        if (cancelled) {
+          callHook(_core.isBacking ? _onLeaveCancelled : onLeaveCancelled, [el]);
+        } else {
+          callHook(onAfterLeave, [el]);
+        }
+
+        el._leaveCb = undefined;
+
+        if (leavingVNodesCache[key] === vnode) {
+          delete leavingVNodesCache[key];
+        }
+      };
+
+      leavingVNodesCache[key] = vnode;
+
+      if (onLeave && _onLeave) {
+        callAsyncHook(_core.isBacking ? _onLeave : onLeave, [el, done]);
+      } else {
+        done();
+      }
+    },
+    clone: function clone(vnode) {
+      return resolveTransitionHooks(vnode, props, state, instance);
+    }
+  };
+  return hooks;
+} // the placeholder really only handles one special case: KeepAlive
+// in the case of a KeepAlive in a leave phase we need to return a KeepAlive
+// placeholder with empty content to avoid the KeepAlive instance from being
+// unmounted.
+
+
+function emptyPlaceholder(vnode) {
+  if (isKeepAlive(vnode)) {
+    vnode = vue.cloneVNode(vnode);
+    vnode.children = null;
+    return vnode;
+  }
+}
+
+function getKeepAliveChild(vnode) {
+  //   const oldChild = vnode.__oldChild
+  //   if (oldChild) { 
+  //       return oldChild
+  //   }
+  // // debugger
+  return isKeepAlive(vnode) ? vnode.children ? shared.isArray(vnode.children) ? vnode.children[0] : vnode.children["default"]({
+    key: PLACEHOLDER
+  })[0] : undefined : vnode;
+}
+
+function setTransitionHooks(vnode, hooks) {
+  if (vnode.shapeFlag & ShapeFlags$1.COMPONENT && vnode.component) {
+    setTransitionHooks(vnode.component.subTree, hooks);
+  } else if (vnode.shapeFlag & ShapeFlags$1.SUSPENSE) {
+    vnode.ssContent.transition = hooks.clone(vnode.ssContent);
+    vnode.ssFallback.transition = hooks.clone(vnode.ssFallback);
+  } else {
+    vnode.transition = hooks;
+  }
+}
+
+function getTransitionRawChildren(children) {
+  var keepComment = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+  var parentKey = arguments.length > 2 ? arguments[2] : undefined;
+  var ret = [];
+  var keyedFragmentCount = 0;
+
+  for (var i = 0; i < children.length; i++) {
+    var child = children[i]; // #5360 inherit parent key in case of <template v-for>
+
+    var key = parentKey == null ? child.key : String(parentKey) + String(child.key != null ? child.key : i); // handle fragment children case, e.g. v-for
+
+    if (child.type === runtimeCore.Fragment) {
+      if (child.patchFlag & PatchFlags.KEYED_FRAGMENT) keyedFragmentCount++;
+      ret = ret.concat(getTransitionRawChildren(child.children, keepComment, key));
+    } // comment placeholders should be skipped, e.g. v-if
+    else if (keepComment || child.type !== runtimeCore.Comment) {
+      ret.push(key != null ? vue.cloneVNode(child, {
+        key: key
+      }) : child);
+    }
+  } // #1126 if a transition children list contains multiple sub fragments, these
+  // fragments will be merged into a flat children array. Since each v-for
+  // fragment may contain different static bindings inside, we need to de-op
+  // these children to force full diffs to ensure correct behavior.
+
+
+  if (keyedFragmentCount > 1) {
+    for (var _i2 = 0; _i2 < ret.length; _i2++) {
+      ret[_i2].patchFlag = PatchFlags.BAIL;
+    }
+  }
+
+  return ret;
+}
+
+var TRANSITION = "transition";
+var ANIMATION = "animation"; // DOM Transition is a higher-order-component based on the platform-agnostic
+// base Transition component, with DOM-specific logic.
+
+var Transition = function Transition(props, _ref6) {
+  var slots = _ref6.slots;
+  return runtimeCore.h(BaseTransition, resolveTransitionProps(props), slots);
+};
+
+Transition.displayName = "SkTransition";
+var DOMTransitionPropsValidators = {
+  name: String,
+  back_name: String,
+  type: String,
+  css: {
+    type: Boolean,
+    "default": true
+  },
+  duration: [String, Number, Object],
+  enterFromClass: String,
+  enterActiveClass: String,
+  enterToClass: String,
+  appearFromClass: String,
+  appearActiveClass: String,
+  appearToClass: String,
+  leaveFromClass: String,
+  leaveActiveClass: String,
+  leaveToClass: String
+};
+Transition.props = /*#__PURE__*/shared.extend({}, BaseTransition.props, DOMTransitionPropsValidators);
+/**
+ * #3227 Incoming hooks may be merged into arrays when wrapping Transition
+ * with custom HOCs.
+ */
+
+var callHook = function callHook(hook) {
+  var args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+  if (shared.isArray(hook)) {
+    hook.forEach(function (h) {
+      return h.apply(void 0, _toConsumableArray(args));
+    });
+  } else if (hook) {
+    hook.apply(void 0, _toConsumableArray(args));
+  }
+};
+/**
+ * Check if a hook expects a callback (2nd arg), which means the user
+ * intends to explicitly control the end of the transition.
+ */
+
+
+var hasExplicitCallback = function hasExplicitCallback(hook) {
+  return hook ? shared.isArray(hook) ? hook.some(function (h) {
+    return h.length > 1;
+  }) : hook.length > 1 : false;
+};
+
+function resolveTransitionProps(rawProps) {
+  var baseProps = {};
+
+  for (var key in rawProps) {
+    if (!(key in DOMTransitionPropsValidators)) {
+      baseProps[key] = rawProps[key];
+    }
+  }
+
+  if (rawProps.css === false) {
+    return baseProps;
+  }
+
+  var _rawProps$name = rawProps.name,
+      name = _rawProps$name === void 0 ? "v" : _rawProps$name,
+      type = rawProps.type,
+      duration = rawProps.duration,
+      _rawProps$enterFromCl = rawProps.enterFromClass,
+      enterFromClass = _rawProps$enterFromCl === void 0 ? "".concat(name, "-enter-from") : _rawProps$enterFromCl,
+      _rawProps$enterActive = rawProps.enterActiveClass,
+      enterActiveClass = _rawProps$enterActive === void 0 ? "".concat(name, "-enter-active") : _rawProps$enterActive,
+      _rawProps$enterToClas = rawProps.enterToClass,
+      enterToClass = _rawProps$enterToClas === void 0 ? "".concat(name, "-enter-to") : _rawProps$enterToClas,
+      _rawProps$appearFromC = rawProps.appearFromClass,
+      appearFromClass = _rawProps$appearFromC === void 0 ? enterFromClass : _rawProps$appearFromC,
+      _rawProps$appearActiv = rawProps.appearActiveClass,
+      appearActiveClass = _rawProps$appearActiv === void 0 ? enterActiveClass : _rawProps$appearActiv,
+      _rawProps$appearToCla = rawProps.appearToClass,
+      appearToClass = _rawProps$appearToCla === void 0 ? enterToClass : _rawProps$appearToCla,
+      _rawProps$leaveFromCl = rawProps.leaveFromClass,
+      leaveFromClass = _rawProps$leaveFromCl === void 0 ? "".concat(name, "-leave-from") : _rawProps$leaveFromCl,
+      _rawProps$leaveActive = rawProps.leaveActiveClass,
+      leaveActiveClass = _rawProps$leaveActive === void 0 ? "".concat(name, "-leave-active") : _rawProps$leaveActive,
+      _rawProps$leaveToClas = rawProps.leaveToClass,
+      leaveToClass = _rawProps$leaveToClas === void 0 ? "".concat(name, "-leave-to") : _rawProps$leaveToClas,
+      _rawProps$back_name = rawProps.back_name,
+      back_name = _rawProps$back_name === void 0 ? "v" : _rawProps$back_name,
+      back_type = rawProps.back_type,
+      back_duration = rawProps.back_duration,
+      _rawProps$back_enterF = rawProps.back_enterFromClass,
+      back_enterFromClass = _rawProps$back_enterF === void 0 ? "".concat(back_name, "-enter-from") : _rawProps$back_enterF,
+      _rawProps$back_enterA = rawProps.back_enterActiveClass,
+      back_enterActiveClass = _rawProps$back_enterA === void 0 ? "".concat(back_name, "-enter-active") : _rawProps$back_enterA,
+      _rawProps$back_enterT = rawProps.back_enterToClass,
+      back_enterToClass = _rawProps$back_enterT === void 0 ? "".concat(back_name, "-enter-to") : _rawProps$back_enterT,
+      _rawProps$back_appear = rawProps.back_appearFromClass,
+      back_appearFromClass = _rawProps$back_appear === void 0 ? back_enterFromClass : _rawProps$back_appear,
+      _rawProps$back_appear2 = rawProps.back_appearActiveClass,
+      back_appearActiveClass = _rawProps$back_appear2 === void 0 ? back_enterActiveClass : _rawProps$back_appear2,
+      _rawProps$back_appear3 = rawProps.back_appearToClass,
+      back_appearToClass = _rawProps$back_appear3 === void 0 ? back_enterToClass : _rawProps$back_appear3,
+      _rawProps$back_leaveF = rawProps.back_leaveFromClass,
+      back_leaveFromClass = _rawProps$back_leaveF === void 0 ? "".concat(back_name, "-leave-from") : _rawProps$back_leaveF,
+      _rawProps$back_leaveA = rawProps.back_leaveActiveClass,
+      back_leaveActiveClass = _rawProps$back_leaveA === void 0 ? "".concat(back_name, "-leave-active") : _rawProps$back_leaveA,
+      _rawProps$back_leaveT = rawProps.back_leaveToClass,
+      back_leaveToClass = _rawProps$back_leaveT === void 0 ? "".concat(back_name, "-leave-to") : _rawProps$back_leaveT;
+  var durations = normalizeDuration(duration);
+  var enterDuration = durations && durations[0];
+  var leaveDuration = durations && durations[1];
+
+  var _onBeforeEnter2 = baseProps.onBeforeEnter,
+      onEnter = baseProps.onEnter,
+      _onEnterCancelled2 = baseProps.onEnterCancelled,
+      _onLeave2 = baseProps.onLeave,
+      _onLeaveCancelled2 = baseProps.onLeaveCancelled,
+      _baseProps$onBeforeAp = baseProps.onBeforeAppear,
+      _onBeforeAppear2 = _baseProps$onBeforeAp === void 0 ? _onBeforeEnter2 : _baseProps$onBeforeAp,
+      _baseProps$onAppear = baseProps.onAppear,
+      onAppear = _baseProps$onAppear === void 0 ? onEnter : _baseProps$onAppear,
+      _baseProps$onAppearCa = baseProps.onAppearCancelled,
+      _onAppearCancelled2 = _baseProps$onAppearCa === void 0 ? _onEnterCancelled2 : _baseProps$onAppearCa;
+
+  var finishEnter = function finishEnter(el, isAppear, done) {
+    removeTransitionClass(el, isAppear ? appearToClass : enterToClass);
+    removeTransitionClass(el, isAppear ? appearActiveClass : enterActiveClass);
+    done && done();
+  };
+
+  var finishLeave = function finishLeave(el, done) {
+    el._isLeaving = false;
+    removeTransitionClass(el, leaveFromClass);
+    removeTransitionClass(el, leaveToClass);
+    removeTransitionClass(el, leaveActiveClass);
+    done && done();
+  };
+
+  var makeEnterHook = function makeEnterHook(isAppear) {
+    return function (el, done) {
+      var hook = isAppear ? onAppear : onEnter;
+
+      var resolve = function resolve() {
+        return finishEnter(el, isAppear, done);
+      };
+
+      callHook(hook, [el, resolve]);
+      nextFrame(function () {
+        removeTransitionClass(el, isAppear ? appearFromClass : enterFromClass);
+        addTransitionClass(el, isAppear ? appearToClass : enterToClass);
+
+        if (!hasExplicitCallback(hook)) {
+          whenTransitionEnds(el, type, enterDuration, resolve);
+        }
+      });
+    };
+  };
+
+  var _finishLeave = function _finishLeave(el, done) {
+    el._isLeaving = false;
+    removeTransitionClass(el, back_leaveFromClass);
+    removeTransitionClass(el, back_leaveToClass);
+    removeTransitionClass(el, back_leaveActiveClass);
+    done && done();
+  };
+
+  var _finishEnter = function _finishEnter(el, isAppear, done) {
+    removeTransitionClass(el, isAppear ? back_appearToClass : back_enterToClass);
+    removeTransitionClass(el, isAppear ? back_appearActiveClass : back_enterActiveClass);
+    done && done();
+  };
+
+  var _makeEnterHook = function _makeEnterHook(isAppear) {
+    return function (el, done) {
+      var hook = isAppear ? onAppear : onEnter;
+
+      var resolve = function resolve() {
+        return _finishEnter(el, isAppear, done);
+      };
+
+      callHook(hook, [el, resolve]);
+      nextFrame(function () {
+        removeTransitionClass(el, isAppear ? back_appearFromClass : back_enterFromClass);
+        addTransitionClass(el, isAppear ? back_appearToClass : back_enterToClass);
+
+        if (!hasExplicitCallback(hook)) {
+          whenTransitionEnds(el, type, enterDuration, resolve);
+        }
+      });
+    };
+  }; // const _core = SingleCore()
+
+
+  return shared.extend(baseProps, {
+    onBeforeEnter: function onBeforeEnter(el) {
+      callHook(_onBeforeEnter2, [el]);
+      addTransitionClass(el, enterFromClass);
+      addTransitionClass(el, enterActiveClass);
+    },
+    _onBeforeEnter: function _onBeforeEnter(el) {
+      callHook(_onBeforeEnter2, [el]);
+      addTransitionClass(el, back_enterFromClass);
+      addTransitionClass(el, back_enterActiveClass);
+    },
+    onBeforeAppear: function onBeforeAppear(el) {
+      callHook(_onBeforeAppear2, [el]);
+      addTransitionClass(el, appearFromClass);
+      addTransitionClass(el, appearActiveClass);
+    },
+    _onBeforeAppear: function _onBeforeAppear(el) {
+      callHook(_onBeforeAppear2, [el]);
+      addTransitionClass(el, back_appearFromClass);
+      addTransitionClass(el, back_appearActiveClass);
+    },
+    _onEnter: _makeEnterHook(false),
+    _onAppear: _makeEnterHook(true),
+    onEnter: makeEnterHook(false),
+    onAppear: makeEnterHook(true),
+    onLeave: function onLeave(el, done) {
+      el._isLeaving = true;
+
+      var resolve = function resolve() {
+        return finishLeave(el, done);
+      };
+
+      addTransitionClass(el, leaveFromClass); // force reflow so *-leave-from classes immediately take effect (#2593)
+
+      forceReflow();
+      addTransitionClass(el, leaveActiveClass);
+      nextFrame(function () {
+        if (!el._isLeaving) {
+          // cancelled
+          return;
+        }
+
+        removeTransitionClass(el, leaveFromClass);
+        addTransitionClass(el, leaveToClass);
+
+        if (!hasExplicitCallback(_onLeave2)) {
+          whenTransitionEnds(el, type, leaveDuration, resolve);
+        }
+      });
+      callHook(_onLeave2, [el, resolve]);
+    },
+    _onLeave: function _onLeave(el, done) {
+      el._isLeaving = true;
+
+      var resolve = function resolve() {
+        return _finishLeave(el, done);
+      };
+
+      addTransitionClass(el, back_leaveFromClass); // force reflow so *-leave-from classes immediately take effect (#2593)
+
+      forceReflow();
+      addTransitionClass(el, back_leaveActiveClass);
+      nextFrame(function () {
+        if (!el._isLeaving) {
+          // cancelled
+          return;
+        }
+
+        removeTransitionClass(el, back_leaveFromClass);
+        addTransitionClass(el, back_leaveToClass);
+
+        if (!hasExplicitCallback(_onLeave2)) {
+          whenTransitionEnds(el, type, leaveDuration, resolve);
+        }
+      });
+      callHook(_onLeave2, [el, resolve]);
+    },
+    onEnterCancelled: function onEnterCancelled(el) {
+      finishEnter(el, false);
+      callHook(_onEnterCancelled2, [el]);
+    },
+    _onEnterCancelled: function _onEnterCancelled(el) {
+      _finishEnter(el, false);
+
+      callHook(_onEnterCancelled2, [el]);
+    },
+    onAppearCancelled: function onAppearCancelled(el) {
+      finishEnter(el, true);
+      callHook(_onAppearCancelled2, [el]);
+    },
+    _onAppearCancelled: function _onAppearCancelled(el) {
+      _finishEnter(el, true);
+
+      callHook(_onAppearCancelled2, [el]);
+    },
+    onLeaveCancelled: function onLeaveCancelled(el) {
+      finishLeave(el);
+      callHook(_onLeaveCancelled2, [el]);
+    },
+    _onLeaveCancelled: function _onLeaveCancelled(el) {
+      _finishLeave(el);
+
+      callHook(_onLeaveCancelled2, [el]);
+    }
+  });
+}
+
+function normalizeDuration(duration) {
+  if (duration == null) {
+    return null;
+  } else if (shared.isObject(duration)) {
+    return [NumberOf(duration.enter), NumberOf(duration.leave)];
+  } else {
+    var n = NumberOf(duration);
+    return [n, n];
+  }
+}
+
+function NumberOf(val) {
+  var res = shared.toNumber(val);
+  validateDuration(res);
+  return res;
+}
+
+function validateDuration(val) {
+  if (typeof val !== "number") {
+    runtimeCore.warn("<transition> explicit duration is not a valid number - " + "got ".concat(JSON.stringify(val), "."));
+  } else if (isNaN(val)) {
+    runtimeCore.warn("<transition> explicit duration is NaN - " + "the duration expression might be incorrect.");
+  }
+}
+
+function addTransitionClass(el, cls) {
+  cls.split(/\s+/).forEach(function (c) {
+    return c && el.classList.add(c);
+  });
+  (el._vtc || (el._vtc = new Set())).add(cls);
+}
+
+function removeTransitionClass(el, cls) {
+  cls.split(/\s+/).forEach(function (c) {
+    return c && el.classList.remove(c);
+  });
+  var _vtc = el._vtc;
+
+  if (_vtc) {
+    _vtc["delete"](cls);
+
+    if (!_vtc.size) {
+      el._vtc = undefined;
+    }
+  }
+}
+
+function nextFrame(cb) {
+  requestAnimationFrame(function () {
+    requestAnimationFrame(cb);
+  });
+}
+
+var endId = 0;
+
+function whenTransitionEnds(el, expectedType, explicitTimeout, resolve) {
+  var id = el._endId = ++endId;
+
+  var resolveIfNotStale = function resolveIfNotStale() {
+    if (id === el._endId) {
+      resolve();
+    }
+  };
+
+  if (explicitTimeout) {
+    return setTimeout(resolveIfNotStale, explicitTimeout);
+  }
+
+  var _getTransitionInfo = getTransitionInfo(el, expectedType),
+      type = _getTransitionInfo.type,
+      timeout = _getTransitionInfo.timeout,
+      propCount = _getTransitionInfo.propCount;
+
+  if (!type) {
+    return resolve();
+  }
+
+  var endEvent = type + "end";
+  var ended = 0;
+
+  var end = function end() {
+    el.removeEventListener(endEvent, onEnd);
+    resolveIfNotStale();
+  };
+
+  var onEnd = function onEnd(e) {
+    if (e.target === el && ++ended >= propCount) {
+      end();
+    }
+  };
+
+  setTimeout(function () {
+    if (ended < propCount) {
+      end();
+    }
+  }, timeout + 1);
+  el.addEventListener(endEvent, onEnd);
+}
+
+function getTransitionInfo(el, expectedType) {
+  var styles = window.getComputedStyle(el); // JSDOM may return undefined for transition properties
+
+  var getStyleProperties = function getStyleProperties(key) {
+    return (styles[key] || "").split(", ");
+  };
+
+  var transitionDelays = getStyleProperties(TRANSITION + "Delay");
+  var transitionDurations = getStyleProperties(TRANSITION + "Duration");
+  var transitionTimeout = getTimeout(transitionDelays, transitionDurations);
+  var animationDelays = getStyleProperties(ANIMATION + "Delay");
+  var animationDurations = getStyleProperties(ANIMATION + "Duration");
+  var animationTimeout = getTimeout(animationDelays, animationDurations);
+  var type = null;
+  var timeout = 0;
+  var propCount = 0;
+  /* istanbul ignore if */
+
+  if (expectedType === TRANSITION) {
+    if (transitionTimeout > 0) {
+      type = TRANSITION;
+      timeout = transitionTimeout;
+      propCount = transitionDurations.length;
+    }
+  } else if (expectedType === ANIMATION) {
+    if (animationTimeout > 0) {
+      type = ANIMATION;
+      timeout = animationTimeout;
+      propCount = animationDurations.length;
+    }
+  } else {
+    timeout = Math.max(transitionTimeout, animationTimeout);
+    type = timeout > 0 ? transitionTimeout > animationTimeout ? TRANSITION : ANIMATION : null;
+    propCount = type ? type === TRANSITION ? transitionDurations.length : animationDurations.length : 0;
+  }
+
+  var hasTransform = type === TRANSITION && /\b(transform|all)(,|$)/.test(styles[TRANSITION + "Property"]);
+  return {
+    type: type,
+    timeout: timeout,
+    propCount: propCount,
+    hasTransform: hasTransform
+  };
+}
+
+function getTimeout(delays, durations) {
+  while (delays.length < durations.length) {
+    delays = delays.concat(delays);
+  }
+
+  return Math.max.apply(Math, _toConsumableArray(durations.map(function (d, i) {
+    return toMs(d) + toMs(delays[i]);
+  })));
+} // Old versions of Chromium (below 61.0.3163.100) formats floating pointer
+// numbers in a locale-dependent way, using a comma instead of a dot.
+// If comma is not replaced with a dot, the input will be rounded down
+// (i.e. acting as a floor function) causing unexpected behaviors
+
+
+function toMs(s) {
+  return Number(s.slice(0, -1).replace(",", ".")) * 1000;
+} // synchronously force layout to put elements into a certain state
+
+
+function forceReflow() {
+  return document.body.offsetHeight;
+}
+
+var components = {
+  StackKeepAlive: StackKeepAlive,
+  Transition: Transition
+};
+var plugin = {
+  install: function install(app) {
+    for (var prop in components) {
+      if (components.hasOwnProperty(prop)) {
+        var component = components[prop];
+        app.component(component.displayName || component.name, component);
+      }
+    }
+  },
+  "ATransition": Transition
+};
+module.exports = plugin;

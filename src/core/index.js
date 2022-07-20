@@ -4,10 +4,12 @@ import {
   getStateId,
   resolvePushedVm,
   genKey,
+  genSingletonKey,
   isPlaceHolderVm,
   replaceState,
   currentPathOf,
-  getStateForward
+  getStateForward,
+  isSingletonNode,
 } from './utils';
 
 import HistoryStack from './Stack';
@@ -30,7 +32,7 @@ export const SingleCore = function(args) {
 export default class Core {
   constructor() {
   }
-  setup({ router, pruneCacheEntry , replaceStay }) {
+  setup({ router, pruneCacheEntry, replaceStay, singleton}) {
 
     hackHistory(history)
     this.destroyCaches = pruneCacheEntry;
@@ -43,10 +45,13 @@ export default class Core {
     this.preStateId = 0;
     this.pre = null;
     this.replaceStay = replaceStay || [];
+    this.singleton = singleton || []; // 单例页面
     this._initial = true; //闲置状态
     this.historyStack = new HistoryStack((_vm) => {
       if ( _vm ) {
-        this.destroyCaches( _vm.vnode.key )
+        if (_vm.vnode.key && !isSingletonNode(_vm.vnode)) {
+          this.destroyCaches( _vm.vnode.key )
+        }
       }
     });
     this.init();
@@ -93,13 +98,17 @@ export default class Core {
     const { router } = this
     // console.log('genKey- isPush',this.isPush)
     // console.log('genKey- isReplace_initial',this.isReplace || this._initial)
+    const _genKey = (num, router, to) => {
+      return (to && this.singleton.includes(to)) ? genSingletonKey(router, to) : genKey(num, router, to);
+    }
+
     if (this.isReplace || this._initial) {
       this._initial = false
-      return genKey(this.stackPointer, router, this._routeTo);
+      return _genKey(this.stackPointer, router, this._routeTo);
     } else if ( this.isPush) {
-      return genKey(this.stackPointer + 1, router, this._routeTo);
+      return _genKey(this.stackPointer + 1, router, this._routeTo);
     } else {
-      return genKey(this.stackPointer - 1, router, this._routeTo);
+      return _genKey(this.stackPointer - 1, router, this._routeTo);
     }
   }
   /**
@@ -107,8 +116,14 @@ export default class Core {
    */
   routerHooks() {
     const { router } = this
-    router.beforeEach((to, from) => {
+    router.beforeEach((to, from, next) => {
+      if (this.singleton.includes(to.path) && to.path === from.path) {
+        console.warn('警告 [stack-keep-alive]: 单例模式的页面不支持从自身重复路由')
+        console.warn('warning [stack-keep-alive]: the singleton component doesn`t support route to from itself')
+        return
+      }
       this._routeTo = to.path
+      next()
     })
     router.afterEach((to, from) => {
       this.historyShouldChange = true;
