@@ -67,6 +67,14 @@ app.use(StackKeepAlive)
       </sk-transition>
     </router-view>
 ```
+3. 单例组件
+  有时期望一个组件在整个应用生命周期只创建一次，比如常见的购物车页面，此时使用 `singleton`配置单例组件
+
+```vue
+<stack-keep-alive v-slot='{ key }' :singleton='["/foo"]'> 
+    <component :is="Component" :key='key'/>
+</stack-keep-alive>
+```
 
 
 ### 更新日志
