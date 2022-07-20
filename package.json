@@ -8,6 +8,14 @@
   "files": [
     "dist/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Zippowxk/stack-keep-alive"
+  },
+  "bugs": {
+    "url": "https://github.com/Zippowxk/stack-keep-alive"
+  },
+  "homepage": "https://github.com/Zippowxk/stack-keep-alive",
   "scripts": {
     "build": "NODE_ENV=development rollup -c --watch",
     "release": "NODE_ENV=production rollup -c",
