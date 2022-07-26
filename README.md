@@ -3,6 +3,9 @@
 
 [Vue2.x 版本](https://github.com/Zippowxk/vue-router-keep-alive-helper)
 
+[在线Demo](http://xinkai.wang/stack-keep-alive-sample/dist/), 打开Vue-devtools查看页面缓存
+
+
 ![img](./assets/stack.gif)
 
 ### 为什么需要本插件：
@@ -89,8 +92,8 @@ app.use(StackKeepAlive)
 
 1. [静态文件引入](./examples/)
 2. [工程化+完整动画](https://github.com/Zippowxk/stack-keep-alive-sample)
-![动画](https://github.com/Zippowxk/stack-keep-alive-sample/blob/main/imgs/sample.gif)
 
+![动画](https://github.com/Zippowxk/stack-keep-alive-sample/blob/main/imgs/sample.gif)
 
 欢迎添加微信 **OmniBug **探讨交流，Email: zippowangxinkai@gmail.com
 
